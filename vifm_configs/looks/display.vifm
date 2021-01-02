@@ -1,0 +1,159 @@
+" display {{{
+
+colorscheme def
+
+
+" L     use the last-level folder-path when setting title of new tabs
+" M     use only the file name instead of full path when spawning a new
+"       tmux-window
+" T     truncate verbose status-bar messages in the middle with ellipsis
+" p     use tilde shortening in view titles
+set shortmess="LMTp"
+
+
+" what each pane does {{{
+" first things first, reset pane display by exiting all currently active
+" display modes
+1wincmd z
+
+" resize both panes to equal sizes with the command:
+"   [range]wincmd {key_to_press}
+" which is equivalent to typing the pane manipulation keybinding:
+"   Ctrl-W <key_to_press>
+1wincmd =
+
+" [OPTIONAL] switch to the top OR left pane
+"       1wincmd t
+
+" default 1: vertical split {{{
+" reset pane display by disabling TREE-mode {{{
+" the normal way would be to attempt to switch TREE-mode off for both panes
+"       windo tree
+"       windo tree!
+" since, unfortunately, running |tree!| will always toggle between ON and OFF
+" for just the current pane. However, running |tree| on a multi-level directory
+" could be very expensive, thus will use a clever way to break away from
+" TREE-mode as documented in the manual by backing off one level of directory
+" and then restoring the working directory for both panes
+windo cd ..
+windo cd -
+" }}}
+
+" make sure that the currently active pane is put on top
+1wincmd K
+
+" perform a vertical split
+split
+
+" enable miller-view, set the column sizes accordingly and preview only
+" directories (preview files in VIEW-mode instead)
+set millerview
+set milleroptions="lsize:11,csize:17,rsize:10,rpreview:directory"
+
+" use the other pane to display preview for VIEW-mode
+set quickview
+
+" }}}
+
+
+" default 2: horizontal split {{{
+" to enable tree view by default, uncomment the next two lines
+"       1wincmd H
+"       vsplit
+"       windo tree
+"       set quickview
+
+" }}}
+
+" }}}
+
+
+" sorting {{{
+" Natural sort of (version) numbers within text.
+set sortnumbers
+
+" sorting order
+"   1.  +dir    -> directories before files
+"   2.  +name   -> filenames (case-sensitive, use |iname| otherwise)
+set sort="+dir,+name"
+
+" set the sorting order of the primary sorting criteria for the primary sorting
+" criteria, i.e., confirm ascending order for |dir| as set above
+set sortorder="ascending"
+
+" }}}
+
+
+" set where and how suggestions are displayed
+" 1     set the delay before displaying said suggestions with |delay:<delay_time>|
+" 2     to use the other pane for displaying said suggestions, include |otherpane|
+" 3.    to group keys with common prefix, include |foldsubkeys|
+set suggestoptions=delay:270,otherpane,foldsubkeys,
+\normal,visual,view,
+\keys,marks,registers:5
+
+
+" Automatically resolve symbolic links on l or Enter.
+set nofollowlinks
+
+
+" do NOT run executable on |l| or |Enter| automatically
+set norunexec
+
+
+" only prompt for confirmation when permanently deleting (include |delete| to
+" also display confirmation when NOT)
+set confirm=permdelete
+
+
+" do not display "../" for parent directory at the top unless at root (/) of
+" the filesystem
+set dotdirs=rootparent
+
+
+" - exclude "s" to to disable horizaontal side borders on both left and right
+"   side of the main viewing area
+" - exclude "p" to disable further vertical AND horizontal padding in VIEW_Mode
+set tuioptions="s"
+
+
+" anything OTHER than LS-view {{{
+
+" the number of lines maintained visible before scrolling, consistent with
+" personal setting in [neo]Vim
+set scrolloff=2
+
+" display relative line number with the default size the gutter set to 4
+set number
+set numberwidth=4
+set relativenumber
+
+
+" set the visible column(s) on any viewmodes other than |lsview|
+" 1.    left align: prepend with |-|
+" 2.    manually specify the width with |<percentage>%|
+" 3.    delimit the field name with curly brackets
+" 4.    append |..| to display ellipsis instead of truncating longer filenames
+" apply this setting to all panes with |windo|
+windo set viewcolumns=-100%{name}..
+" winrun and windo {{{
+" execute command for pane(s), which is determined by type argument:
+" :winrun <target_panes> <command_to_run>
+"   ^ - top-left pane
+"   $ - bottom-right pane
+"   % - all panes
+"   . - current pane
+"   , - other pane
+
+" to execute command for each pane
+" :windo <command_to_run>
+
+" }}}
+
+
+" }}}
+
+
+
+" }}}
+

@@ -1,0 +1,104 @@
+" system {{{
+" some more humane settings, default is "fst"
+" removing f    ->  |:filter| will KEEP matched files instead of HIDING
+" removing s    ->  yy, dd and DD will always act on a single file even if a
+"                   selection currently exists, shall instead use ys, ds and Ds
+"                   to act on the selection
+" removing t    ->  <Tab> and <CTRL-I> will traverse backwards in history
+"                   instead of switching tabs, use <space> for this instead
+set cpoptions=""
+" This makes vifm perform file operations on its own instead of relying on
+" standard utilities like `cp`.  While using `cp` and alike is a more universal
+" solution, it's also much slower when processing large amounts of files and
+" doesn't support progress measuring.
+set syscalls
+
+
+" Don't do too many requests to slow file systems
+if !has('win')
+    set slowfs=curlftpfs
+endif
+
+" defaulting to |screen| discontinued, now used on an ad-hoc basis
+" mildly awkward syntax to guarantee |screen| OFF
+screen!
+screen
+
+" previous commands to guarantee |screen| ON
+"   if $TERM == 'tmux' || $TERM == 'tmux-256color'
+"       screen!
+"   else
+"       screen!
+"       screen
+"   endif
+
+
+" }}}
+
+
+" history {{{
+" This is how many directories to store in the directory history.
+set history=100
+
+
+" Trash Directory
+" The default is to move files that are deleted with dd or :d to
+" the trash directory.  If you change this you will not be able to move
+" files by deleting them and then using p to put the file in the new location.
+" I recommend not changing this until you are familiar with vifm.
+" This probably shouldn't be an option.
+set trash
+
+" Maximum number of changes that can be undone.
+set undolevels=100
+
+
+" What should be saved automatically between vifm sessions.  Drop "savedirs"
+" value if you don't want vifm to remember last visited directories for you.
+set vifminfo=
+    \bmarks,bookmarks,registers,
+    \savedirs,dirstack,tabs,
+    \dhistory,chistory,shistory,phistory
+    "dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,bmarks
+
+
+" }}}
+
+
+" marks {{{
+
+" :mark mark /full/directory/path [filename]
+
+mark h ~/
+
+mark m /mnt/x/myData/&/
+
+" }}}
+
+
+
+" various customization examples {{{
+
+" Use ag (the silver searcher) instead of grep
+"       set grepprg='ag --line-numbers %i %a %s'
+
+
+" Add additional place to look for executables
+"       let $PATH = $HOME.'/bin/fuse:'.$PATH
+
+
+" Block particular shortcut
+"       nnoremap <left> <nop>
+
+
+" Export IPC name of current instance as environment variable and use it to
+" communicate with the instance later.
+"
+" It can be used in some shell script that gets run from inside vifm, for
+" example, like this:
+"     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
+"
+
+" let $VIFM_SERVER_NAME = v:servername
+
+" }}}

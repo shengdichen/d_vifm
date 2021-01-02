@@ -1,0 +1,490 @@
+" file handlers {{{
+
+" default introduction by vifm {{{
+" The file type is for the default programs to be used with
+" a file extension.
+" :filetype pattern1,pattern2 defaultprogram,program2
+" :fileviewer pattern1,pattern2 consoleviewer
+" The other programs for the file type can be accessed with the :file command
+" The command macros %f, %F, %d, %F may be used in the commands.
+" The %a macro is ignored.  To use a % you must put %%.
+
+" For automated FUSE mounts, you must register an extension with :file[x]type
+" in one of following formats:
+"
+" :filetype extensions FUSE_MOUNT|some_mount_command using %SOURCE_FILE and %DESTINATION_DIR variables
+" %SOURCE_FILE and %DESTINATION_DIR are filled in by vifm at runtime.
+" A sample line might look like this:
+" :filetype *.zip,*.jar,*.war,*.ear FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR
+"
+" :filetype extensions FUSE_MOUNT2|some_mount_command using %PARAM and %DESTINATION_DIR variables
+" %PARAM and %DESTINATION_DIR are filled in by vifm at runtime.
+" A sample line might look like this:
+" :filetype *.ssh FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR
+" %PARAM value is filled from the first line of file (whole line).
+" Example first line for SshMount filetype: root@127.0.0.1:/
+"
+" You can also add %CLEAR if you want to clear screen before running FUSE
+" program.
+
+" }}}
+
+
+" introduction {{{
+" distinguish between two types of file handler:
+"   1.  opening handler
+"   2.  previewing handler
+
+
+" opening handler {{{
+" filetype <file_t>[,<file_t>]*
+"   \ {description of first handler}
+"   \ <command_of_handler>,
+"   \
+"   \ {description of second handler}
+"   \ <command_of_handler>,
+
+" }}}
+
+" choosing opening handler {{{
+" to view a dialogue showing all currently set handlers for the current
+" filetype of the current file, with the extra [ &] at the end indicating
+" a fork, which is probably always a good idea for GUI-applications
+"       |:file[ &]|
+" to avoid the popped-up dialogue and select a handler directly with
+" command-line completion, tab-complete after |:file|, select the handler and "
+" then optionally include the [ &] at the end to run as a fork
+"       |:file {tab_complete}<chosen_handler>[ &]|
+" if the handler is known already, can avoid tab-completion and provide the
+" beginning few characters that can uniquely identify the handler
+"       |:file <first_few_chars>[ &]|
+
+" }}}
+
+" previewing-handler {{{
+" |fileviewer| specifies previewing behavior, i.e., the output when |e| has
+" been toggled or |:view| has been activated, with the same syntax as
+" |file[x]type|
+
+
+" the |fileviewer| option can be locally overriden, i.e., effective only for
+" the current pane, by locally setting |previewprg|, e.g.:
+"       set previewprg="git log -p %c 2>&1"
+" note that calling |set| here is equivalent to |setlocal|
+
+" }}}
+
+
+" see help-pages: |vifm-patterns| and the following |vifm-glob| for specifying
+" filetypes in patterns, e.g., with RegEx
+
+" to specify files, see |vifm-macros|
+"   %c      file under cursor position in the active pane
+"   %C      file under cursor position in the inactive pane
+"   %f      all selected file[s] in the active pane
+"   %F      all selected file[s] in the inactive pane
+"   %d      fullpath to current directory in the active pane
+"   %D      fullpath to current directory in the inactive pane
+
+
+" detour: vifm-globbing {{{
+" for any specific |.ext| extension, observe following matching behaviors:
+"     match...      with...
+"     .ext          .ext
+"
+"     ..ext         ?.ext
+"     a.ext         ?.ext
+"
+"     [^\.].ext     *.ext
+"
+"      ..ext        ?*.ext
+"      a.ext        ?*.ext
+"     ...ext        ?*.ext
+"     .a.ext        ?*.ext
+"     a..ext        ?*.ext
+"     aa.ext        ?*.ext
+" thus, for every file extension |ext|, use:
+"       .ext and ?*.ext
+" to truly include everything ending with ".ext", INCLUDING ".ext" itself,
+" which can be circumvented with:
+"       *.ext
+
+" }}}
+
+" }}}
+
+
+" all handlers {{{
+
+" directories {{{
+" 1.    %d will open the current directory
+" 2.    %f will open the selected directory under the current directory
+" NOTE: */ alone will NOT match directories starting with a dot, e.g., |.git|
+" will NOT be matched, prepend a "?" to force the first character to be
+" anything. Observe that the "?" forces the directory name to be at least of
+" one character's length, which is fine anyway for directories
+filextype ?*/
+    \ {Nautilus,, curDir}
+    \ nohup nautilus %d 1>/dev/null 2>&1 &,
+    \ {nautilus,, selDir}
+    \ nohup nautilus %f 1>/dev/null 2>&1 &,
+    \ {dolphin,, curDir}
+    \ nohup dolphin %d 1>/dev/null 2>&1 &,
+    \ {dolphin,, selDir}
+    \ nohup dolphin %f 1>/dev/null 2>&1 &,
+    \ {roll it in VLC}
+    \ nohup vlc %c 1>/dev/null 2>&1 &,
+
+" }}}
+
+
+" pdf and office {{{
+
+" PDF {{{
+" the defaults
+"       filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+"       fileviewer *.pdf pdftotext -nopgbrk %c -
+
+filextype *.pdf
+	\ {evince}
+	\ nohup evince %f 1>/dev/null 2>&1 &,
+	\ {okular}
+	\ nohup okular %f 1>/dev/null 2>&1 &,
+
+filetype *.pdf
+    \ {terminal-mode}
+    \ pdftotext -nopgbrk %c - | cat -n | less,
+
+fileviewer *.pdf
+    \ pdftotext -nopgbrk %c - | cat -n,
+
+" }}}
+
+" *TeX {{{
+filextype *.lyx
+	\ {lyx}
+	\ nohup lyx %f 1>/dev/null 2>&1 &,
+
+" bibliography files
+filextype *.bib
+	\ {kbibtex}
+	\ nohup kbibtex %f 1>/dev/null 2>&1 &,
+" }}}
+
+" PostScript {{{
+filextype *.ps,*.eps,*.ps.gz
+        \ {View in zathura}
+        \ zathura %f,
+        \ {View in gv}
+        \ gv %c %i &,
+" }}}
+
+" Djvu {{{
+filextype *.djvu
+        \ {View in zathura}
+        \ zathura %f,
+        \ {View in apvlv}
+        \ apvlv %f,
+" }}}
+
+" Office files {{{
+"       filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx libreoffice %f &
+filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
+    \ nohup libreoffice %c 1>/dev/null 2>&1 &,
+
+fileviewer *.doc catdoc %c
+fileviewer *.docx docx2txt.pl %f -
+" }}}
+
+" }}}
+
+
+" media {{{
+" audio {{{
+" the defaults
+"   filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+"       \ {Play using ffplay}
+"       \ ffplay -nodisp -autoexit %c,
+"       \ {Play using MPlayer}
+"       \ mplayer %f,
+
+filextype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+    \ {the omni-VLC}
+    \ nohup vlc %c 1>/dev/null 2>&1 &,
+
+"       fileviewer *.mp3 mp3info
+"       fileviewer *.flac soxi
+
+fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+    \ ffprobe -pretty %c 2>&1 | cat -n,
+
+" }}}
+
+
+" video {{{
+filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+         \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+         \*.as[fx]
+    \ {the omni-VLC}
+    \ nohup vlc %c 1>/dev/null 2>&1 &,
+" the defaults
+"       \ {View using ffplay}
+"       \ ffplay -fs -autoexit %f,
+"       \ {View using Dragon}
+"       \ dragon %f:p,
+"       \ {View using mplayer}
+"       \ mplayer %f,
+
+
+fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+          \*.as[fx]
+    \ ffprobe -pretty %c 2>&1 | cat -n,
+
+" }}}
+
+
+" images {{{
+filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
+    \ {imv}
+	\ nohup imv %f 1>/dev/null 2>&1 &,
+        \ {View in sxiv}
+        \ sxiv %f,
+        \ {View in gpicview}
+        \ gpicview %c,
+        \ {View in shotwell}
+        \ shotwell,
+fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
+    \ {fbi}
+	\ fbi %f,
+         \ identify %f
+
+" Displaying pictures in terminal
+" fileviewer *.jpg,*.png shellpic %c
+
+" }}}
+
+" }}}
+
+
+" dev and sourcecode {{{
+" web {{{
+" the defaults:
+"   filextype *.html,*.htm
+"       \ {edit source code}
+"       \ nvim %c,
+"       \ {Open with dwb}
+"       \ dwb %f %i &,
+"       \ {Open with firefox}
+"       \ firefox %f &,
+"       \ {Open with uzbl}
+"       \ uzbl-browser %f %i &,
+"   filetype *.html,*.htm links, lynx
+
+filetype *.html,*.htm
+    \ {edit source}
+    \ nvim %c,
+
+
+filextype *.html,*.htm
+    \ {vivaldi}
+    \ nohup vivaldi-stable %f 1>/dev/null 2>&1 &,
+    \ {chromium}
+    \ nohup chromium %f 1>/dev/null 2>&1 &,
+    \ {firefox}
+    \ nohup firefox %f 1>/dev/null 2>&1 &,
+
+
+fileviewer *.html,*.htm
+    \ w3m %c,
+
+" }}}
+
+" Object
+filetype *.o nm %f | less
+
+" Man page
+filetype *.[1-8] man ./%c
+fileviewer *.[1-8] man ./%c | col -b
+
+" }}}
+
+
+" misc {{{
+" OpenRaster
+filextype *.ora
+        \ {Edit in MyPaint}
+        \ mypaint %f,
+
+" Mindmap
+filextype *.vym
+        \ {Open with VYM}
+        \ vym %f &,
+
+" MD5
+filetype *.md5
+       \ {Check MD5 hash sum}
+       \ md5sum -c %f %S,
+
+" SHA1
+filetype *.sha1
+       \ {Check SHA1 hash sum}
+       \ sha1sum -c %f %S,
+
+" SHA256
+filetype *.sha256
+       \ {Check SHA256 hash sum}
+       \ sha256sum -c %f %S,
+
+" SHA512
+filetype *.sha512
+       \ {Check SHA512 hash sum}
+       \ sha512sum -c %f %S,
+
+" GPG signature
+filetype *.asc
+       \ {Check signature}
+       \ !!gpg --verify %c,
+
+" Torrent
+filetype *.torrent ktorrent %f &
+fileviewer *.torrent dumptorrent -v %c
+
+" FuseZipMount
+filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
+       \ {Mount with fuse-zip}
+       \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
+       \ {View contents}
+       \ zip -sf %c | less,
+       \ {Extract here}
+       \ tar -xf %c,
+fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
+
+" ArchiveMount
+filetype *.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz
+       \ {Mount with archivemount}
+       \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
+fileviewer *.tgz,*.tar.gz tar -tzf %c
+fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
+fileviewer *.tar.txz,*.txz xz --list %c
+fileviewer *.tar tar -tf %c
+
+fileviewer *.zip
+        \ unzip -l %f
+
+
+" Rar2FsMount and rar archives
+filetype *.rar
+       \ {Mount with rar2fs}
+       \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
+fileviewer *.rar unrar v %c
+
+" IsoMount
+filetype *.iso
+       \ {Mount with fuseiso}
+       \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
+
+" SshMount
+filetype *.ssh
+       \ {Mount with sshfs}
+       \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
+
+" FtpMount
+filetype *.ftp
+       \ {Mount with curlftpfs}
+       \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
+
+" Fuse7z and 7z archives
+filetype *.7z
+       \ {Mount with fuse-7z}
+       \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
+fileviewer *.7z 7z l %c
+
+" TuDu files
+filetype *.tudu tudu -f %c
+
+" Qt projects
+filextype *.pro qtcreator %f &
+
+" }}}
+
+
+" Syntax highlighting in previewing handlers {{{
+" Explicitly set highlight type for some extensions
+"
+" 256-color terminal
+" fileviewer *.[ch],*.[ch]pp highlight -O xterm256 -s dante --syntax c %c
+" fileviewer Makefile,Makefile.* highlight -O xterm256 -s dante --syntax make %c
+"
+" 16-color terminal
+" fileviewer *.c,*.h highlight -O ansi -s dante %c
+"
+" Or leave it for automatic detection
+"
+" fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
+
+" }}}
+
+" }}}
+
+
+" }}}
+
+
+" the default handlers {{{
+" specify the default handlers, MUST be placed at the end, since they would
+" otherwise:
+"   1.  override all handlers specified above when opening by pressing |l|
+"       in N_Mode
+"   2.  take precedence over all handlers specified above when selecting a
+"       handler before opening with |:file[&]| in N_Mode
+" even in case of matching types, as |?*| and |*| combined will match any name
+" with vifm-globbing
+"
+" These default handlers will be listed last when selecting a handler with
+" |:file[&]|, i.e., in case of a matching type, after the type's specific
+" handler(s) specified above. These default handlers are in a sense the
+" "last-resort" handler when no known information is known for handling the
+" target.
+
+
+" opening-handler {{{
+filetype ?*,*
+    \ {Vim,, neo'd}
+    \ nvim %c,
+    \ {old-school vi}
+    \ vi %c,
+    \ {good o'Vim}
+    \ vim %c,
+
+filextype ?*,*
+    \ {graphic Vim}
+    \ nohup gvim %c 1>/dev/null 2>&1 &,
+
+"   Command used to edit files in various contexts.  The default is vim.
+"   If you would like to use another vi clone such as Elvis or Vile
+"   you will need to change this setting.
+" use neoVim
+" NOTE: the default action for opening all files, i.e., NOT directories, of
+" filetypes not specified below, with the action of "opening" performed by
+" pressing "l" in N_mode and "gl" in LIST_mode
+set vicmd=vi
+set vixcmd=nvim
+
+" }}}
+
+
+" previwing-handler {{{
+" show line number when previewing any file (explicitly NOT folders, which
+" should be handled by vifm itself)
+fileviewer ?*[^/]
+    \ cat -n %c,
+
+
+" alternatively, use the %PAGER script of neoVim, located at:
+"   /usr/share/nvim/runtime/macros/less.sh
+
+" }}}
+
+" }}}
+
