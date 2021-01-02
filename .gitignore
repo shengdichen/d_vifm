@@ -1,0 +1,8 @@
+*
+!.gitignore
+!*/
+!colors/**/*
+!scripts/**/*
+!vifm_configs/**/*
+!vifmrc
+
