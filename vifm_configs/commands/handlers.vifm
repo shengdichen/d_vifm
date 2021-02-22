@@ -222,6 +222,15 @@ filextype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
 fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
     \ ffprobe -pretty %c 2>&1 | cat -n,
 
+
+" Audio-Books {{{
+filextype *.m4b
+    \ {mpv it}
+    \ nohup mpv --player-operation-mode=pseudo-gui -- %c 1>/dev/null 2>&1 &,
+
+fileviewer *.m4b
+    \ ffprobe -pretty %c 2>&1 | cat -n,
+" }}}
 " }}}
 
 
