@@ -71,8 +71,15 @@ set vifminfo=
 
 mark h ~/
 
-mark m /mnt/x/myData/&/
+mark d ~/Dots/
 
+" centralized position for non-root mounting
+mark m ~/mnt/
+
+" where all fuse-drives are mounted
+mark f ~/mnt/FUSE/ptr/
+
+mark x ~/xdg/
 " }}}
 
 
