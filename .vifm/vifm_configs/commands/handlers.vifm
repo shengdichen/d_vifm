@@ -466,9 +466,12 @@ filextype *.pro qtcreator %f &
 
 
 " opening-handler {{{
+" use:
+"       $ nvim -O <file_1> [<file_2>...]
+" to open multiple files in splits, which gracefully handles a single file too
 filetype ?*,*
-    \ {Vim,, neo'd}
-    \ nvim %c,
+    \ {In-Place}
+    \ nvim -O %f,
     \ {old-school vi}
     \ vi %c,
     \ {good o'Vim}
