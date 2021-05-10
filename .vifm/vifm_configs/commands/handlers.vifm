@@ -489,16 +489,22 @@ filextype ?*,*
     \ {graphic Vim}
     \ nohup gvim %c 1>/dev/null 2>&1 &,
 
+
 "   Command used to edit files in various contexts.  The default is vim.
 "   If you would like to use another vi clone such as Elvis or Vile
 "   you will need to change this setting.
-" use neoVim
-" NOTE: the default action for opening all files, i.e., NOT directories, of
-" filetypes not specified below, with the action of "opening" performed by
-" pressing "l" in N_mode and "gl" in LIST_mode
+"
+" In particular, this is used to
+"   1.  display vifm's help files
+"   2.  bulk-rename
+" and NOT for general file handling, which is set with file[x]type above
+" NOTE:
+"   set this to the simple command of |vi| or |nvim|, as this example would
+"   break Visual-rename:
+"       set vixcmd="tmux split-window -h -t :. nvim"
+"
 set vicmd=vi
 set vixcmd=nvim
-
 " }}}
 
 
