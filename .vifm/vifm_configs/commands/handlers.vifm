@@ -472,8 +472,14 @@ filextype *.pro qtcreator %f &
 filetype ?*,*
     \ {In-Place}
     \ nvim -O %f,
-    \ {diff}
+    \ {diff,, In-Place}
     \ nvim -d %f,
+    \ {Tmux}
+    \ tmux split-window -h -t :. nvim -O %f &&
+        \ tmux select-layout main-vertical,
+    \ {diff,, Tmux}
+    \ tmux split-window -h -t :. nvim -d %f &&
+        \ tmux select-layout main-vertical,
     \ {old-school vi}
     \ vi %c,
     \ {good o'Vim}
