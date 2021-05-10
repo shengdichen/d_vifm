@@ -472,6 +472,8 @@ filextype *.pro qtcreator %f &
 filetype ?*,*
     \ {In-Place}
     \ nvim -O %f,
+    \ {diff}
+    \ nvim -d %f,
     \ {old-school vi}
     \ vi %c,
     \ {good o'Vim}
