@@ -111,11 +111,16 @@ command! prev
 "       body will be automatically prompted
 "   2.  extra arguments are awkwardly processed
 nnoremap <cr> :nvz<space>
+nnoremap L
+    \ :tmuxSplitWindowVertEdit
+    \ <cr>
 
 
 
-" start a new shell instance
-nnoremap S :shell
+
+" new shell in vertical split
+nnoremap S
+    \ :tmuxSplitWindowVert
 
 
 " start shell in-place, as opposed to starting a new shell instance above
