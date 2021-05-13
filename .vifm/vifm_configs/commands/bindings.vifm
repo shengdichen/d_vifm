@@ -119,6 +119,11 @@ nnoremap L
     \ <cr>
 
 
+nnoremap <cr>
+    \ :tmuxSplitWindowVertEdit
+    \ |
+    \ :tmuxSetLayout
+    \ <cr>
 
 
 " new shell in vertical split
