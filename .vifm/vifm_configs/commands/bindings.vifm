@@ -49,6 +49,17 @@ command! z :execute "!tmux new-window -a %a"
 command! nv :!nvim %a %c
 
 
+" util-funcs for tmux-integration {{{
+" create new pane to plain shell
+command! tmuxSplitWindowVert
+    \ :execute "!tmux split-window -v -t :."
+
+" create new pane to nvim
+command! tmuxSplitWindowVertEdit
+    \ :execute "!tmux split-window -v -t :. nvim -O %f"
+" }}}
+
+
 " perform the similar editing with neoVim, now in a new tmux-window, named as
 " nvn := |nv|(previous command) + n(new_window)
 "       command! nvz :execute "screen!" | :execute "!nvim %a %c" | :execute "screen"
