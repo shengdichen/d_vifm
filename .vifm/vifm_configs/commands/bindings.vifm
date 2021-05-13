@@ -50,11 +50,26 @@ command! nv :!nvim %a %c
 
 
 " util-funcs for tmux-integration {{{
-" create new pane to plain shell
+" create new pane to plain shell {{{
+" NOTE:
+"   shell's working-directory set to that of the invoking vifm-window
+
+command! tmuxSplitWindowHorz
+    \ :execute "!tmux split-window -h -t :."
+
 command! tmuxSplitWindowVert
     \ :execute "!tmux split-window -v -t :."
+" }}}
 
-" create new pane to nvim
+
+" create new pane to nvim {{{
+" NOTE:
+"   %f := all selected files [vifm's macro]
+"   -O := open in splits [vim's command-line calling syntax]
+
+command! tmuxSplitWindowHorzEdit
+    \ :execute "!tmux split-window -h -t :. nvim -O %f"
+
 command! tmuxSplitWindowVertEdit
     \ :execute "!tmux split-window -v -t :. nvim -O %f"
 " }}}
@@ -63,6 +78,7 @@ command! tmuxSplitWindowVertEdit
 command! tmuxSetLayout
     \ :execute "!tmux select-layout main-vertical"
 
+" }}}
 " perform the similar editing with neoVim, now in a new tmux-window, named as
 " nvn := |nv|(previous command) + n(new_window)
 "       command! nvz :execute "screen!" | :execute "!nvim %a %c" | :execute "screen"
