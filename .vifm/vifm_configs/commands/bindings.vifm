@@ -155,6 +155,11 @@ nnoremap <cr>
     \ <cr>
 
 
+nnoremap H
+    \ :tmuxSplitWindowVertDupl
+    \ <cr>
+
+
 " new shell in vertical split
 nnoremap S
     \ :tmuxSplitWindowVert
