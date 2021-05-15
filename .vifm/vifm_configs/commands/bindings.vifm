@@ -75,6 +75,19 @@ command! tmuxSplitWindowVertEdit
 " }}}
 
 
+" create new pane to duplicate current session {{{
+" NOTE:
+"   use vifm's internal session-mechanism to save session for duplication
+
+command! tmuxSplitWindowHorzDupl
+    \ :write |
+    \ :execute "!tmux split-window -h -t :. vifm"
+
+command! tmuxSplitWindowVertDupl
+    \ :write |
+    \ :execute "!tmux split-window -v -t :. vifm"
+" }}}
+
 command! tmuxSetLayout
     \ :execute "!tmux select-layout main-vertical"
 
