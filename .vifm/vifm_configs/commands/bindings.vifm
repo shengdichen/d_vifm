@@ -134,6 +134,11 @@ command! prev
 
 
 " keybindings {{{
+nnoremap J 4j
+nnoremap K 4k
+
+vnoremap J 4j
+vnoremap K 4k
 
 " call the command |nvz| for editting with neoVim in a new tmux-window as
 " documented above
