@@ -66,6 +66,8 @@ set vifminfo=
 
 
 " marks {{{
+" remove all legacy marks from previous usage
+delmarks!
 
 " :mark mark /full/directory/path [filename]
 
