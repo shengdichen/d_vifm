@@ -2,7 +2,7 @@
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
 " use the RFC 2822-compliant date format
-set timefmt="%d.%b.%Y-%T"
+set timefmt="%Y.%b.%d-%T"
 
 
 " use shortened sizes, i.e., B, KB, etc.
