@@ -124,6 +124,8 @@
 " anything. Observe that the "?" forces the directory name to be at least of
 " one character's length, which is fine anyway for directories
 filextype ?*/
+    \ {Execute,, Straight-up}
+    \ nohup ./%c 1>/dev/null 2>&1 &,
     \ {Nautilus,, curDir}
     \ nohup nautilus %d 1>/dev/null 2>&1 &,
     \ {nautilus,, selDir}
