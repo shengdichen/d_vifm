@@ -142,6 +142,14 @@ filextype ?*/
 filetype ?*/
     \ {get total size}
     \ nvim <(du -c -h -d0 %f),
+    \ {Import with beets}
+    \ beet import -l import_log %f,
+    \ {Move-Import with beets}
+    \ beet import -m -l import_log %f,
+    \ {Re-tag}
+    \ beet import -L -l update_log %f,
+    \ {list albums with beets}
+    \ beet ls %f,
 " }}}
 
 
