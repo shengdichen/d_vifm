@@ -66,13 +66,22 @@ set vifminfo=
 
 
 " marks {{{
+" remove all legacy marks from previous usage
+delmarks!
 
 " :mark mark /full/directory/path [filename]
 
 mark h ~/
 
-mark m /mnt/x/myData/&/
+mark d ~/Dots/
 
+" centralized position for non-root mounting
+mark m ~/mnt/
+
+" where all fuse-drives are mounted
+mark f ~/mnt/FUSE/ptr/
+
+mark x ~/xdg/
 " }}}
 
 
