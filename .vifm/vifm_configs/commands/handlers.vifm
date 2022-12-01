@@ -150,6 +150,8 @@ filextype ?*/
 filextype *.pdf
 	\ {zathura}
 	\ nohup zathura %f 1>/dev/null 2>&1 &,
+	\ {pdfarranger}
+	\ nohup pdfarranger %f 1>/dev/null 2>&1 &,
 	\ {evince}
 	\ nohup evince %f 1>/dev/null 2>&1 &,
 	\ {okular}
