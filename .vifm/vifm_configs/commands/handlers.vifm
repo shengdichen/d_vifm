@@ -139,6 +139,9 @@ filextype ?*/
     \ {roll it in VLC}
     \ nohup vlc %c 1>/dev/null 2>&1 &,
 
+filetype ?*/
+    \ {get total size}
+    \ nvim <(du -c -h -d0 %f),
 " }}}
 
 
