@@ -49,6 +49,49 @@ command! z :execute "!tmux new-window -a %a"
 command! nv :!nvim %a %c
 
 
+" util-funcs for tmux-integration {{{
+" create new pane to plain shell {{{
+" NOTE:
+"   shell's working-directory set to that of the invoking vifm-window
+
+command! tmuxSplitWindowHorz
+    \ :execute "!tmux split-window -h -t :."
+
+command! tmuxSplitWindowVert
+    \ :execute "!tmux split-window -v -t :."
+" }}}
+
+
+" create new pane to nvim {{{
+" NOTE:
+"   %f := all selected files [vifm's macro]
+"   -O := open in splits [vim's command-line calling syntax]
+
+command! tmuxSplitWindowHorzEdit
+    \ :execute "!tmux split-window -h -t :. nvim -O %f"
+
+command! tmuxSplitWindowVertEdit
+    \ :execute "!tmux split-window -v -t :. nvim -O %f"
+" }}}
+
+
+" create new pane to duplicate current session {{{
+" NOTE:
+"   use vifm's internal session-mechanism to save session for duplication
+
+command! tmuxSplitWindowHorzDupl
+    \ :write |
+    \ :execute "!tmux split-window -h -t :. vifm"
+
+command! tmuxSplitWindowVertDupl
+    \ :write |
+    \ :execute "!tmux split-window -v -t :. vifm"
+" }}}
+
+command! tmuxSetLayout
+    \ :execute "!tmux select-layout main-vertical"
+
+" }}}
 " perform the similar editing with neoVim, now in a new tmux-window, named as
 " nvn := |nv|(previous command) + n(new_window)
 "       command! nvz :execute "screen!" | :execute "!nvim %a %c" | :execute "screen"
@@ -100,11 +143,26 @@ command! prev
 "       body will be automatically prompted
 "   2.  extra arguments are awkwardly processed
 nnoremap <cr> :nvz<space>
+nnoremap L
+    \ :tmuxSplitWindowVertEdit
+    \ <cr>
 
 
+nnoremap <cr>
+    \ :tmuxSplitWindowVertEdit
+    \ |
+    \ :tmuxSetLayout
+    \ <cr>
 
-" start a new shell instance
-nnoremap S :shell
+
+nnoremap H
+    \ :tmuxSplitWindowVertDupl
+    \ <cr>
+
+
+" new shell in vertical split
+nnoremap S
+    \ :tmuxSplitWindowVert
 
 
 " start shell in-place, as opposed to starting a new shell instance above
