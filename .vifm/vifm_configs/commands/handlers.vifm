@@ -196,6 +196,9 @@ filextype *.djvu
 " Office files {{{
 "       filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx libreoffice %f &
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
+	\ {libreoffice}
+	\ nohup env WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
+	\ {libreoffice_wayland}
     \ nohup libreoffice %c 1>/dev/null 2>&1 &,
 
 fileviewer *.doc catdoc %c
