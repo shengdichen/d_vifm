@@ -152,6 +152,8 @@ filextype *.pdf
 	\ nohup zathura %f 1>/dev/null 2>&1 &,
 	\ {pdfarranger}
 	\ nohup pdfarranger %f 1>/dev/null 2>&1 &,
+	\ {xournal++}
+	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
 	\ {evince}
 	\ nohup evince %f 1>/dev/null 2>&1 &,
 	\ {okular}
@@ -205,6 +207,13 @@ fileviewer *.doc catdoc %c
 fileviewer *.docx docx2txt.pl %f -
 " }}}
 
+" xournal++ {{{
+filextype *.xopp
+	\ {xournal++_wayland}
+	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
+	\ {xournal++}
+	\ nohup env WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
+" }}}
 " }}}
 
 
