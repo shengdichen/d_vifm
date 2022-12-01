@@ -133,7 +133,7 @@ filextype ?*/
     \ {dolphin,, selDir}
     \ nohup dolphin %f 1>/dev/null 2>&1 &,
     \ {mpv it}
-    \ nohup mpv --player-operation-mode=pseudo-gui -- %c 1>/dev/null 2>&1 &,
+    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
     \ {roll it in VLC}
     \ nohup vlc %c 1>/dev/null 2>&1 &,
 
@@ -216,7 +216,7 @@ fileviewer *.docx docx2txt.pl %f -
 
 filextype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
     \ {mpv it}
-    \ nohup mpv --player-operation-mode=pseudo-gui -- %c 1>/dev/null 2>&1 &,
+    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
     \ {the omni-VLC}
     \ nohup vlc %c 1>/dev/null 2>&1 &,
 
@@ -230,7 +230,7 @@ fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
 " Audio-Books {{{
 filextype *.m4b
     \ {mpv it}
-    \ nohup mpv --player-operation-mode=pseudo-gui -- %c 1>/dev/null 2>&1 &,
+    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
 
 fileviewer *.m4b
     \ ffprobe -pretty %c 2>&1 | cat -n,
@@ -243,7 +243,7 @@ filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
          \*.as[fx]
     \ {mpv it}
-    \ nohup mpv --player-operation-mode=pseudo-gui -- %c 1>/dev/null 2>&1 &,
+    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
     \ {the omni-VLC}
     \ nohup vlc %c 1>/dev/null 2>&1 &,
 " the defaults
