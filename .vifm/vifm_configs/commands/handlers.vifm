@@ -171,9 +171,14 @@ fileviewer *.pdf
 " *TeX {{{
 filextype *.lyx
 	\ {lyx}
+	\ nohup env WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
+	\ {lyx_wayland}
 	\ nohup lyx %f 1>/dev/null 2>&1 &,
 
 " bibliography files
+filetype *.bib
+    \ nvim %f,
+
 filextype *.bib
 	\ {kbibtex}
 	\ nohup kbibtex %f 1>/dev/null 2>&1 &,
