@@ -8,7 +8,7 @@ colorscheme def
 "       tmux-window
 " T     truncate verbose status-bar messages in the middle with ellipsis
 " p     use tilde shortening in view titles
-set shortmess="LMTp"
+set shortmess="LMp"
 
 
 " what each pane does {{{
