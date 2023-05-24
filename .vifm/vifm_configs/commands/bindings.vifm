@@ -24,6 +24,10 @@ command! tch :touch "%a"
 command! vgrep vim "+grep %a"
 command! reload :write | restart
 
+command! exx
+    \ !nohup ./%f 1>/dev/null 2>&1 &
+command! ex
+    \ !!./%f
 " }}}
 
 
