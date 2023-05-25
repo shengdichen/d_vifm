@@ -24,6 +24,13 @@ command! tch :touch "%a"
 command! vgrep vim "+grep %a"
 command! reload :write | restart
 
+" get the size {{{
+command! sz
+    \ !!du -d0 -h -c %f
+command! szn
+    \ !nvim <(du -d0 -h -c %f)
+" }}}
+
 command! exx
     \ !nohup ./%f 1>/dev/null 2>&1 &
 command! ex
