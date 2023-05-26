@@ -49,7 +49,10 @@ command! ex
     \ !!./%f
 " }}}
 
-
+command viewspec
+    \ !sox %c -n spectrogram -o %c.png 1>/dev/null 2>&1
+    \ &&
+    \ imv %c.png &
 
 " start a GUI application in background, consistent with personal bash alias
 command! x :!nohup %a 1>/dev/null 2>&1 &
