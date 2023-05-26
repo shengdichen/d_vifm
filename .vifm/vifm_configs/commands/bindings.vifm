@@ -31,6 +31,18 @@ command! szn
     \ !nvim <(du -d0 -h -c %f)
 " }}}
 
+command! list
+    \ !nvim <(ls -a -C1 %a | tail -n +3)
+
+command! compareFlat
+    \ !nvim -d
+    \ <(ls -a -C1 %f:h | tail -n +3 | sort)
+    \ <(ls -a -C1 %F:h | tail -n +3 | sort)
+command! compareRecur
+    \ !nvim -d
+    \ <(find %f:h -type f | sort)
+    \ <(cd %F:h && find . -type f | sort)
+
 command! exx
     \ !nohup ./%f 1>/dev/null 2>&1 &
 command! ex
