@@ -101,10 +101,10 @@ command! tmuxSplitWindowVert
 "   -O := open in splits [vim's command-line calling syntax]
 
 command! tmuxSplitWindowHorzEdit
-    \ :execute "!tmux split-window -h -t :. nvim -O %f"
+    \ :execute "!tmux split-window -h -t :. nvim -O '%f'"
 
 command! tmuxSplitWindowVertEdit
-    \ :execute "!tmux split-window -v -t :. nvim -O %f"
+    \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
 " }}}
 
 
