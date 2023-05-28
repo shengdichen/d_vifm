@@ -54,9 +54,8 @@ command viewspec
     \ &&
     \ imv %c.png &
 
-" start a GUI application in background, consistent with personal bash alias
-command! x :!nohup %a 1>/dev/null 2>&1 &
-
+command! x
+    \ !nohup %a 1>/dev/null 2>&1 &
 
 " run command in new tmux-window, formatted with the command name |z| as
 " parallelism to |x| in the sense that both create a new, separate viewport
