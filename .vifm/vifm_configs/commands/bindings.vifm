@@ -31,6 +31,9 @@ command! szn
     \ !nvim <(du -d0 -h -c %f)
 " }}}
 
+command! hardlink
+    \ !!cp -al %f %a
+
 command! list
     \ !nvim <(ls -a -C1 %a | tail -n +3)
 
