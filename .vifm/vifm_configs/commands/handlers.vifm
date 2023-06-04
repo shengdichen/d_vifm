@@ -554,3 +554,4 @@ fileviewer ?*[^/]
 
 " }}}
 
+" vim: filetype=vifm foldmethod=marker

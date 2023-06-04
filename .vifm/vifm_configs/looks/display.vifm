@@ -157,3 +157,4 @@ windo set viewcolumns=-100%{name}..
 
 " }}}
 
+" vim: filetype=vifm foldmethod=marker
