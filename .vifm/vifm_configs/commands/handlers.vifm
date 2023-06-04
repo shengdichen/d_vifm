@@ -1,5 +1,4 @@
 " file handlers {{{
-
 " default introduction by vifm {{{
 " The file type is for the default programs to be used with
 " a file extension.
@@ -26,15 +25,12 @@
 "
 " You can also add %CLEAR if you want to clear screen before running FUSE
 " program.
-
 " }}}
-
 
 " introduction {{{
 " distinguish between two types of file handler:
 "   1.  opening handler
 "   2.  previewing handler
-
 
 " opening handler {{{
 " filetype <file_t>[,<file_t>]*
@@ -43,7 +39,6 @@
 "   \
 "   \ {description of second handler}
 "   \ <command_of_handler>,
-
 " }}}
 
 " choosing opening handler {{{
@@ -58,7 +53,6 @@
 " if the handler is known already, can avoid tab-completion and provide the
 " beginning few characters that can uniquely identify the handler
 "       |:file <first_few_chars>[ &]|
-
 " }}}
 
 " previewing-handler {{{
@@ -66,14 +60,11 @@
 " been toggled or |:view| has been activated, with the same syntax as
 " |file[x]type|
 
-
 " the |fileviewer| option can be locally overriden, i.e., effective only for
 " the current pane, by locally setting |previewprg|, e.g.:
 "       set previewprg="git log -p %c 2>&1"
 " note that calling |set| here is equivalent to |setlocal|
-
 " }}}
-
 
 " see help-pages: |vifm-patterns| and the following |vifm-glob| for specifying
 " filetypes in patterns, e.g., with RegEx
@@ -85,7 +76,6 @@
 "   %F      all selected file[s] in the inactive pane
 "   %d      fullpath to current directory in the active pane
 "   %D      fullpath to current directory in the inactive pane
-
 
 " detour: vifm-globbing {{{
 " for any specific |.ext| extension, observe following matching behaviors:
@@ -108,14 +98,10 @@
 " to truly include everything ending with ".ext", INCLUDING ".ext" itself,
 " which can be circumvented with:
 "       *.ext
-
 " }}}
-
 " }}}
-
 
 " all handlers {{{
-
 " directories {{{
 " 1.    %d will open the current directory
 " 2.    %f will open the selected directory under the current directory
@@ -152,9 +138,7 @@ filetype ?*/
     \ beet ls %f,
 " }}}
 
-
 " pdf and office {{{
-
 " PDF {{{
 " the defaults
 "       filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
@@ -178,7 +162,6 @@ filetype *.pdf
 
 fileviewer *.pdf
     \ pdftotext -nopgbrk %c - | cat -n,
-
 " }}}
 
 " *TeX {{{
@@ -234,7 +217,6 @@ filextype *.xopp
 " }}}
 " }}}
 
-
 " media {{{
 " audio {{{
 " the defaults
@@ -256,7 +238,6 @@ filextype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
 fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
     \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
 
-
 " Audio-Books {{{
 filextype *.m4b
     \ {mpv it}
@@ -266,7 +247,6 @@ fileviewer *.m4b
     \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
 " }}}
 " }}}
-
 
 " video {{{
 filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
@@ -284,14 +264,11 @@ filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
 "       \ {View using mplayer}
 "       \ mplayer %f,
 
-
 fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
           \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
           \*.as[fx]
     \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
-
 " }}}
-
 
 " images {{{
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
@@ -310,11 +287,8 @@ fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
 
 " Displaying pictures in terminal
 " fileviewer *.jpg,*.png shellpic %c
-
 " }}}
-
 " }}}
-
 
 " dev and sourcecode {{{
 " web {{{
@@ -334,7 +308,6 @@ filetype *.html,*.htm
     \ {edit source}
     \ nvim %c,
 
-
 filextype *.html,*.htm
     \ {vivaldi}
     \ nohup vivaldi-stable %f 1>/dev/null 2>&1 &,
@@ -343,10 +316,8 @@ filextype *.html,*.htm
     \ {firefox}
     \ nohup firefox %f 1>/dev/null 2>&1 &,
 
-
 fileviewer *.html,*.htm
     \ w3m %c,
-
 " }}}
 
 " Object
@@ -355,9 +326,7 @@ filetype *.o nm %f | less
 " Man page
 filetype *.[1-8] man ./%c
 fileviewer *.[1-8] man ./%c | col -b
-
 " }}}
-
 
 " misc {{{
 " OpenRaster
@@ -421,7 +390,6 @@ fileviewer *.tar tar -tf %c
 fileviewer *.zip
         \ unzip -l %f
 
-
 " Rar2FsMount and rar archives
 filetype *.rar
        \ {Mount with rar2fs}
@@ -454,9 +422,7 @@ filetype *.tudu tudu -f %c
 
 " Qt projects
 filextype *.pro qtcreator %f &
-
 " }}}
-
 
 " Syntax highlighting in previewing handlers {{{
 " Explicitly set highlight type for some extensions
@@ -471,14 +437,9 @@ filextype *.pro qtcreator %f &
 " Or leave it for automatic detection
 "
 " fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
-
 " }}}
-
 " }}}
-
-
 " }}}
-
 
 " the default handlers {{{
 " specify the default handlers, MUST be placed at the end, since they would
@@ -495,7 +456,6 @@ filextype *.pro qtcreator %f &
 " handler(s) specified above. These default handlers are in a sense the
 " "last-resort" handler when no known information is known for handling the
 " target.
-
 
 " opening-handler {{{
 " use:
@@ -521,7 +481,6 @@ filextype ?*,*
     \ {graphic Vim}
     \ nohup gvim %c 1>/dev/null 2>&1 &,
 
-
 "   Command used to edit files in various contexts.  The default is vim.
 "   If you would like to use another vi clone such as Elvis or Vile
 "   you will need to change this setting.
@@ -539,19 +498,15 @@ set vicmd=vi
 set vixcmd=nvim
 " }}}
 
-
 " previwing-handler {{{
 " show line number when previewing any file (explicitly NOT folders, which
 " should be handled by vifm itself)
 fileviewer ?*[^/]
     \ cat -n %c,
 
-
 " alternatively, use the %PAGER script of neoVim, located at:
 "   /usr/share/nvim/runtime/macros/less.sh
-
 " }}}
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
