@@ -4,7 +4,6 @@
 " use the RFC 2822-compliant date format
 set timefmt="%Y.%b.%d-%T"
 
-
 " use shortened sizes, i.e., B, KB, etc.
 set noiec
 
@@ -18,25 +17,20 @@ set sizefmt="units:iec,precision:1,nospace"
 set showtabline=multiple
 " }}}
 
-
 " command-line {{{
 " With this option turned on you can run partially entered commands with
 " unambiguous beginning using :! (e.g. :!Te instead of :!Terminal or :!Te<tab>).
 " set fastrun
 
-
 " Use Vim's format of help file (has highlighting and "hyperlinks").
 " If you would rather use a plain text help file set novimhelp.
 set vimhelp
 
-
 " list possible matches on tab completion in command-line mode
 set wildmenu
 
-
 " Display completions in a form of popup with descriptions of the matches
 set wildstyle=popup
-
 
 " shell {{{
 " default shell when running external command with:
@@ -46,7 +40,6 @@ set shell=/bin/zsh
 
 " default flag to pass on when invoking the shell set above
 set shellcmdflag="-c"
-
 " }}}
 
 " searching {{{
@@ -55,13 +48,11 @@ set shellcmdflag="-c"
 set ignorecase
 set smartcase
 
-
 " Don't highlight search results automatically
 set nohlsearch
 
 " Use increment searching (search while typing)
 set incsearch
-
 " }}}
 
 " filtering {{{
@@ -74,17 +65,12 @@ windo filter
 
 " reset the dotfiles-filter by displaying dotfiles (/^[\.].*$/) by default
 set dotfiles
-
 " }}}
-
-
 " }}}
-
 
 " status-line {{{
 " enable the status-line
 set laststatus
-
 
 " set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 " %A        permission
@@ -98,12 +84,8 @@ set laststatus
 " %l        number of file in current view
 " %L        total number of file(s) in current view
 " %d        formatted date of modification
-
 set statusline=" [%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d "
-
 " }}}
-
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
