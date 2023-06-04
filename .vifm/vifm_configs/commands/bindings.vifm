@@ -121,15 +121,19 @@ command! tmuxSplitWindowVertDupl
     \ :execute "!tmux split-window -v -t :. vifm"
 " }}}
 
+" misc {{{
 command! tmuxSetLayout
     \ :execute "!tmux select-layout main-vertical"
 
+command! tmuxPanePrevious
+    \ :execute "!tmux select-pane -t :.-1"
+command! tmuxPaneNext
+    \ :execute "!tmux select-pane -t :.+1"
+
+command! tmuxPaneLast
+    \ :execute "!tmux select-pane -t :.{last}"
 " }}}
-" perform the similar editing with neoVim, now in a new tmux-window, named as
-" nvn := |nv|(previous command) + n(new_window)
-"       command! nvz :execute "screen!" | :execute "!nvim %a %c" | :execute "screen"
-" edit in a new (vertical) split of tmux
-command! nvz :execute "!tmux split-window nvim %a %c"
+" }}}
 
 
 
@@ -172,19 +176,6 @@ nnoremap K 4k
 
 vnoremap J 4j
 vnoremap K 4k
-
-" call the command |nvz| for editting with neoVim in a new tmux-window as
-" documented above
-" NOTE: could also copy the body of the command |nvz| as core the mapping,
-" which, however, would have the disadvantages of:
-"   1.  extrem noise in command-line every time hitting the keybinding, as the
-"       body will be automatically prompted
-"   2.  extra arguments are awkwardly processed
-nnoremap <cr> :nvz<space>
-nnoremap L
-    \ :tmuxSplitWindowVertEdit
-    \ <cr>
-
 
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
