@@ -1,2 +1,4 @@
 .vifm/vifm-help.txt
 .vifm/colors/Default.vifm
+
+.vifm/vifminfo.json*
