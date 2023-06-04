@@ -1,7 +1,5 @@
 " display {{{
-
 colorscheme def
-
 
 " L     use the last-level folder-path when setting title of new tabs
 " M     use only the file name instead of full path when spawning a new
@@ -9,7 +7,6 @@ colorscheme def
 " T     truncate verbose status-bar messages in the middle with ellipsis
 " p     use tilde shortening in view titles
 set shortmess="LMp"
-
 
 " what each pane does {{{
 " first things first, reset pane display by exiting all currently active
@@ -52,9 +49,7 @@ set milleroptions="lsize:11,csize:17,rsize:10,rpreview:directory"
 
 " use the other pane to display preview for VIEW-mode
 set quickview
-
 " }}}
-
 
 " default 2: horizontal split {{{
 " to enable tree view by default, uncomment the next two lines
@@ -62,11 +57,8 @@ set quickview
 "       vsplit
 "       windo tree
 "       set quickview
-
 " }}}
-
 " }}}
-
 
 " sorting {{{
 " Natural sort of (version) numbers within text.
@@ -83,7 +75,6 @@ set sortorder="ascending"
 
 " }}}
 
-
 " set where and how suggestions are displayed
 " 1     set the delay before displaying said suggestions with |delay:<delay_time>|
 " 2     to use the other pane for displaying said suggestions, include |otherpane|
@@ -92,33 +83,26 @@ set suggestoptions=delay:270,otherpane,foldsubkeys,
 \normal,visual,view,
 \keys,marks,registers:5
 
-
 " Automatically resolve symbolic links on l or Enter.
 set nofollowlinks
 
-
 " do NOT run executable on |l| or |Enter| automatically
 set norunexec
-
 
 " only prompt for confirmation when permanently deleting (include |delete| to
 " also display confirmation when NOT)
 set confirm=permdelete
 
-
 " do not display "../" for parent directory at the top unless at root (/) of
 " the filesystem
 set dotdirs=rootparent
-
 
 " - exclude "s" to to disable horizaontal side borders on both left and right
 "   side of the main viewing area
 " - exclude "p" to disable further vertical AND horizontal padding in VIEW_Mode
 set tuioptions="s"
 
-
 " anything OTHER than LS-view {{{
-
 " the number of lines maintained visible before scrolling, consistent with
 " personal setting in [neo]Vim
 set scrolloff=2
@@ -127,7 +111,6 @@ set scrolloff=2
 set number
 set numberwidth=4
 set relativenumber
-
 
 " set the visible column(s) on any viewmodes other than |lsview|
 " 1.    left align: prepend with |-|
@@ -147,14 +130,8 @@ windo set viewcolumns=-100%{name}..
 
 " to execute command for each pane
 " :windo <command_to_run>
-
 " }}}
-
-
 " }}}
-
-
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
