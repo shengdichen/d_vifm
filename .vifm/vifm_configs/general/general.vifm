@@ -13,7 +13,6 @@ set cpoptions=""
 " doesn't support progress measuring.
 set syscalls
 
-
 " Don't do too many requests to slow file systems
 if !has('win')
     set slowfs=curlftpfs
@@ -31,15 +30,11 @@ screen
 "       screen!
 "       screen
 "   endif
-
-
 " }}}
-
 
 " history {{{
 " This is how many directories to store in the directory history.
 set history=100
-
 
 " Trash Directory
 " The default is to move files that are deleted with dd or :d to
@@ -52,7 +47,6 @@ set trash
 " Maximum number of changes that can be undone.
 set undolevels=100
 
-
 " What should be saved automatically between vifm sessions.  Drop "savedirs"
 " value if you don't want vifm to remember last visited directories for you.
 set vifminfo=
@@ -60,10 +54,7 @@ set vifminfo=
     \savedirs,dirstack,tabs,
     \dhistory,chistory,shistory,phistory
     "dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,bmarks
-
-
 " }}}
-
 
 " marks {{{
 " remove all legacy marks from previous usage
@@ -84,21 +75,15 @@ mark f ~/mnt/FUSE/ptr/
 mark x ~/xdg/
 " }}}
 
-
-
 " various customization examples {{{
-
 " Use ag (the silver searcher) instead of grep
 "       set grepprg='ag --line-numbers %i %a %s'
-
 
 " Add additional place to look for executables
 "       let $PATH = $HOME.'/bin/fuse:'.$PATH
 
-
 " Block particular shortcut
 "       nnoremap <left> <nop>
-
 
 " Export IPC name of current instance as environment variable and use it to
 " communicate with the instance later.
@@ -109,7 +94,6 @@ mark x ~/xdg/
 "
 
 " let $VIFM_SERVER_NAME = v:servername
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
