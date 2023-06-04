@@ -222,6 +222,15 @@ nnoremap w
 nnoremap W :prev<space>
 
 
+" tabbing {{{
+nnoremap <c-t> :tabnew || tabname<space>
+nnoremap <c-y> :tabname<space>
+
+nnoremap <c-n> gt
+nnoremap <c-p> gT
+
+" }}}
+
 " default, but discontinued bindings {{{
 " [discontinued default binding] toggle VIEW_Mode in V_Mode and restore the
 " visual selection afterwards
