@@ -294,3 +294,4 @@ nnoremap gb :file &<cr>l
 
 " }}}
 
+" vim: filetype=vifm foldmethod=marker

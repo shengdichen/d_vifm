@@ -106,3 +106,4 @@ set statusline=" [%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d "
 
 " }}}
 
+" vim: filetype=vifm foldmethod=marker
