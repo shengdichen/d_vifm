@@ -1,6 +1,3 @@
-" vim: filetype=vifm :
-
-
 " The environment variable $VIFM, if not explicitly set, is FIRST assumed to
 " be, if existent,
 "       $HOME/.vifm
