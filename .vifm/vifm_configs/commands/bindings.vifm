@@ -1,5 +1,4 @@
 " user-defined commands {{{
-
 " default extra commands {{{
 " :com[mand][!] command_name action
 " The following macros can be used in a command
@@ -75,12 +74,9 @@ command! x
 " the -a flag of tmux's native |new-window| command remedies this inconvenience
 command! z :execute "!tmux new-window -a %a"
 
-
-
 " edit with neoVim by calling |:nv| in N_Mode, i.e., |nv| in C_Mode, with
 " additional arguments passed as flags to neoVim
 command! nv :!nvim %a %c
-
 
 " util-funcs for tmux-integration {{{
 " create new pane to plain shell {{{
@@ -94,7 +90,6 @@ command! tmuxSplitWindowVert
     \ :execute "!tmux split-window -v -t :."
 " }}}
 
-
 " create new pane to nvim {{{
 " NOTE:
 "   %f := all selected files [vifm's macro]
@@ -106,7 +101,6 @@ command! tmuxSplitWindowHorzEdit
 command! tmuxSplitWindowVertEdit
     \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
 " }}}
-
 
 " create new pane to duplicate current session {{{
 " NOTE:
@@ -135,8 +129,6 @@ command! tmuxPaneLast
 " }}}
 " }}}
 
-
-
 " a more complex example command with integrated testing for directories, for
 " demonstration purposes only
 "   command! nvtz
@@ -144,8 +136,6 @@ command! tmuxPaneLast
 "       \ execute "cd %c" |
 "       \ else | execute "screen!" | execute "!nvim %a %c" | execute "screen" |
 "       \ endif
-
-
 
 " if no arugment passed, toggle between setting to |git log| and resetting
 " if argument passed and is "d", preview with |git diff|
@@ -164,11 +154,7 @@ command! prev
     \ else |
         \ execute "set previewprg='%a'" |
     \ endif
-
-
 " }}}
-
-
 
 " keybindings {{{
 nnoremap J 4j
@@ -183,21 +169,16 @@ nnoremap <cr>
     \ :tmuxSetLayout
     \ <cr>
 
-
 nnoremap H
     \ :tmuxSplitWindowVertDupl
     \ <cr>
-
 
 " new shell in vertical split
 nnoremap S
     \ :tmuxSplitWindowVert
 
-
 " start shell in-place, as opposed to starting a new shell instance above
 nnoremap s :shell!<cr>
-
-
 
 " toggle visibility of preview window in a separate pane
 " NOTE: to preview in fullscreen, press "e" in N_Mode
@@ -208,10 +189,8 @@ nnoremap w
     \ endif
     \ <cr>
 
-
 " a similar shortcut to toggle previewing with |git log|
 nnoremap W :prev<space>
-
 
 " tabbing {{{
 nnoremap <c-t> :tabnew || tabname<space>
@@ -219,7 +198,6 @@ nnoremap <c-y> :tabname<space>
 
 nnoremap <c-n> gt
 nnoremap <c-p> gT
-
 " }}}
 
 " default, but discontinued bindings {{{
@@ -279,10 +257,7 @@ nnoremap gb :file &<cr>l
 "   nnoremap <f6> :move<cr>
 "   nnoremap <f7> :mkdir<space>
 "   nnoremap <f8> :delete<cr>
-
-
 " }}}
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
