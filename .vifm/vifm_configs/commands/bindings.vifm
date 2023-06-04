@@ -173,11 +173,6 @@ nnoremap K 4k
 vnoremap J 4j
 vnoremap K 4k
 
-nnoremap L
-    \ :tmuxSplitWindowVertEdit
-    \ <cr>
-
-
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
     \ |
