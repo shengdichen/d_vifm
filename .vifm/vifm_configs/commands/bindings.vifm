@@ -173,14 +173,6 @@ nnoremap K 4k
 vnoremap J 4j
 vnoremap K 4k
 
-" call the command |nvz| for editting with neoVim in a new tmux-window as
-" documented above
-" NOTE: could also copy the body of the command |nvz| as core the mapping,
-" which, however, would have the disadvantages of:
-"   1.  extrem noise in command-line every time hitting the keybinding, as the
-"       body will be automatically prompted
-"   2.  extra arguments are awkwardly processed
-nnoremap <cr> :nvz<space>
 nnoremap L
     \ :tmuxSplitWindowVertEdit
     \ <cr>
