@@ -24,13 +24,44 @@ command! tch :touch "%a"
 command! vgrep vim "+grep %a"
 command! reload :write | restart
 
+" get the size {{{
+command! sz
+    \ !!du -d0 -h -c %f
+command! szn
+    \ !nvim <(du -d0 -h -c %f)
 " }}}
 
+command! hardlink
+    \ !!cp -al %f %a
 
+command! list
+    \ !nvim <(ls -a -C1 %a | tail -n +3)
 
-" start a GUI application in background, consistent with personal bash alias
-command! x :!nohup %a 1>/dev/null 2>&1 &
+command! compareFlat
+    \ !nvim -d
+    \ <(ls -a -C1 %f:h | tail -n +3 | sort)
+    \ <(ls -a -C1 %F:h | tail -n +3 | sort)
+command! compareRecur
+    \ !nvim -d
+    \ <(find %f:h -type f | sort)
+    \ <(cd %F:h && find . -type f | sort)
 
+command! exx
+    \ !nohup ./%f 1>/dev/null 2>&1 &
+command! ex
+    \ !!./%f
+" }}}
+
+command! tidal
+    \ for i in {1..2}; do tidal-dl -l "%a"; done
+
+command viewspec
+    \ !sox %c -n spectrogram -o %c.png 1>/dev/null 2>&1
+    \ &&
+    \ imv %c.png &
+
+command! x
+    \ !nohup %a 1>/dev/null 2>&1 &
 
 " run command in new tmux-window, formatted with the command name |z| as
 " parallelism to |x| in the sense that both create a new, separate viewport
@@ -70,10 +101,10 @@ command! tmuxSplitWindowVert
 "   -O := open in splits [vim's command-line calling syntax]
 
 command! tmuxSplitWindowHorzEdit
-    \ :execute "!tmux split-window -h -t :. nvim -O %f"
+    \ :execute "!tmux split-window -h -t :. nvim -O '%f'"
 
 command! tmuxSplitWindowVertEdit
-    \ :execute "!tmux split-window -v -t :. nvim -O %f"
+    \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
 " }}}
 
 
