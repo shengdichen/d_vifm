@@ -1,91 +1,73 @@
-" *-lines {{{
-" Format for displaying time in file list. For example:
-" TIME_STAMP_FORMAT=%m/%d-%H:%M
-" use the RFC 2822-compliant date format
+" 1999.Jan.01-23:59:59
 set timefmt="%Y.%b.%d-%T"
 
 " use shortened sizes, i.e., B, KB, etc.
 set noiec
 
-" size for displaying human-readable sizes
-" units:iec     1024 instead of 1000
-" nospace       do NOT place a space-character between size and unit
-set sizefmt="units:iec,precision:1,nospace"
+" NOTE:
+"   1. units:iec: 1024 instead of 1000
+"   2. nospace: do NOT place a space-character between size and unit
+set sizefmt=
+\units:iec,
+\precision:1,
+\nospace
 
-" tab-line {{{
-" only display the tab-line when multiple tabs are present
+" only display tab-line if multiple tabs are present
 set showtabline=multiple
-" }}}
 
 " command-line {{{
-" With this option turned on you can run partially entered commands with
-" unambiguous beginning using :! (e.g. :!Te instead of :!Terminal or :!Te<tab>).
+" run command with unambiguous beginning
 " set fastrun
 
-" Use Vim's format of help file (has highlighting and "hyperlinks").
-" If you would rather use a plain text help file set novimhelp.
+" help-page with [n]vim
 set vimhelp
 
-" list possible matches on tab completion in command-line mode
+" tab-completion
 set wildmenu
-
-" Display completions in a form of popup with descriptions of the matches
 set wildstyle=popup
 
-" shell {{{
-" default shell when running external command with:
-"   |:!<my_command>|
-"       set shell=/bin/bash
 set shell=/bin/zsh
-
-" default flag to pass on when invoking the shell set above
 set shellcmdflag="-c"
 " }}}
 
 " searching {{{
-" Ignore case in search patterns unless it contains at least one uppercase
-" letter
 set ignorecase
 set smartcase
 
-" Don't highlight search results automatically
 set nohlsearch
-
-" Use increment searching (search while typing)
 set incsearch
 " }}}
 
-" filtering {{{
-"   Filter-out build and temporary files
-"
-"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
-
-" reset the currently set, if any, filter of both windows to show everything
+" filter {{{
+" reset the currently set, if any, filter of both panes
 windo filter
 
-" reset the dotfiles-filter by displaying dotfiles (/^[\.].*$/) by default
+" sample filter C[++] & python
+"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
+
+" show dotfiles
 set dotfiles
 " }}}
 " }}}
 
 " status-line {{{
-" enable the status-line
+" enable status-line
 set laststatus
 
-" set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
-" %A        permission
-" %u        user
-" %g        group
+" NOTE:
+"   %A: permission
+"   %u: user
+"   %g: group
 
-" %s        size
-" %E        size of all currently selected files
-" %T        target if current item under cursor is a link
+"   %s: size
+"   %E: size of all selected files
+"   %T: target if current item is a link
 
-" %l        number of file in current view
-" %L        total number of file(s) in current view
-" %d        formatted date of modification
-set statusline=" [%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d "
-" }}}
+"   %l: position of item in current view
+"   %L: total number of items(s) in current view
+"   %d: formatted date of modification
+set statusline=
+\" [%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d "
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
