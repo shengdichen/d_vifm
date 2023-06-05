@@ -441,70 +441,41 @@ filextype *.pro qtcreator %f &
 " }}}
 " }}}
 
-" the default handlers {{{
-" specify the default handlers, MUST be placed at the end, since they would
-" otherwise:
-"   1.  override all handlers specified above when opening by pressing |l|
-"       in N_Mode
-"   2.  take precedence over all handlers specified above when selecting a
-"       handler before opening with |:file[&]| in N_Mode
-" even in case of matching types, as |?*| and |*| combined will match any name
-" with vifm-globbing
-"
-" These default handlers will be listed last when selecting a handler with
-" |:file[&]|, i.e., in case of a matching type, after the type's specific
-" handler(s) specified above. These default handlers are in a sense the
-" "last-resort" handler when no known information is known for handling the
-" target.
+" default handler {{{
+" NOTE:
+"   1.  must be placed AFTER all matching-based handlers above
+"   2.  use |?*| and |*| to match all
 
-" opening-handler {{{
-" use:
-"       $ nvim -O <file_1> [<file_2>...]
-" to open multiple files in splits, which gracefully handles a single file too
 filetype ?*,*
-    \ {In-Place}
+    \ {nvim}
     \ nvim -O %f,
-    \ {diff,, In-Place}
+    \ {diff}
     \ nvim -d %f,
-    \ {Tmux}
+    \ {nvim.tmux}
     \ tmux split-window -h -t :. nvim -O %f &&
         \ tmux select-layout main-vertical,
-    \ {diff,, Tmux}
+    \ {diff.tmux}
     \ tmux split-window -h -t :. nvim -d %f &&
         \ tmux select-layout main-vertical,
-    \ {old-school vi}
+    \ {vi}
     \ vi %c,
-    \ {good o'Vim}
+    \ {vim}
     \ vim %c,
 
 filextype ?*,*
-    \ {graphic Vim}
+    \ {gvim}
     \ nohup gvim %c 1>/dev/null 2>&1 &,
 
-"   Command used to edit files in various contexts.  The default is vim.
-"   If you would like to use another vi clone such as Elvis or Vile
-"   you will need to change this setting.
-"
-" In particular, this is used to
-"   1.  display vifm's help files
-"   2.  bulk-rename
-" and NOT for general file handling, which is set with file[x]type above
-" NOTE:
-"   set this to the simple command of |vi| or |nvim|, as this example would
-"   break Visual-rename:
-"       set vixcmd="tmux split-window -h -t :. nvim"
-"
+" notably used for bulk-renaming
 set vicmd=vi
 set vixcmd=nvim
-" }}}
 
-" previwing-handler {{{
-" show line number when previewing any file (explicitly NOT folders, which
-" should be handled by vifm itself)
+" preview {{{
+" for files only (NOT folders: these are handled by vifm itself)
 fileviewer ?*[^/]
     \ cat -n %c,
 
-" alternatively, use the %PAGER script of neoVim, located at:
+" alternatively, use nvim's pager:
 "   /usr/share/nvim/runtime/macros/less.sh
 " }}}
 " }}}
