@@ -13,7 +13,7 @@ highlight Executable cterm=none ctermfg=002 ctermbg=016
 
 highlight Selected cterm=none ctermfg=007 ctermbg=237
 
-" the following highlighting options follow the default coloring of |dircolor|:
+" default |$ dircolors| {{{
 " cyan for symbolic links
 highlight Link cterm=none ctermfg=006 ctermbg=016
 " red for broken links
