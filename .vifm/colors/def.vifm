@@ -103,3 +103,5 @@ highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=016
 
 
 highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=red
+
+" vim: filetype=vifm foldmethod=marker
