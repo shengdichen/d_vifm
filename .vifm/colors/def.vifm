@@ -1,7 +1,7 @@
 highlight clear
 
 " different panes {{{
-" the currently active pane {{{
+" the active pane {{{
 highlight CurrLine cterm=bold ctermfg=007 ctermbg=237
 
 " generic files
@@ -26,8 +26,9 @@ highlight Fifo cterm=bold ctermfg=005 ctermbg=016
 " yellow for block devices
 highlight Device cterm=none ctermfg=003 ctermbg=016
 " }}}
+" }}}
 
-" the currently inactive pane {{{
+" the inactive pane {{{
 " cursor-line
 highlight OtherLine cterm=none ctermfg=007 ctermbg=233
 
@@ -38,8 +39,7 @@ highlight OtherWin cterm=none ctermfg=239 ctermbg=235
 " both "gutter" borders along left and right sides
 highlight Border cterm=none ctermfg=015 ctermbg=016
 
-"       highlight AuxWin cterm=bold,underline,reverse,standout ctermfg=default ctermbg=default
-" the currently inactive columns if set to millerview
+" currently inactive columns if set to millerview
 highlight AuxWin cterm=none ctermfg=015 ctermbg=016
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
@@ -47,12 +47,12 @@ highlight AuxWin cterm=none ctermfg=015 ctermbg=016
 highlight SuggestBox cterm=none ctermfg=255 ctermbg=016
 " }}}
 
-" all the lines {{{
+" *-lines {{{
 " NOTE:
 "   enlisted in vertical order from the top of the screen to the bottom
 
-" tablines {{{
-" the active tab
+" tab-line {{{
+" active tab
 highlight TabLineSel cterm=none ctermfg=015 ctermbg=016
 
 " inactive tabs
