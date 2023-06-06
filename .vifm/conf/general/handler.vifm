@@ -8,10 +8,6 @@
 filextype ?*/
     \ {Execute,, Straight-up}
     \ nohup ./%c 1>/dev/null 2>&1 &,
-    \ {Nautilus,, curDir}
-    \ nohup nautilus %d 1>/dev/null 2>&1 &,
-    \ {nautilus,, selDir}
-    \ nohup nautilus %f 1>/dev/null 2>&1 &,
     \ {dolphin,, curDir}
     \ nohup dolphin %d 1>/dev/null 2>&1 &,
     \ {dolphin,, selDir}
