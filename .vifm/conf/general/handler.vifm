@@ -441,12 +441,6 @@ filetype ?*,*
         \ tmux select-layout main-vertical,
     \ {vi}
     \ vi %c,
-    \ {vim}
-    \ vim %c,
-
-filextype ?*,*
-    \ {gvim}
-    \ nohup gvim %c 1>/dev/null 2>&1 &,
 
 " notably used for bulk-renaming
 set vicmd=vi
