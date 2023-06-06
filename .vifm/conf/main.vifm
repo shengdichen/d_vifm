@@ -1,0 +1,9 @@
+source $VIFM/conf/general/general.vifm
+
+source $VIFM/conf/looks/display.vifm
+source $VIFM/conf/looks/lines.vifm
+
+source $VIFM/conf/commands/handlers.vifm
+source $VIFM/conf/commands/bindings.vifm
+
+" vim: filetype=vifm

@@ -5,19 +5,6 @@
 "       ~/.vifm
 " if $HOME has not been set otherwise and the said location exists.
 
-
-source $VIFM/conf/general/general.vifm
-
-
-
-source $VIFM/conf/looks/display.vifm
-
-source $VIFM/conf/looks/lines.vifm
-
-
-
-source $VIFM/conf/commands/handlers.vifm
-
-source $VIFM/conf/commands/bindings.vifm
+source $VIFM/conf/main.vifm
 
 " vim: filetype=vifm
