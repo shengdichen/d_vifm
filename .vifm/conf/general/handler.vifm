@@ -35,10 +35,6 @@ filextype *.pdf
 	\ nohup pdfarranger %f 1>/dev/null 2>&1 &,
 	\ {xournal++}
 	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
-	\ {evince}
-	\ nohup evince %f 1>/dev/null 2>&1 &,
-	\ {okular}
-	\ nohup okular %f 1>/dev/null 2>&1 &,
 
 filetype *.pdf
     \ {terminal-mode}
