@@ -1,18 +1,8 @@
-" colorscheme written from scratch by
-" Shengdi Chen
-
-
-" clear residual highlights
 highlight clear
 
-
-
 " different panes {{{
-" the currently active pane {{{
-
-" current cursorline
+" the active pane {{{
 highlight CurrLine cterm=bold ctermfg=007 ctermbg=237
-
 
 " generic files
 highlight Win cterm=none ctermfg=255 ctermbg=016
@@ -21,11 +11,9 @@ highlight Directory cterm=none ctermfg=255 ctermbg=016
 
 highlight Executable cterm=none ctermfg=002 ctermbg=016
 
-" selected items (can be toggled with VISUAL-mode)
 highlight Selected cterm=none ctermfg=007 ctermbg=237
 
-
-" the following highlighting options follow the default coloring of |dircolor|:
+" default |$ dircolors| {{{
 " cyan for symbolic links
 highlight Link cterm=none ctermfg=006 ctermbg=016
 " red for broken links
@@ -37,69 +25,58 @@ highlight Fifo cterm=bold ctermfg=005 ctermbg=016
 
 " yellow for block devices
 highlight Device cterm=none ctermfg=003 ctermbg=016
-
+" }}}
 " }}}
 
-
-" the currently inactive pane {{{
-" current cursorline
+" the inactive pane {{{
+" cursor-line
 highlight OtherLine cterm=none ctermfg=007 ctermbg=233
 
-" generic files of inactive panes
+" generic files
 highlight OtherWin cterm=none ctermfg=239 ctermbg=235
-
 " }}}
-
 
 " both "gutter" borders along left and right sides
 highlight Border cterm=none ctermfg=015 ctermbg=016
 
-"       highlight AuxWin cterm=bold,underline,reverse,standout ctermfg=default ctermbg=default
-" the currently inactive columns if set to millerview
+" currently inactive columns if set to millerview
 highlight AuxWin cterm=none ctermfg=015 ctermbg=016
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
 " keybinding, taking up the spare pane if existent
 highlight SuggestBox cterm=none ctermfg=255 ctermbg=016
-
 " }}}
 
+" *-lines {{{
+" NOTE:
+"   enlisted in vertical order from the top of the screen to the bottom
 
-" all the lines {{{
-" enlisted in vertical order from the top of the screen to the bottom
-
-" tablines {{{
-" active tabs
+" tab-line {{{
+" active tab
 highlight TabLineSel cterm=none ctermfg=015 ctermbg=016
 
 " inactive tabs
 highlight TabLine cterm=none ctermfg=243 ctermbg=016
-
 " }}}
 
-" top-line of every pane{{{
-" the currently active pane
+" top-line (current path) {{{
+" active pane
 highlight TopLineSel cterm=none ctermfg=255 ctermbg=016
 
-" inactive panes
+" inactive pane
 highlight TopLine cterm=none ctermfg=255 ctermbg=016
-
 " }}}
-
 
 highlight JobLine cterm=bold,reverse ctermfg=black ctermbg=255
 
-" the line above command-line
 highlight StatusLine cterm=none ctermfg=008 ctermbg=016
 
-
-" everything about the command-line
+" command-line related
 highlight CmdLine cterm=none ctermfg=255 ctermbg=016
 highlight WildMenu cterm=bold ctermfg=255 ctermbg=016
 highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=016
-
 " }}}
 
-
-
 highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=red
+
+" vim: filetype=vifm foldmethod=marker

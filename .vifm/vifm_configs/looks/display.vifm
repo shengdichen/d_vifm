@@ -1,7 +1,4 @@
-" display {{{
-
 colorscheme def
-
 
 " L     use the last-level folder-path when setting title of new tabs
 " M     use only the file name instead of full path when spawning a new
@@ -9,7 +6,6 @@ colorscheme def
 " T     truncate verbose status-bar messages in the middle with ellipsis
 " p     use tilde shortening in view titles
 set shortmess="LMp"
-
 
 " what each pane does {{{
 " first things first, reset pane display by exiting all currently active
@@ -42,19 +38,18 @@ windo cd -
 " make sure that the currently active pane is put on top
 1wincmd K
 
-" perform a vertical split
+" split vertically
 split
 
-" enable miller-view, set the column sizes accordingly and preview only
-" directories (preview files in VIEW-mode instead)
 set millerview
-set milleroptions="lsize:11,csize:17,rsize:10,rpreview:directory"
+" preview only directories (preview files in VIEW-mode instead)
+set milleroptions=
+\lsize:11,csize:17,rsize:10,
+\rpreview:directory
 
-" use the other pane to display preview for VIEW-mode
+" use the other pane for previewing
 set quickview
-
 " }}}
-
 
 " default 2: horizontal split {{{
 " to enable tree view by default, uncomment the next two lines
@@ -62,80 +57,64 @@ set quickview
 "       vsplit
 "       windo tree
 "       set quickview
-
+" }}}
 " }}}
 
-" }}}
-
-
-" sorting {{{
-" Natural sort of (version) numbers within text.
+" sort {{{
+" natural sort of (version) numbers within text
 set sortnumbers
 
-" sorting order
-"   1.  +dir    -> directories before files
-"   2.  +name   -> filenames (case-sensitive, use |iname| otherwise)
+" NOTE:
+"   1. +dir: directories before files
+"   2. +name: case-sensitive by raw name
 set sort="+dir,+name"
 
-" set the sorting order of the primary sorting criteria for the primary sorting
-" criteria, i.e., confirm ascending order for |dir| as set above
 set sortorder="ascending"
-
 " }}}
 
-
-" set where and how suggestions are displayed
-" 1     set the delay before displaying said suggestions with |delay:<delay_time>|
-" 2     to use the other pane for displaying said suggestions, include |otherpane|
-" 3.    to group keys with common prefix, include |foldsubkeys|
-set suggestoptions=delay:270,otherpane,foldsubkeys,
+" NOTE:
+"   1. |delay:<delay_time>|: delay before displaying suggestions
+"   2. |otherpane|: use the other pane for displaying suggestions
+"   3. |foldsubkeys|: group suggestions with common prefix
+set suggestoptions=
+\delay:270,otherpane,foldsubkeys,
 \normal,visual,view,
 \keys,marks,registers:5
 
-
-" Automatically resolve symbolic links on l or Enter.
+" open linked files directly instead of changing to its dir
 set nofollowlinks
 
-
-" do NOT run executable on |l| or |Enter| automatically
+" do NOT auto-run executable
 set norunexec
 
-
-" only prompt for confirmation when permanently deleting (include |delete| to
-" also display confirmation when NOT)
+" only prompt at permanent deletion
 set confirm=permdelete
 
-
-" do not display "../" for parent directory at the top unless at root (/) of
-" the filesystem
+" do not include |../| as first entry unless at root (/)
 set dotdirs=rootparent
 
-
-" - exclude "s" to to disable horizaontal side borders on both left and right
-"   side of the main viewing area
-" - exclude "p" to disable further vertical AND horizontal padding in VIEW_Mode
+" NOTE:
+"   1. exclude |s|: disable horizontal side borders on both left and right
+"   sides of the main viewing area
+"   2. exclude |p|: disable further vertical AND horizontal padding in VIEW_Mode
 set tuioptions="s"
 
-
-" anything OTHER than LS-view {{{
-
-" the number of lines maintained visible before scrolling, consistent with
-" personal setting in [neo]Vim
+" non-LS-view {{{
+" number of lines kept visible when scrolling
 set scrolloff=2
 
-" display relative line number with the default size the gutter set to 4
 set number
-set numberwidth=4
+set numberwidth=4  " gutter-size
 set relativenumber
 
-
 " set the visible column(s) on any viewmodes other than |lsview|
-" 1.    left align: prepend with |-|
-" 2.    manually specify the width with |<percentage>%|
-" 3.    delimit the field name with curly brackets
-" 4.    append |..| to display ellipsis instead of truncating longer filenames
+"   1. prepend |-|: left align
+"   2. |<percentage>%|: width
+"   3. delimit the field name with curly brackets
+"   4. append |..|: display ellipsis instead of truncating longer filenames
 " apply this setting to all panes with |windo|
 windo set viewcolumns=-100%{name}..
+
 " winrun and windo {{{
 " execute command for pane(s), which is determined by type argument:
 " :winrun <target_panes> <command_to_run>
@@ -147,14 +126,7 @@ windo set viewcolumns=-100%{name}..
 
 " to execute command for each pane
 " :windo <command_to_run>
-
 " }}}
-
-
-" }}}
-
-
-
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
