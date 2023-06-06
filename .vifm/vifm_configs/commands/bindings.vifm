@@ -1,5 +1,5 @@
-" user-defined commands {{{
-" default extra commands {{{
+" commands {{{
+" intro {{{
 " :com[mand][!] command_name action
 " The following macros can be used in a command
 " %a is replaced with the user arguments.
@@ -11,30 +11,29 @@
 " %d the current directory name.
 " %D the other window directory name.
 " %m run the command in a menu window
-
-command! df df -h %m 2> /dev/null
-command! diff nvim -d %f %F
-command! zip zip -r %f.zip %f
-command! run !! ./%f
-command! make !!make %a
-command! mkcd :mkdir %a | cd %a
-command! mkd :mkdir "%a"
-command! tch :touch "%a"
-command! vgrep vim "+grep %a"
-command! reload :write | restart
-
-" get the size {{{
-command! sz
-    \ !!du -d0 -h -c %f
-command! szn
-    \ !nvim <(du -d0 -h -c %f)
 " }}}
+
+" file-system {{{
+command! mkcd
+    \ :mkdir %a | cd %a
+command! mkd
+    \ :mkdir "%a"
+command! tch
+    \ :touch "%a"
+
+command! getSize
+    \ !!du -d0 -h -c %f
+command! getSizeNvim
+    \ !nvim <(du -d0 -h -c %f)
 
 command! hardlink
     \ !!cp -al %f %a
 
 command! list
     \ !nvim <(ls -a -C1 %a | tail -n +3)
+
+command! diff
+    \ nvim -d %f %F
 
 command! compareFlat
     \ !nvim -d
@@ -45,6 +44,16 @@ command! compareRecur
     \ <(find %f:h -type f | sort)
     \ <(cd %F:h && find . -type f | sort)
 
+command! df
+    \ df -h %m 2> /dev/null
+" }}}
+
+" execute {{{
+command! x
+    \ !nohup %a 1>/dev/null 2>&1 &
+
+command! run
+    \ !! ./%f
 command! exx
     \ !nohup ./%f 1>/dev/null 2>&1 &
 command! ex
@@ -59,27 +68,9 @@ command viewspec
     \ &&
     \ imv %c.png &
 
-command! x
-    \ !nohup %a 1>/dev/null 2>&1 &
-
-" run command in new tmux-window, formatted with the command name |z| as
-" parallelism to |x| in the sense that both create a new, separate viewport
-" NOTE: use |execute| to include further instructions after |command|, as the
-" bar character ("|") will be automatically consumed by |command| itself as its
-" argument, as documented in vifm-:bar
-"       command! z :execute "screen!" | :execute "%a" | :execute "screen"
-"
-" The |screen| command of vifm always creates the new window at the end of the
-" current session, which is counter-productive for many-window navigation
-" the -a flag of tmux's native |new-window| command remedies this inconvenience
-command! z :execute "!tmux new-window -a %a"
-
-" edit with neoVim by calling |:nv| in N_Mode, i.e., |nv| in C_Mode, with
-" additional arguments passed as flags to neoVim
-command! nv :!nvim %a %c
-
-" util-funcs for tmux-integration {{{
-" create new pane to plain shell {{{
+" tmux  {{{
+" new pane {{{
+" shell {{{
 " NOTE:
 "   shell's working-directory set to that of the invoking vifm-window
 
@@ -90,7 +81,7 @@ command! tmuxSplitWindowVert
     \ :execute "!tmux split-window -v -t :."
 " }}}
 
-" create new pane to nvim {{{
+" edit in nvim {{{
 " NOTE:
 "   %f := all selected files [vifm's macro]
 "   -O := open in splits [vim's command-line calling syntax]
@@ -102,10 +93,7 @@ command! tmuxSplitWindowVertEdit
     \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
 " }}}
 
-" create new pane to duplicate current session {{{
-" NOTE:
-"   use vifm's internal session-mechanism to save session for duplication
-
+" duplicate current vifm-session {{{
 command! tmuxSplitWindowHorzDupl
     \ :write |
     \ :execute "!tmux split-window -h -t :. vifm"
@@ -113,6 +101,7 @@ command! tmuxSplitWindowHorzDupl
 command! tmuxSplitWindowVertDupl
     \ :write |
     \ :execute "!tmux split-window -v -t :. vifm"
+" }}}
 " }}}
 
 " misc {{{
@@ -128,6 +117,10 @@ command! tmuxPaneLast
     \ :execute "!tmux select-pane -t :.{last}"
 " }}}
 " }}}
+
+" vifm {{{
+command! reload
+    \ :write | restart
 
 " a more complex example command with integrated testing for directories, for
 " demonstration purposes only
@@ -156,12 +149,26 @@ command! prev
     \ endif
 " }}}
 
-" keybindings {{{
+" misc {{{
+command! zip
+    \ zip -r %f.zip %f
+
+command! make
+    \ !!make %a
+
+command! vgrep
+    \ vim "+grep %a"
+" }}}
+" }}}
+
+" bind {{{
+" navigation {{{
 nnoremap J 4j
 nnoremap K 4k
 
 vnoremap J 4j
 vnoremap K 4k
+" }}}
 
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
@@ -173,12 +180,24 @@ nnoremap H
     \ :tmuxSplitWindowVertDupl
     \ <cr>
 
-" new shell in vertical split
+" shell in-place
+nnoremap s
+    \ :shell!<cr>
+" shell in split
 nnoremap S
     \ :tmuxSplitWindowVert
 
-" start shell in-place, as opposed to starting a new shell instance above
-nnoremap s :shell!<cr>
+" tab {{{
+nnoremap <c-t>
+    \ :tabnew || tabname<space>
+nnoremap <c-y>
+    \ :tabname<space>
+
+nnoremap <c-n>
+    \ gt
+nnoremap <c-p>
+    \ gT
+" }}}
 
 " toggle visibility of preview window in a separate pane
 " NOTE: to preview in fullscreen, press "e" in N_Mode
@@ -189,26 +208,12 @@ nnoremap w
     \ endif
     \ <cr>
 
-" a similar shortcut to toggle previewing with |git log|
-nnoremap W :prev<space>
+" misc {{{
+" NOTE:
+"   default, but discontinued bindings
 
-" tabbing {{{
-nnoremap <c-t> :tabnew || tabname<space>
-nnoremap <c-y> :tabname<space>
-
-nnoremap <c-n> gt
-nnoremap <c-p> gT
-" }}}
-
-" default, but discontinued bindings {{{
-" [discontinued default binding] toggle VIEW_Mode in V_Mode and restore the
-" visual selection afterwards
+" toggle VIEW_Mode in V_Mode and restore selection afterwards
 vnoremap w :view<cr>gv
-
-" Open file in existing instance of gvim
-"   nnoremap o :!gvim --remote-tab-silent %f<cr>
-" Open file in new instance of gvim
-"   nnoremap O :!gvim %f<cr>
 
 " Open file in the background using its default program
 nnoremap gb :file &<cr>l
@@ -232,7 +237,6 @@ nnoremap gb :file &<cr>l
 "       nnoremap yf :!echo -n %c:p | xsel --input --primary %i &&
 "                   \ echo -n %c:p | xsel --clipboard --input %i<cr>
 "   endif
-
 
 " Mappings for faster renaming
 "   nnoremap I cw<c-a>
