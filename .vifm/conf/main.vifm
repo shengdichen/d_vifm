@@ -4,6 +4,7 @@ source $VIFM/conf/general/handler.vifm
 source $VIFM/conf/visual/display.vifm
 source $VIFM/conf/visual/line.vifm
 
-source $VIFM/conf/commands/bindings.vifm
+source $VIFM/conf/command/command.vifm
+source $VIFM/conf/command/bindings.vifm
 
 " vim: filetype=vifm
