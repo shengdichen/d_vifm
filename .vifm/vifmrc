@@ -1,23 +1,3 @@
-" The environment variable $VIFM, if not explicitly set, is FIRST assumed to
-" be, if existent,
-"       $HOME/.vifm
-" and would thus be equal to:
-"       ~/.vifm
-" if $HOME has not been set otherwise and the said location exists.
-
-
-source $VIFM/vifm_configs/general/general.vifm
-
-
-
-source $VIFM/vifm_configs/looks/display.vifm
-
-source $VIFM/vifm_configs/looks/lines.vifm
-
-
-
-source $VIFM/vifm_configs/commands/handlers.vifm
-
-source $VIFM/vifm_configs/commands/bindings.vifm
+source $VIFM/conf/main.vifm
 
 " vim: filetype=vifm
