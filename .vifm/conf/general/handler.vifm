@@ -452,14 +452,9 @@ filextype ?*,*
 set vicmd=vi
 set vixcmd=nvim
 
-" preview {{{
-" for files only (NOT folders: these are handled by vifm itself)
+" preview for files (NOT folders: these are handled by vifm itself)
 fileviewer ?*[^/]
     \ fold -w 119 -s | nl -b a -w 2 -n 'rz' -s '  ',
-
-" alternatively, use nvim's pager:
-"   /usr/share/nvim/runtime/macros/less.sh
-" }}}
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
