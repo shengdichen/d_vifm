@@ -1,21 +1,13 @@
 " matched {{{
 " dir {{{
 " NOTE:
-"   1. %d: directory at cursor
-"   2. %f: selected directory
-"   3. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
+"   1. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
 "   prepend a "?" to force matching such dirs
 filextype ?*/
-    \ {Execute,, Straight-up}
-    \ nohup ./%c 1>/dev/null 2>&1 &,
     \ {mpv it}
     \ nohup mpv -- %f 1>/dev/null 2>&1 &,
-    \ {roll it in VLC}
-    \ nohup vlc %c 1>/dev/null 2>&1 &,
 
 filetype ?*/
-    \ {get total size}
-    \ nvim <(du -c -h -d0 %f),
     \ {Import with beets}
     \ beet import -l import_log %f,
     \ {Move-Import with beets}
