@@ -6,18 +6,18 @@
 " if $HOME has not been set otherwise and the said location exists.
 
 
-source $VIFM/vifm_configs/general/general.vifm
+source $VIFM/conf/general/general.vifm
 
 
 
-source $VIFM/vifm_configs/looks/display.vifm
+source $VIFM/conf/looks/display.vifm
 
-source $VIFM/vifm_configs/looks/lines.vifm
+source $VIFM/conf/looks/lines.vifm
 
 
 
-source $VIFM/vifm_configs/commands/handlers.vifm
+source $VIFM/conf/commands/handlers.vifm
 
-source $VIFM/vifm_configs/commands/bindings.vifm
+source $VIFM/conf/commands/bindings.vifm
 
 " vim: filetype=vifm
