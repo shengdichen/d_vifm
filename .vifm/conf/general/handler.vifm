@@ -29,7 +29,7 @@ filextype *.pdf
 	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
 
 filetype *.pdf
-    \ {terminal-mode}
+    \ {as text}
     \ pdftotext -nopgbrk %c - | cat -n | less,
 
 fileviewer *.pdf
@@ -207,18 +207,6 @@ filetype *.ftp
 " }}}
 
 " web {{{
-" the defaults:
-"   filextype *.html,*.htm
-"       \ {edit source code}
-"       \ nvim %c,
-"       \ {Open with dwb}
-"       \ dwb %f %i &,
-"       \ {Open with firefox}
-"       \ firefox %f &,
-"       \ {Open with uzbl}
-"       \ uzbl-browser %f %i &,
-"   filetype *.html,*.htm links, lynx
-
 filetype *.html,*.htm
     \ {nvim}
     \ nvim %f,
@@ -237,26 +225,21 @@ fileviewer *.html,*.htm
     \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
-" Object
-filetype *.o
-    \ nm %f | less
-
 " man-page
 filetype *.[1-8n].gz
     \ man -l %f | nvim -R -c "set filetype=man",
 fileviewer *.[1-8n].gz
     \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
+
+filetype *.o
+    \ nm %f | less
 " }}}
 
 " misc {{{
-" OpenRaster
 filextype *.ora
-    \ {Edit in MyPaint}
     \ mypaint %f,
 
-" Mindmap
 filextype *.vym
-    \ {Open with VYM}
     \ vym %f &,
 
 filetype *.tudu
@@ -291,7 +274,7 @@ filetype ?*,*
 set vicmd=vi
 set vixcmd=nvim
 
-" preview for files (NOT folders: these are handled by vifm itself)
+" for files, NOT folders (these are handled by vifm itself)
 fileviewer ?*[^/]
     \ fold -w 119 -s | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
