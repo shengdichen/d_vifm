@@ -214,8 +214,10 @@ filetype *.ftp
 "   filetype *.html,*.htm links, lynx
 
 filetype *.html,*.htm
-    \ {edit source}
-    \ nvim %c,
+    \ {nvim}
+    \ nvim %f,
+    \ {w3m}
+    \ w3m -T text/html -dump %f | nvim -R,
 
 filextype *.html,*.htm
     \ {fd}
