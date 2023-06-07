@@ -168,30 +168,25 @@ fileviewer *.7z
 
 " dev {{{
 " signature {{{
-" MD5
 filetype *.md5
-    \ {Check MD5 hash sum}
+    \ {check hash}
     \ md5sum -c %f %S,
 
-" SHA1
 filetype *.sha1
-\ {Check SHA1 hash sum}
-\ sha1sum -c %f %S,
+    \ {check hash}
+    \ sha1sum -c %f %S,
 
-" SHA256
 filetype *.sha256
-    \ {Check SHA256 hash sum}
+    \ {check hash}
     \ sha256sum -c %f %S,
 
-" SHA512
 filetype *.sha512
-       \ {Check SHA512 hash sum}
-       \ sha512sum -c %f %S,
+    \ {check hash}
+    \ sha512sum -c %f %S,
 
-" GPG signature
 filetype *.asc
-       \ {Check signature}
-       \ !!gpg --verify %c,
+    \ {verify signature}
+    \ !!gpg --verify %c,
 " }}}
 
 " mount {{{
