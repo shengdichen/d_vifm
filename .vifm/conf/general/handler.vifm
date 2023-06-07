@@ -241,11 +241,11 @@ fileviewer *.html,*.htm
 filetype *.o
     \ nm %f | less
 
-" Man page
-filetype *.[1-8]
-    \ man ./%c
-fileviewer *.[1-8]
-    \ man ./%c | col -b
+" man-page
+filetype *.[1-8n].gz
+    \ man -l %f | nvim -R -c "set filetype=man",
+fileviewer *.[1-8n].gz
+    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
 " misc {{{
