@@ -119,6 +119,12 @@ fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
 " Displaying pictures in terminal
 " fileviewer *.jpg,*.png shellpic %c
 " }}}
+
+filetype *.torrent
+    \ {info: transmission}
+    \ transmission-show %f | nvim -R,
+fileviewer *.torrent
+    \ transmission-show -D -T %f,
 " }}}
 
 " archiving & compression {{{
@@ -252,12 +258,6 @@ filextype *.ora
 filextype *.vym
     \ {Open with VYM}
     \ vym %f &,
-
-" Torrent
-filetype *.torrent
-    \ ktorrent %f &
-fileviewer *.torrent
-    \ dumptorrent -v %c
 
 filetype *.tudu
     \ tudu -f %c
