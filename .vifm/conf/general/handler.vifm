@@ -47,16 +47,16 @@ filextype *.xopp
 	\ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
 
 filextype *.lyx
-	\ {lyx}
-	\ nohup env WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
 	\ {lyx_wayland}
 	\ nohup lyx %f 1>/dev/null 2>&1 &,
+	\ {lyx}
+	\ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
 
 filetype *.bib
 	\ {nvim}
     \ nvim %f,
 
-" Office files {{{
+" "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
 	\ {libreoffice_wayland}
     \ nohup libreoffice %c 1>/dev/null 2>&1 &,
@@ -64,8 +64,7 @@ filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
 	\ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
 
 fileviewer *.doc
-    \ catdoc %c
-
+    \ catdoc %f,
 fileviewer *.docx
     \ docx2txt.pl %f -
 " }}}
