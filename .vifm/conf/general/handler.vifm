@@ -218,15 +218,15 @@ filetype *.html,*.htm
     \ nvim %c,
 
 filextype *.html,*.htm
-    \ {vivaldi}
-    \ nohup vivaldi-stable %f 1>/dev/null 2>&1 &,
+    \ {fd}
+    \ firefox-developer-edition --private-window %f 1>/dev/null 2>&1 &,
+    \ {ff}
+    \ firefox --private-window %f 1>/dev/null 2>&1 &,
     \ {chromium}
-    \ nohup chromium %f 1>/dev/null 2>&1 &,
-    \ {firefox}
-    \ nohup firefox %f 1>/dev/null 2>&1 &,
+    \ chromium --incognito --new-window %f 1>/dev/null 2>&1 &,
 
 fileviewer *.html,*.htm
-    \ w3m %c,
+    \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
 " Object
