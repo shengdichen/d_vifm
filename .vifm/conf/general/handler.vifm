@@ -11,12 +11,12 @@ filextype ?*/
 " document {{{
 " pdf-related {{{
 filextype *.pdf
-	\ {zathura}
-	\ nohup zathura %f 1>/dev/null 2>&1 &,
-	\ {pdfarranger}
-	\ nohup pdfarranger %f 1>/dev/null 2>&1 &,
-	\ {xournal++}
-	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ {zathura}
+    \ nohup zathura %f 1>/dev/null 2>&1 &,
+    \ {pdfarranger}
+    \ nohup pdfarranger %f 1>/dev/null 2>&1 &,
+    \ {xournal++}
+    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
 
 filetype *.pdf
     \ {as text}
@@ -31,23 +31,23 @@ filextype *.ps,*.eps,*.ps.gz,*.djvu
 " }}}
 
 filextype *.xopp
-	\ {xournal++_wayland}
-	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
-	\ {xournal++}
-	\ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
+    \ {xournal++_wayland}
+    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ {xournal++}
+    \ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
 
 filextype *.lyx
-	\ {lyx_wayland}
-	\ nohup lyx %f 1>/dev/null 2>&1 &,
-	\ {lyx}
-	\ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
+    \ {lyx_wayland}
+    \ nohup lyx %f 1>/dev/null 2>&1 &,
+    \ {lyx}
+    \ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
 
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
-	\ {libreoffice_wayland}
+    \ {libreoffice_wayland}
     \ nohup libreoffice %f 1>/dev/null 2>&1 &,
-	\ {libreoffice}
-	\ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
+    \ {libreoffice}
+    \ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
 
 fileviewer *.doc
     \ catdoc %f,
@@ -90,7 +90,7 @@ fileviewer
 " pic {{{
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ {imv}
-	\ nohup imv %f 1>/dev/null 2>&1 &,
+    \ nohup imv %f 1>/dev/null 2>&1 &,
 fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ fbi %f,
     \ identify %f
