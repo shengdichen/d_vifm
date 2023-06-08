@@ -135,6 +135,22 @@ filetype *.tar
     \ tar -xvf %f,
 fileviewer *.tar
     \ tar -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+" bzip2 {{{
+filetype *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+    \ {list}
+    \ tar --bzip2 -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --bzip2 -xvf %f,
+fileviewer *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+    \ tar --bzip2 -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.bz2,*.bz
+    \ {decompress}
+    \ bzip2 -keep -d %f,
+fileviewer *.bz2,*.bz
+    \ bzip2 --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
 " }}}
 
 " dev {{{
