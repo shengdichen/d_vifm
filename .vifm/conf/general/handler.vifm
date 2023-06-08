@@ -205,6 +205,14 @@ filetype *.zip
     \ unzip %f,
 fileviewer *.zip
     \ unzip -l %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.rar
+    \ {list}
+    \ unrar l %f | nvim -R,
+    \ {extract}
+    \ unrar x %f,
+fileviewer *.rar
+    \ unrar v %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
 
 " dev {{{
