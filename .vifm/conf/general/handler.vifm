@@ -6,16 +6,6 @@
 filextype ?*/
     \ {mpv it}
     \ nohup mpv -- %f 1>/dev/null 2>&1 &,
-
-filetype ?*/
-    \ {Import with beets}
-    \ beet import -l import_log %f,
-    \ {Move-Import with beets}
-    \ beet import -m -l import_log %f,
-    \ {Re-tag}
-    \ beet import -L -l update_log %f,
-    \ {list albums with beets}
-    \ beet ls %f,
 " }}}
 
 " document {{{
