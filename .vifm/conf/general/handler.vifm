@@ -151,6 +151,22 @@ filetype *.bz2,*.bz
 fileviewer *.bz2,*.bz
     \ bzip2 --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
+
+" gzip {{{
+filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
+    \ {list}
+    \ tar --gzip -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --gzip -xvf %f,
+fileviewer *.tar.gz,*.tgz,*.tar.Z,*.taz
+    \ tar --gzip -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.gz,*.z
+    \ {decompress}
+    \ gzip --keep -d %f,
+fileviewer *.gz,*.z
+    \ gzip --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
 " }}}
 
 " dev {{{
