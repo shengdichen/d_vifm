@@ -42,10 +42,6 @@ filextype *.lyx
 	\ {lyx}
 	\ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
 
-filetype *.bib
-	\ {nvim}
-    \ nvim %f,
-
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
 	\ {libreoffice_wayland}
