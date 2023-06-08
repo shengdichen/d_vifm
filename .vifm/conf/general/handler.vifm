@@ -127,49 +127,7 @@ fileviewer *.torrent
     \ transmission-show -D -T %f,
 " }}}
 
-" archiving & compression {{{
-" FuseZipMount
-filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
-    \ {Mount with fuse-zip}
-    \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
-    \ {View contents}
-    \ zip -sf %c | less,
-    \ {Extract here}
-    \ tar -xf %c,
-fileviewer *.zip,*.jar,*.war,*.ear,*.oxt
-    \ zip -sf %c
-
-" ArchiveMount
-filetype *.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz
-    \ {Mount with archivemount}
-    \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
-fileviewer *.tgz,*.tar.gz
-    \ tar -tzf %c
-fileviewer *.tar.bz2,*.tbz2
-    \ tar -tjf %c
-fileviewer *.tar.txz,*.txz
-    \ xz --list %c
-fileviewer *.tar
-    \ tar -tf %c
-
-fileviewer *.zip
-    \ unzip -l %f
-
-filetype *.rar
-    \ {Mount with rar2fs}
-    \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
-fileviewer *.rar
-    \ unrar v %c
-
-filetype *.iso
-    \ {Mount with fuseiso}
-    \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
-
-filetype *.7z
-    \ {Mount with fuse-7z}
-    \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
-fileviewer *.7z
-    \ 7z l %c
+" archive {{{
 " }}}
 
 " dev {{{
