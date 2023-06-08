@@ -189,6 +189,22 @@ filetype *.xz,*.lzma,*.lz
 fileviewer *.xz,*.lzma,*.lz
     \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
+
+filetype *.7z
+    \ {list}
+    \ 7z l %f |  nvim -R,
+    \ {extract}
+    \ 7z x %f,
+fileviewer *.7z
+    \ 7z l %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.zip
+    \ {list}
+    \ unzip -l %f | nvim -R,
+    \ {extract}
+    \ unzip %f,
+fileviewer *.zip
+    \ unzip -l %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
 
 " dev {{{
