@@ -153,6 +153,12 @@ fileviewer *.bz2,*.bz
 " }}}
 
 " gzip {{{
+" man-page
+filetype *.[1-8n].gz
+    \ man -l %f | nvim -R -c "set filetype=man",
+fileviewer *.[1-8n].gz
+    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
+
 filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
     \ {list}
     \ tar --gzip -tvf %f | nvim -R,
@@ -221,12 +227,6 @@ filextype *.html,*.htm
 fileviewer *.html,*.htm
     \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
-
-" man-page
-filetype *.[1-8n].gz
-    \ man -l %f | nvim -R -c "set filetype=man",
-fileviewer *.[1-8n].gz
-    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
 
 filetype *.o
     \ nm %f | less
