@@ -204,23 +204,23 @@ fileviewer *.rar
 " dev {{{
 " signature {{{
 filetype *.md5
-    \ {check hash}
+    \ {verify}
     \ md5sum -c %f %S,
 
 filetype *.sha1
-    \ {check hash}
+    \ {verify}
     \ sha1sum -c %f %S,
 
 filetype *.sha256
-    \ {check hash}
+    \ {verify}
     \ sha256sum -c %f %S,
 
 filetype *.sha512
-    \ {check hash}
+    \ {verify}
     \ sha512sum -c %f %S,
 
 filetype *.asc
-    \ {verify signature}
+    \ {verify}
     \ !!gpg --verify %f,
 " }}}
 
