@@ -127,49 +127,102 @@ fileviewer *.torrent
     \ transmission-show -D -T %f,
 " }}}
 
-" archiving & compression {{{
-" FuseZipMount
-filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
-    \ {Mount with fuse-zip}
-    \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
-    \ {View contents}
-    \ zip -sf %c | less,
-    \ {Extract here}
-    \ tar -xf %c,
-fileviewer *.zip,*.jar,*.war,*.ear,*.oxt
-    \ zip -sf %c
-
-" ArchiveMount
-filetype *.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz
-    \ {Mount with archivemount}
-    \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
-fileviewer *.tgz,*.tar.gz
-    \ tar -tzf %c
-fileviewer *.tar.bz2,*.tbz2
-    \ tar -tjf %c
-fileviewer *.tar.txz,*.txz
-    \ xz --list %c
+" archive {{{
+filetype *.tar
+    \ {list}
+    \ tar -tvf %f | nvim -R,
+    \ {extract}
+    \ tar -xvf %f,
 fileviewer *.tar
-    \ tar -tf %c
+    \ tar -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
 
-fileviewer *.zip
-    \ unzip -l %f
+" bzip2 {{{
+filetype *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+    \ {list}
+    \ tar --bzip2 -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --bzip2 -xvf %f,
+fileviewer *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+    \ tar --bzip2 -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.bz2,*.bz
+    \ {decompress}
+    \ bzip2 -keep -d %f,
+fileviewer *.bz2,*.bz
+    \ bzip2 --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
+
+" gzip {{{
+" man-page
+filetype *.[1-8n].gz
+    \ man -l %f | nvim -R -c "set filetype=man",
+fileviewer *.[1-8n].gz
+    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
+
+filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
+    \ {list}
+    \ tar --gzip -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --gzip -xvf %f,
+fileviewer *.tar.gz,*.tgz,*.tar.Z,*.taz
+    \ tar --gzip -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.gz,*.z
+    \ {decompress}
+    \ gzip --keep -d %f,
+fileviewer *.gz,*.z
+    \ gzip --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
+
+" xz {{{
+filetype *.tar.xz,*.txz,*tar.lz,*.tlz
+    \ {list}
+    \ tar --xz -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --xz -xvf %f,
+fileviewer *.tar.xz,*.txz,*tar.lz,*.tlz
+    \ tar --xz -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.xz,*.lzma,*.lz
+    \ {decompress}
+    \ xz -keep -d %f,
+fileviewer *.xz,*.lzma,*.lz
+    \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
+
+filetype
+\ *.7z,
+\*.iso
+    \ {list}
+    \ 7z l %f |  nvim -R,
+    \ {extract}
+    \ 7z x %f,
+fileviewer
+\ *.7z,
+\*.iso
+    \ 7z l %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype
+\ *.zip,
+\*.apk,*.apkg,
+\*.[ejw]ar
+    \ {list}
+    \ unzip -l %f | nvim -R,
+    \ {extract}
+    \ unzip %f,
+fileviewer
+\ *.zip,
+\*.apk,*.apkg,
+\*.[ejw]ar
+    \ unzip -l %f | nl -b a -w 2 -n 'rz' -s '  '
 
 filetype *.rar
-    \ {Mount with rar2fs}
-    \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
+    \ {list}
+    \ unrar l %f | nvim -R,
+    \ {extract}
+    \ unrar x %f,
 fileviewer *.rar
-    \ unrar v %c
-
-filetype *.iso
-    \ {Mount with fuseiso}
-    \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
-
-filetype *.7z
-    \ {Mount with fuse-7z}
-    \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
-fileviewer *.7z
-    \ 7z l %c
+    \ unrar v %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
 
 " dev {{{
@@ -224,12 +277,6 @@ filextype *.html,*.htm
 fileviewer *.html,*.htm
     \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
-
-" man-page
-filetype *.[1-8n].gz
-    \ man -l %f | nvim -R -c "set filetype=man",
-fileviewer *.[1-8n].gz
-    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
 
 filetype *.o
     \ nm %f | less
