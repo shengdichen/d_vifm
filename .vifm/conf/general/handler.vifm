@@ -173,6 +173,22 @@ filetype *.gz,*.z
 fileviewer *.gz,*.z
     \ gzip --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
+
+" xz {{{
+filetype *.tar.xz,*.txz,*tar.lz,*.tlz
+    \ {list}
+    \ tar --xz -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --xz -xvf %f,
+fileviewer *.tar.xz,*.txz,*tar.lz,*.tlz
+    \ tar --xz -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.xz,*.lzma,*.lz
+    \ {decompress}
+    \ xz -keep -d %f,
+fileviewer *.xz,*.lzma,*.lz
+    \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
 " }}}
 
 " dev {{{
