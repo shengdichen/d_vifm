@@ -234,21 +234,6 @@ fileviewer *.[1-8n].gz
 filetype *.o
     \ nm %f | less
 " }}}
-
-" misc {{{
-filextype *.ora
-    \ mypaint %f,
-
-filextype *.vym
-    \ vym %f &,
-
-filetype *.tudu
-    \ tudu -f %c
-
-" qt-project
-filextype *.pro
-    \ qtcreator %f &
-" }}}
 " }}}
 
 " default {{{
