@@ -247,7 +247,9 @@ fileviewer *.html,*.htm
 " }}}
 
 filetype *.o
-    \ nm %f | less
+    \ nm %f | nvim -R,
+fileviewer *.o
+    \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 " }}}
 
