@@ -20,10 +20,10 @@ filextype *.pdf
 
 filetype *.pdf
     \ {as text}
-    \ pdftotext -nopgbrk %c - | cat -n | less,
+    \ pdftotext -nopgbrk %f - | cat -n | less,
 
 fileviewer *.pdf
-    \ pdftotext -nopgbrk %c - | cat -n,
+    \ pdftotext -nopgbrk %f - | cat -n,
 
 filextype *.ps,*.eps,*.ps.gz,*.djvu
     \ {zathura}
@@ -49,7 +49,7 @@ filetype *.bib
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
 	\ {libreoffice_wayland}
-    \ nohup libreoffice %c 1>/dev/null 2>&1 &,
+    \ nohup libreoffice %f 1>/dev/null 2>&1 &,
 	\ {libreoffice}
 	\ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
 
@@ -73,7 +73,7 @@ fileviewer
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
+    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
 " }}}
 
 " vid {{{
@@ -88,7 +88,7 @@ fileviewer
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m4v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
+    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
 " }}}
 
 " pic {{{
@@ -98,7 +98,7 @@ filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ {View in sxiv}
     \ sxiv %f,
     \ {View in gpicview}
-    \ gpicview %c,
+    \ gpicview %f,
     \ {View in shotwell}
     \ shotwell,
 fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
@@ -107,7 +107,7 @@ fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ identify %f
 
 " Displaying pictures in terminal
-" fileviewer *.jpg,*.png shellpic %c
+" fileviewer *.jpg,*.png shellpic %f
 " }}}
 
 filetype *.torrent
@@ -235,7 +235,7 @@ filetype *.sha512
 
 filetype *.asc
     \ {verify signature}
-    \ !!gpg --verify %c,
+    \ !!gpg --verify %f,
 " }}}
 
 " web {{{
@@ -279,7 +279,7 @@ filetype ?*,*
     \ tmux split-window -h -t :. nvim -d %f &&
         \ tmux select-layout main-vertical,
     \ {vi}
-    \ vi %c,
+    \ vi %f,
 
 " notably used for bulk-renaming
 set vicmd=vi
