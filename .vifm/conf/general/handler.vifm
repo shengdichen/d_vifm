@@ -198,12 +198,18 @@ filetype *.7z
 fileviewer *.7z
     \ 7z l %f | nl -b a -w 2 -n 'rz' -s '  '
 
-filetype *.zip
+filetype
+\ *.zip,
+\*.apk,*.apkg,
+\*.[ejw]ar
     \ {list}
     \ unzip -l %f | nvim -R,
     \ {extract}
     \ unzip %f,
-fileviewer *.zip
+fileviewer
+\ *.zip,
+\*.apk,*.apkg,
+\*.[ejw]ar
     \ unzip -l %f | nl -b a -w 2 -n 'rz' -s '  '
 
 filetype *.rar
