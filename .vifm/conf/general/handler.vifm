@@ -91,15 +91,8 @@ fileviewer
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ {imv}
 	\ nohup imv %f 1>/dev/null 2>&1 &,
-    \ {View in sxiv}
-    \ sxiv %f,
-    \ {View in gpicview}
-    \ gpicview %f,
-    \ {View in shotwell}
-    \ shotwell,
 fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-    \ {fbi}
-	\ fbi %f,
+    \ fbi %f,
     \ identify %f
 
 " Displaying pictures in terminal
