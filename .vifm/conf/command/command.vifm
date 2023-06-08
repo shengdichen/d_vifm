@@ -158,6 +158,11 @@ command! archiveTarGzip
     \ tar --gzip -cv -f _new.tar.gz -- %f
 command! archiveTarXz
     \ tar --xz -cv -f _new.tar.xz -- %f
+
+command! archiveSevenz
+    \ 7z a _new.7z -- %f
+command! archiveZip
+    \ zip -r _new.zip -- %f
 " }}}
 
 command! make
