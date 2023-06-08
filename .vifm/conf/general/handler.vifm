@@ -190,12 +190,16 @@ fileviewer *.xz,*.lzma,*.lz
     \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
 
-filetype *.7z
+filetype
+\ *.7z,
+\*.iso
     \ {list}
     \ 7z l %f |  nvim -R,
     \ {extract}
     \ 7z x %f,
-fileviewer *.7z
+fileviewer
+\ *.7z,
+\*.iso
     \ 7z l %f | nl -b a -w 2 -n 'rz' -s '  '
 
 filetype
