@@ -1,3 +1,16 @@
+" unmap {{{
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+
+nnoremap <pageup> <nop>
+nnoremap <pagedown> <nop>
+
+nnoremap <home> <nop>
+nnoremap <end> <nop>
+" }}}
+
 " navigation {{{
 nnoremap J 4j
 nnoremap K 4k
