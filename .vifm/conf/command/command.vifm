@@ -103,12 +103,6 @@ command! tmuxPaneLast
 " }}}
 " }}}
 
-" vifm {{{
-command! reload
-    \ :write | restart
-" }}}
-
-" misc {{{
 " archive {{{
 command! archiveTar
     \ tar -cv -f _new.tar -- %f
@@ -123,13 +117,6 @@ command! archiveSevenz
     \ 7z a _new.7z -- %f
 command! archiveZip
     \ zip -r _new.zip -- %f
-" }}}
-
-command! make
-    \ !!make %a
-
-command! vgrep
-    \ vim "+grep %a"
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
