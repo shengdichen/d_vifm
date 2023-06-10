@@ -1,12 +1,15 @@
 " file-system {{{
-command! fzf
-    \ :set noquickview
-    \ | let $_res = term('find | fzf 2>/dev/tty')
+command! fzfCore
+    \ :let $_res = term('find | fzf 2>/dev/tty')
     \ | if $_res != ''
     \ |     execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
     \ | endif
     \ | unlet $_res
-    \ | only
+
+command! fzf
+    \ :set noquickview
+    \ | :fzfCore
+    \ | :only
 
 command! mkcd
     \ :mkdir %a | cd %a
