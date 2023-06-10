@@ -124,7 +124,7 @@ command! archiveZip
 set grepprg=
     \"
     \ag
-        \ --line-numbers
+        \ --line-numbers --noheading --nobreak
         \ --hidden
         \ %i %a %s
     \"
