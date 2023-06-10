@@ -35,6 +35,9 @@ nnoremap s
 " shell in split
 nnoremap S
     \ :tmuxSplitWindowVert
+" new terminal
+nnoremap <c-s>
+    \ :!foot vifm %d %D &
 
 " tab {{{
 nnoremap <c-t>
