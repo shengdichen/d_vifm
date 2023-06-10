@@ -6,34 +6,24 @@
 filextype ?*/
     \ {mpv it}
     \ nohup mpv -- %f 1>/dev/null 2>&1 &,
-
-filetype ?*/
-    \ {Import with beets}
-    \ beet import -l import_log %f,
-    \ {Move-Import with beets}
-    \ beet import -m -l import_log %f,
-    \ {Re-tag}
-    \ beet import -L -l update_log %f,
-    \ {list albums with beets}
-    \ beet ls %f,
 " }}}
 
 " document {{{
 " pdf-related {{{
 filextype *.pdf
-	\ {zathura}
-	\ nohup zathura %f 1>/dev/null 2>&1 &,
-	\ {pdfarranger}
-	\ nohup pdfarranger %f 1>/dev/null 2>&1 &,
-	\ {xournal++}
-	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ {zathura}
+    \ nohup zathura %f 1>/dev/null 2>&1 &,
+    \ {pdfarranger}
+    \ nohup pdfarranger %f 1>/dev/null 2>&1 &,
+    \ {xournal++}
+    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
 
 filetype *.pdf
     \ {as text}
-    \ pdftotext -nopgbrk %c - | cat -n | less,
+    \ pdftotext -nopgbrk %f - | cat -n | less,
 
 fileviewer *.pdf
-    \ pdftotext -nopgbrk %c - | cat -n,
+    \ pdftotext -nopgbrk %f - | cat -n,
 
 filextype *.ps,*.eps,*.ps.gz,*.djvu
     \ {zathura}
@@ -41,27 +31,23 @@ filextype *.ps,*.eps,*.ps.gz,*.djvu
 " }}}
 
 filextype *.xopp
-	\ {xournal++_wayland}
-	\ nohup xournalpp %f 1>/dev/null 2>&1 &,
-	\ {xournal++}
-	\ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
+    \ {xournal++_wayland}
+    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ {xournal++}
+    \ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
 
 filextype *.lyx
-	\ {lyx_wayland}
-	\ nohup lyx %f 1>/dev/null 2>&1 &,
-	\ {lyx}
-	\ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
-
-filetype *.bib
-	\ {nvim}
-    \ nvim %f,
+    \ {lyx_wayland}
+    \ nohup lyx %f 1>/dev/null 2>&1 &,
+    \ {lyx}
+    \ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
 
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
-	\ {libreoffice_wayland}
-    \ nohup libreoffice %c 1>/dev/null 2>&1 &,
-	\ {libreoffice}
-	\ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
+    \ {libreoffice_wayland}
+    \ nohup libreoffice %f 1>/dev/null 2>&1 &,
+    \ {libreoffice}
+    \ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
 
 fileviewer *.doc
     \ catdoc %f,
@@ -83,7 +69,7 @@ fileviewer
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
+    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
 " }}}
 
 " vid {{{
@@ -98,26 +84,16 @@ fileviewer
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m4v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ ffprobe -loglevel quiet -show_format -pretty %c 2>&1 | cat -n,
+    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
 " }}}
 
 " pic {{{
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
     \ {imv}
-	\ nohup imv %f 1>/dev/null 2>&1 &,
-    \ {View in sxiv}
-    \ sxiv %f,
-    \ {View in gpicview}
-    \ gpicview %c,
-    \ {View in shotwell}
-    \ shotwell,
-fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-    \ {fbi}
-	\ fbi %f,
-    \ identify %f
+    \ nohup imv %f 1>/dev/null 2>&1 &,
 
-" Displaying pictures in terminal
-" fileviewer *.jpg,*.png shellpic %c
+fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
+    \ identify %f
 " }}}
 
 filetype *.torrent
@@ -228,35 +204,24 @@ fileviewer *.rar
 " dev {{{
 " signature {{{
 filetype *.md5
-    \ {check hash}
+    \ {verify}
     \ md5sum -c %f %S,
 
 filetype *.sha1
-    \ {check hash}
+    \ {verify}
     \ sha1sum -c %f %S,
 
 filetype *.sha256
-    \ {check hash}
+    \ {verify}
     \ sha256sum -c %f %S,
 
 filetype *.sha512
-    \ {check hash}
+    \ {verify}
     \ sha512sum -c %f %S,
 
 filetype *.asc
-    \ {verify signature}
-    \ !!gpg --verify %c,
-" }}}
-
-" mount {{{
-" SshMount
-filetype *.ssh
-    \ {Mount with sshfs}
-    \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
-
-filetype *.ftp
-    \ {Mount with curlftpfs}
-    \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
+    \ {verify}
+    \ !!gpg --verify %f,
 " }}}
 
 " web {{{
@@ -279,7 +244,9 @@ fileviewer *.html,*.htm
 " }}}
 
 filetype *.o
-    \ nm %f | less
+    \ nm %f | nvim -R,
+fileviewer *.o
+    \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 " }}}
 
@@ -300,7 +267,7 @@ filetype ?*,*
     \ tmux split-window -h -t :. nvim -d %f &&
         \ tmux select-layout main-vertical,
     \ {vi}
-    \ vi %c,
+    \ vi %f,
 
 " notably used for bulk-renaming
 set vicmd=vi
