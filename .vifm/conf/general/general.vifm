@@ -56,9 +56,6 @@ mark x ~/xdg/
 " Add additional place to look for executables
 "       let $PATH = $HOME.'/bin/fuse:'.$PATH
 
-" Block particular shortcut
-"       nnoremap <left> <nop>
-
 " Export IPC name of current instance as environment variable and use it to
 " communicate with the instance later.
 "
