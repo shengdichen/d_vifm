@@ -107,14 +107,6 @@ command! tmuxPaneLast
 command! reload
     \ :write | restart
 
-" a more complex example command with integrated testing for directories, for
-" demonstration purposes only
-"   command! nvtz
-"       \ :if filetype('.') == "dir" |
-"       \ execute "cd %c" |
-"       \ else | execute "screen!" | execute "!nvim %a %c" | execute "screen" |
-"       \ endif
-
 " if no arugment passed, toggle between setting to |git log| and resetting
 " if argument passed and is "d", preview with |git diff|
 " otherwise set to the argument
