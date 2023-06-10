@@ -121,4 +121,9 @@ command! archiveZip
     \ zip -r _new.zip -- %f
 " }}}
 
+set grepprg=
+    \"
+    \ag --line-numbers %i %a %s
+    \"
+
 " vim: filetype=vifm foldmethod=marker
