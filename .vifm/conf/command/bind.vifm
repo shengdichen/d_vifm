@@ -87,11 +87,6 @@ nnoremap gb :file &<cr>l
 "                   \ echo -n %c:p | xsel --clipboard --input %i<cr>
 "   endif
 
-" Mappings for faster renaming
-"   nnoremap I cw<c-a>
-"   nnoremap cc cw<c-u>
-"   nnoremap A cw
-
 " Open console in current directory
 "   nnoremap ,t :!xterm &<cr>
 
