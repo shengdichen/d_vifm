@@ -6,6 +6,8 @@ command! fzfCore
     \ | :endif
     \ | :unlet $_res
 
+" NOTE:
+"   1. MUST set |noquickview| first!
 command! fzf
     \ :set noquickview
     \ | :fzfCore
