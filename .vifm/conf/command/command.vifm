@@ -5,6 +5,7 @@ command! fzf
     \ | if $_res != ''
     \ |     execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
     \ | endif
+    \ | unlet $_res
     \ | only
 
 command! mkcd
