@@ -30,8 +30,6 @@ command! diffDirRecur
 command! x
     \ !nohup %a 1>/dev/null 2>&1 &
 
-command! run
-    \ !! ./%f
 command! exx
     \ !nohup ./%f 1>/dev/null 2>&1 &
 command! ex
