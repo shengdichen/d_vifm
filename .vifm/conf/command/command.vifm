@@ -26,9 +26,6 @@ command! compareRecur
     \ !nvim -d
     \ <(find %f:h -type f | sort)
     \ <(cd %F:h && find . -type f | sort)
-
-command! df
-    \ df -h %m 2> /dev/null
 " }}}
 
 " execute {{{
