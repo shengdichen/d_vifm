@@ -7,8 +7,6 @@ command! tch
     \ :touch "%a"
 
 command! getSize
-    \ !!du -d0 -h -c %f
-command! getSizeNvim
     \ !nvim <(du -d0 -h -c %f)
 
 command! hardlink
