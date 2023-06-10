@@ -41,10 +41,10 @@ command! ex
 command! tidal
     \ for i in {1..2}; do tidal-dl -l "%a"; done
 
-command viewspec
-    \ !sox %c -n spectrogram -o %c.png 1>/dev/null 2>&1
+command! spectrogram
+    \ sox %c -n spectrogram -o %c.png
     \ &&
-    \ imv %c.png &
+    \ imv %c.png %m
 
 " tmux  {{{
 " new pane {{{
