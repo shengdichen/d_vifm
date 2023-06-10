@@ -1,10 +1,10 @@
 " file-system {{{
 command! fzfCore
     \ :let $_res = term('find | fzf 2>/dev/tty')
-    \ | if $_res != ''
-    \ |     execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
-    \ | endif
-    \ | unlet $_res
+    \ | :if $_res != ''
+    \ |     :execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
+    \ | :endif
+    \ | :unlet $_res
 
 command! fzf
     \ :set noquickview
