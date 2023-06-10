@@ -123,7 +123,10 @@ command! archiveZip
 
 set grepprg=
     \"
-    \ag --line-numbers %i %a %s
+    \ag
+        \ --line-numbers
+        \ --hidden
+        \ %i %a %s
     \"
 
 " vim: filetype=vifm foldmethod=marker
