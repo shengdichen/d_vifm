@@ -19,6 +19,11 @@ vnoremap J 4j
 vnoremap K 4k
 " }}}
 
+nnoremap ? <nop>
+nnoremap ?
+    \ :fzf
+    \ <cr>
+
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
     \ |
