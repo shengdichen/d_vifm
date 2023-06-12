@@ -17,6 +17,9 @@ nnoremap K 4k
 
 vnoremap J 4j
 vnoremap K 4k
+
+mnoremap J 4j
+mnoremap K 4k
 " }}}
 
 nnoremap ? <nop>

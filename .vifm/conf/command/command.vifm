@@ -121,4 +121,12 @@ command! archiveZip
     \ zip -r _new.zip -- %f
 " }}}
 
+set grepprg=
+    \"
+    \ag
+        \ --line-numbers --noheading --nobreak
+        \ --hidden
+        \ %i %a %s
+    \"
+
 " vim: filetype=vifm foldmethod=marker
