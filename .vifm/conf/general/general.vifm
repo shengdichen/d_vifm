@@ -4,15 +4,10 @@
 "   2. removing s: yy, dd and DD will always act on a single file even if a
 "   selection exists; use ys, ds and Ds instead to act on the selection
 "   3. removing t: <Tab> and <CTRL-I> will traverse backwards in history
-"   instead of switching tabs, use <space> for this instead
+"   instead of switching tabs; use <space> for this instead
 set cpoptions=""
 
-if !has('win')
-    set slowfs=curlftpfs
-endif
-
-" do NOT rely on vifm's multiplexer-integration
-" NOTE: mildly awkward syntax
+" do NOT rely on vifm's multiplexer-integration (mildly awkward syntax)
 screen!
 screen
 " }}}
@@ -47,20 +42,6 @@ mark m ~/mnt/
 mark f ~/mnt/FUSE/ptr/
 
 mark x ~/xdg/
-" }}}
-
-" misc {{{
-" Add additional place to look for executables
-"       let $PATH = $HOME.'/bin/fuse:'.$PATH
-
-" Export IPC name of current instance as environment variable and use it to
-" communicate with the instance later.
-"
-" It can be used in some shell script that gets run from inside vifm, for
-" example, like this:
-"     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
-
-" let $VIFM_SERVER_NAME = v:servername
 " }}}
 
 " vim: filetype=vifm foldmethod=marker

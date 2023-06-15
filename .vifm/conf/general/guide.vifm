@@ -117,4 +117,25 @@
 " }}}
 " }}}
 
+" sample filter C[++] & python
+"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
+
+" if !has('win')
+"     set slowfs=curlftpfs
+" endif
+
+" misc {{{
+" Add additional place to look for executables
+"       let $PATH = $HOME.'/bin/fuse:'.$PATH
+
+" Export IPC name of current instance as environment variable and use it to
+" communicate with the instance later.
+"
+" It can be used in some shell script that gets run from inside vifm, for
+" example, like this:
+"     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
+
+" let $VIFM_SERVER_NAME = v:servername
+" }}}
+
 " vim: filetype=vifm foldmethod=marker

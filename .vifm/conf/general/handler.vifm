@@ -4,7 +4,7 @@
 "   1. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
 "   prepend a "?" to force matching such dirs
 filextype ?*/
-    \ {mpv it}
+    \ {mpv}
     \ nohup mpv -- %f 1>/dev/null 2>&1 &,
 " }}}
 
@@ -226,9 +226,9 @@ filetype *.asc
 
 " web {{{
 filetype *.html,*.htm
-    \ {nvim}
+    \ {edit}
     \ nvim %f,
-    \ {w3m}
+    \ {view}
     \ w3m -T text/html -dump %f | nvim -R,
 
 filextype *.html,*.htm

@@ -1,7 +1,7 @@
 " 1999.Jan.01-23:59:59
 set timefmt="%Y.%b.%d-%T"
 
-" use shortened sizes, i.e., B, KB, etc.
+" use shortened size-units, i.e., B, KB, etc.
 set noiec
 
 " NOTE:
@@ -16,9 +16,6 @@ set sizefmt=
 set showtabline=multiple
 
 " command-line {{{
-" run command with unambiguous beginning
-" set fastrun
-
 " help-page with [n]vim
 set vimhelp
 
@@ -39,11 +36,8 @@ set incsearch
 " }}}
 
 " filter {{{
-" reset the currently set, if any, filter of both panes
+" reset the filter(s) of both panes
 windo filter
-
-" sample filter C[++] & python
-"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
 
 " show dotfiles
 set dotfiles
