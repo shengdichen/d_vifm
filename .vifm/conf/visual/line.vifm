@@ -1,7 +1,7 @@
 " 1999.Jan.01-23:59:59
 set timefmt="%Y.%b.%d-%T"
 
-" use shortened sizes, i.e., B, KB, etc.
+" use shortened size-units, i.e., B, KB, etc.
 set noiec
 
 " NOTE:
