@@ -4,7 +4,7 @@
 "   2. removing s: yy, dd and DD will always act on a single file even if a
 "   selection exists; use ys, ds and Ds instead to act on the selection
 "   3. removing t: <Tab> and <CTRL-I> will traverse backwards in history
-"   instead of switching tabs, use <space> for this instead
+"   instead of switching tabs; use <space> for this instead
 set cpoptions=""
 
 if !has('win')
