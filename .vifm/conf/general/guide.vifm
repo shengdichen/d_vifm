@@ -117,4 +117,7 @@
 " }}}
 " }}}
 
+" sample filter C[++] & python
+"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
+
 " vim: filetype=vifm foldmethod=marker

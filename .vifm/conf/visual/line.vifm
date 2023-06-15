@@ -39,9 +39,6 @@ set incsearch
 " reset the filter(s) of both panes
 windo filter
 
-" sample filter C[++] & python
-"   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
-
 " show dotfiles
 set dotfiles
 " }}}
