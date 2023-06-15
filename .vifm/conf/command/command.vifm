@@ -135,5 +135,6 @@ command! agFzfCore
     \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
     \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
     \ | :execute $_res
+    \ | :unlet $_res
 
 " vim: filetype=vifm foldmethod=marker
