@@ -1,6 +1,6 @@
 " file-system {{{
 command! fzfCore
-    \ :let $_res = term('find | fzf 2>/dev/tty')
+    \ :let $_res = term('find -L | fzf 2>/dev/tty')
     \ | :if $_res != ''
     \ |     :execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
     \ | :endif
