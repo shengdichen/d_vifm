@@ -36,7 +36,7 @@ set incsearch
 " }}}
 
 " filter {{{
-" reset the currently set, if any, filter of both panes
+" reset the filter(s) of both panes
 windo filter
 
 " sample filter C[++] & python
