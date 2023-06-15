@@ -11,8 +11,7 @@ if !has('win')
     set slowfs=curlftpfs
 endif
 
-" do NOT rely on vifm's multiplexer-integration
-" NOTE: mildly awkward syntax
+" do NOT rely on vifm's multiplexer-integration (mildly awkward syntax)
 screen!
 screen
 " }}}
