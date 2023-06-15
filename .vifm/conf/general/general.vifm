@@ -7,10 +7,6 @@
 "   instead of switching tabs; use <space> for this instead
 set cpoptions=""
 
-if !has('win')
-    set slowfs=curlftpfs
-endif
-
 " do NOT rely on vifm's multiplexer-integration (mildly awkward syntax)
 screen!
 screen

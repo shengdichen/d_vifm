@@ -120,4 +120,8 @@
 " sample filter C[++] & python
 "   filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
 
+" if !has('win')
+"     set slowfs=curlftpfs
+" endif
+
 " vim: filetype=vifm foldmethod=marker
