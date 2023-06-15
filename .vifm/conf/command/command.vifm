@@ -133,8 +133,12 @@ command! agFzf
 " ag|fzf -> "<file>:<line_n>:<match>" -> nvim
 command! agFzfCore
     \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+    \ | :agToNvim $_res
+    \ | :unlet $_res
+
+command! agToNvim
+    \ :let $_res = %a
     \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
     \ | :execute $_res
-    \ | :unlet $_res
 
 " vim: filetype=vifm foldmethod=marker
