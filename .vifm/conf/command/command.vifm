@@ -69,10 +69,6 @@ command! tmuxSplitWindowVert
 " }}}
 
 " edit in nvim {{{
-" NOTE:
-"   %f := all selected files [vifm's macro]
-"   -O := open in splits [vim's command-line calling syntax]
-
 command! tmuxSplitWindowHorzEdit
     \ :execute "!tmux split-window -h -t :. nvim -O '%f'"
 
