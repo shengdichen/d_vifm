@@ -16,9 +16,6 @@ set sizefmt=
 set showtabline=multiple
 
 " command-line {{{
-" run command with unambiguous beginning
-" set fastrun
-
 " help-page with [n]vim
 set vimhelp
 
