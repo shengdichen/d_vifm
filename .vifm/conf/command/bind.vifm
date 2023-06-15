@@ -22,8 +22,7 @@ mnoremap J 4j
 mnoremap K 4k
 " }}}
 
-nnoremap ? <nop>
-nnoremap ?
+nnoremap fz
     \ :fzf
     \ <cr>
 
