@@ -127,10 +127,8 @@ set grepprg=
 
 command! agFzf
     \ :set noquickview
-    \ | :agToFzfToMatch
-    \ | :matchToNvim $_res
-    \ | :unlet $_res
-    \ | :only
+    \ | :agToFzfToMatch | :matchToNvim $_res
+    \ | :unlet $_res | :only
 
 " ag|fzf -> "<file>:<line_n>:<match>"
 command! agToFzfToMatch
