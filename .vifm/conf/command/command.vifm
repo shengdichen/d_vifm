@@ -1,10 +1,17 @@
 " file-system {{{
 command! fzfCore
+    \ :findToFzfToMatch
+    \ | :matchToNavigation $_res
+    \ | :unlet $_res
+
+command! findToFzfToMatch
     \ :let $_res = term('find -L | fzf 2>/dev/tty')
+
+command matchToNavigation
+    \ :let $_res = %a
     \ | :if $_res != ''
     \ |     :execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
     \ | :endif
-    \ | :unlet $_res
 
 " NOTE:
 "   1. MUST set |noquickview| first!
