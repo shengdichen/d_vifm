@@ -1,3 +1,28 @@
+" grep {{{
+set grepprg=
+    \"
+    \ag
+        \ --line-numbers --noheading --nobreak
+        \ --hidden
+        \ %i %a %s
+    \"
+
+command! agFzf
+    \ :set noquickview
+    \ | :agToFzfToMatch | :matchToNvim $_res
+    \ | :unlet $_res | :only
+
+" ag|fzf -> "<file>:<line_n>:<match>"
+command! agToFzfToMatch
+    \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+
+" "<file>:<line_n>:<match>" -> nvim
+command! matchToNvim
+    \ :let $_res = %a
+    \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
+    \ | :execute $_res
+" }}}
+
 " file-system {{{
 " NOTE:
 "   1. MUST set |noquickview| first!
@@ -118,28 +143,5 @@ command! archiveSevenz
 command! archiveZip
     \ zip -r _new.zip -- %f
 " }}}
-
-set grepprg=
-    \"
-    \ag
-        \ --line-numbers --noheading --nobreak
-        \ --hidden
-        \ %i %a %s
-    \"
-
-command! agFzf
-    \ :set noquickview
-    \ | :agToFzfToMatch | :matchToNvim $_res
-    \ | :unlet $_res | :only
-
-" ag|fzf -> "<file>:<line_n>:<match>"
-command! agToFzfToMatch
-    \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
-
-" <file>:<line_n>:<match>" -> nvim
-command! matchToNvim
-    \ :let $_res = %a
-    \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
-    \ | :execute $_res
 
 " vim: filetype=vifm foldmethod=marker
