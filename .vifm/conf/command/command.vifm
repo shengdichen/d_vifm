@@ -1,4 +1,4 @@
-" grep {{{
+" search {{{
 set grepprg=
     \"
     \ag
@@ -28,9 +28,7 @@ command! agToFzfToMatch
 command! matchToNvim
     \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
     \ | :execute $VIFM_TMP_RES
-" }}}
 
-" file-system {{{
 command! fzf
     \ :fzfSetup
     \ | :findToFzfToMatch | :matchToNavigation
@@ -45,7 +43,9 @@ command matchToNavigation
     \ :if $VIFM_TMP_RES != ''
     \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
+" }}}
 
+" file-system {{{
 command! mkcd
     \ :mkdir %a | cd %a
 command! mkd
