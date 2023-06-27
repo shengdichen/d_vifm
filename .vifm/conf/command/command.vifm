@@ -7,12 +7,18 @@ set grepprg=
         \ %i %a %s
     \"
 
-command! agFzf
+command fzfSetup
     \ :set noquickview
-    \ | :agToFzfToMatch | :matchToNvim $VIFM_TMP_RES
-    \ | :unlet $VIFM_TMP_RES | :only
 
-" ag|fzf -> "<file>:<line_n>:<match>"
+command cleanup
+    \ :unlet $VIFM_TMP_RES | :only
+
+command! agFzf
+    \ :fzfSetup
+    \ | :agToFzfToMatch | :matchToNvim $VIFM_TMP_RES
+    \ | :cleanup
+
+" ag -> fzf -> "<file>:<line_n>:<match>"
 command! agToFzfToMatch
     \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
 
@@ -27,9 +33,9 @@ command! matchToNvim
 " NOTE:
 "   1. MUST set |noquickview| first!
 command! fzf
-    \ :set noquickview
+    \ :fzfSetup
     \ | :findToFzfToMatch | :matchToNavigation $VIFM_TMP_RES
-    \ | :unlet $VIFM_TMP_RES | :only
+    \ | :cleanup
 
 command! findToFzfToMatch
     \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
