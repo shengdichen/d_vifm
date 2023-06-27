@@ -15,7 +15,7 @@ command cleanup
 
 command! agFzf
     \ :fzfSetup
-    \ | :agToFzfToMatch | :matchToNvim $VIFM_TMP_RES
+    \ | :agToFzfToMatch | :matchToNvim
     \ | :cleanup
 
 " ag -> fzf -> "<file>:<line_n>:<match>"
@@ -24,8 +24,7 @@ command! agToFzfToMatch
 
 " "<file>:<line_n>:<match>" -> nvim
 command! matchToNvim
-    \ :let $VIFM_TMP_RES = %a
-    \ | :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
+    \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
     \ | :execute $VIFM_TMP_RES
 " }}}
 
@@ -34,7 +33,7 @@ command! matchToNvim
 "   1. MUST set |noquickview| first!
 command! fzf
     \ :fzfSetup
-    \ | :findToFzfToMatch | :matchToNavigation $VIFM_TMP_RES
+    \ | :findToFzfToMatch | :matchToNavigation
     \ | :cleanup
 
 " find -> fzf -> <path>
@@ -43,8 +42,7 @@ command! findToFzfToMatch
 
 " <path> -> vifm
 command matchToNavigation
-    \ :let $VIFM_TMP_RES = %a
-    \ | :if $VIFM_TMP_RES != ''
+    \ :if $VIFM_TMP_RES != ''
     \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
 
