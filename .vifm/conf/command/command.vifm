@@ -1,18 +1,51 @@
-" file-system {{{
-command! fzfCore
-    \ :let $_res = term('find | fzf 2>/dev/tty')
-    \ | :if $_res != ''
-    \ |     :execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
-    \ | :endif
-    \ | :unlet $_res
+" search {{{
+set grepprg=
+    \"
+    \ag
+        \ --line-numbers --noheading --nobreak
+        \ --hidden
+        \ %i %a %s
+    \"
 
 " NOTE:
-"   1. MUST set |noquickview| first!
-command! fzf
+"   1. MUST set |noquickview| before launching fzf
+command fzfSetup
     \ :set noquickview
-    \ | :fzfCore
-    \ | :only
 
+command cleanup
+    \ :unlet $VIFM_TMP_RES | :only
+
+command! agFzf
+    \ :fzfSetup
+    \ | :agToFzfToMatch | :matchToNvim
+    \ | :cleanup
+
+" ag -> fzf -> "<file>:<line_n>:<match>"
+command! agToFzfToMatch
+    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+
+" "<file>:<line_n>:<match>" -> nvim
+command! matchToNvim
+    \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
+    \ | :execute $VIFM_TMP_RES
+
+command! findFzf
+    \ :fzfSetup
+    \ | :findToFzfToMatch | :matchToNavigation
+    \ | :cleanup
+
+" find -> fzf -> <path>
+command! findToFzfToMatch
+    \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
+
+" <path> -> vifm
+command matchToNavigation
+    \ :if $VIFM_TMP_RES != ''
+    \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
+    \ | :endif
+" }}}
+
+" file-system {{{
 command! mkcd
     \ :mkdir %a | cd %a
 command! mkd
@@ -116,28 +149,5 @@ command! archiveSevenz
 command! archiveZip
     \ zip -r _new.zip -- %f
 " }}}
-
-set grepprg=
-    \"
-    \ag
-        \ --line-numbers --noheading --nobreak
-        \ --hidden
-        \ %i %a %s
-    \"
-
-command! agFzf
-    \ :set noquickview
-    \ | :agToFzfToMatch | :matchToNvim $_res
-    \ | :unlet $_res | :only
-
-" ag|fzf -> "<file>:<line_n>:<match>"
-command! agToFzfToMatch
-    \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
-
-" <file>:<line_n>:<match>" -> nvim
-command! matchToNvim
-    \ :let $_res = %a
-    \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
-    \ | :execute $_res
 
 " vim: filetype=vifm foldmethod=marker
