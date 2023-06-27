@@ -29,7 +29,7 @@ command! matchToNvim
     \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
     \ | :execute $VIFM_TMP_RES
 
-command! fzf
+command! findFzf
     \ :fzfSetup
     \ | :findToFzfToMatch | :matchToNavigation
     \ | :cleanup

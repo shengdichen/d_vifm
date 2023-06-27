@@ -26,7 +26,7 @@ nnoremap ff
     \ :agFzf
     \ <cr>
 nnoremap fz
-    \ :fzf
+    \ :findFzf
     \ <cr>
 
 nnoremap <cr>
