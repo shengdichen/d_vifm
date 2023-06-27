@@ -9,18 +9,18 @@ set grepprg=
 
 command! agFzf
     \ :set noquickview
-    \ | :agToFzfToMatch | :matchToNvim $_res
-    \ | :unlet $_res | :only
+    \ | :agToFzfToMatch | :matchToNvim $VIFM_TMP_RES
+    \ | :unlet $VIFM_TMP_RES | :only
 
 " ag|fzf -> "<file>:<line_n>:<match>"
 command! agToFzfToMatch
-    \ :let $_res = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
 
 " "<file>:<line_n>:<match>" -> nvim
 command! matchToNvim
-    \ :let $_res = %a
-    \ | :let $_res = system('echo $_res | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
-    \ | :execute $_res
+    \ :let $VIFM_TMP_RES = %a
+    \ | :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
+    \ | :execute $VIFM_TMP_RES
 " }}}
 
 " file-system {{{
@@ -28,16 +28,16 @@ command! matchToNvim
 "   1. MUST set |noquickview| first!
 command! fzf
     \ :set noquickview
-    \ | :findToFzfToMatch | :matchToNavigation $_res
-    \ | :unlet $_res | :only
+    \ | :findToFzfToMatch | :matchToNavigation $VIFM_TMP_RES
+    \ | :unlet $VIFM_TMP_RES | :only
 
 command! findToFzfToMatch
-    \ :let $_res = term('find -L | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
 
 command matchToNavigation
-    \ :let $_res = %a
-    \ | :if $_res != ''
-    \ |     :execute system('[ -f "$_res" ] && echo goto || echo cd') fnameescape($_res)
+    \ :let $VIFM_TMP_RES = %a
+    \ | :if $VIFM_TMP_RES != ''
+    \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
 
 command! mkcd
