@@ -7,6 +7,8 @@ set grepprg=
         \ %i %a %s
     \"
 
+" NOTE:
+"   1. MUST set |noquickview| before launching fzf
 command fzfSetup
     \ :set noquickview
 
@@ -29,8 +31,6 @@ command! matchToNvim
 " }}}
 
 " file-system {{{
-" NOTE:
-"   1. MUST set |noquickview| first!
 command! fzf
     \ :fzfSetup
     \ | :findToFzfToMatch | :matchToNavigation
