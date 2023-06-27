@@ -37,9 +37,11 @@ command! fzf
     \ | :findToFzfToMatch | :matchToNavigation $VIFM_TMP_RES
     \ | :cleanup
 
+" find -> fzf -> <path>
 command! findToFzfToMatch
     \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
 
+" <path> -> vifm
 command matchToNavigation
     \ :let $VIFM_TMP_RES = %a
     \ | :if $VIFM_TMP_RES != ''
