@@ -25,7 +25,7 @@ mnoremap K 4k
 nnoremap ff
     \ :agFzf
     \ <cr>
-nnoremap fz
+nnoremap fa
     \ :findFzf
     \ <cr>
 nnoremap ft
