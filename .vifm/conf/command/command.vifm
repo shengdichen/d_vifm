@@ -36,7 +36,7 @@ command! findFzf
 
 " find -> fzf -> <path>
 command! findToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
 
 " <path> -> vifm
 command matchToNavigation
