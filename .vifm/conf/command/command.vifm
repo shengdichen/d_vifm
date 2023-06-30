@@ -31,7 +31,7 @@ command! matchToNvim
 
 command! findFzf
     \ :fzfSetup
-    \ | :findToFzfToMatch | :matchToNavigation
+    \ | :findToFzfToMatch %a | :matchToNavigation
     \ | :cleanup
 
 " find -> fzf -> <path>
