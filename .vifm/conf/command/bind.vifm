@@ -28,6 +28,14 @@ nnoremap ff
 nnoremap fz
     \ :findFzf
     \ <cr>
+nnoremap ft
+    \ :findFzf -type<space>
+nnoremap fd
+    \ :findFzf -type d
+    \ <cr>
+nnoremap fg
+    \ :findFzf -type f
+    \ <cr>
 
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
