@@ -41,7 +41,7 @@ command! findToFzfToMatch
 " <path> -> vifm
 command matchToNavigation
     \ :if $VIFM_TMP_RES != ''
-    \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
+    \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
 " }}}
 
