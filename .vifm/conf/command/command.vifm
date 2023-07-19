@@ -31,17 +31,17 @@ command! matchToNvim
 
 command! findFzf
     \ :fzfSetup
-    \ | :findToFzfToMatch | :matchToNavigation
+    \ | :findToFzfToMatch %a | :matchToNavigation
     \ | :cleanup
 
 " find -> fzf -> <path>
 command! findToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('find -L | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
 
 " <path> -> vifm
 command matchToNavigation
     \ :if $VIFM_TMP_RES != ''
-    \ |     :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
+    \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
 " }}}
 
