@@ -242,6 +242,14 @@ filetype *.sha512
 filetype *.asc
     \ {verify}
     \ !!gpg --verify %f,
+
+filetype *.gpg
+    \ {pass: edit}
+    \ pass edit $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/"),
+    \ {pass: copy}
+    \ pass -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/"),
+    \ {pass: view}
+    \ pass $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") | nvim -R,
 " }}}
 
 " web {{{
