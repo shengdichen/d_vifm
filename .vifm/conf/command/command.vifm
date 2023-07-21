@@ -167,6 +167,13 @@ command! passEdit
 command! passCopy
     \ :passInternalPath %f:p
     \ | !pass -c $PATH_PASS
+
+command! passNew
+    \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
+    \ | !
+    \   pass generate $PATH_PASS 1>/dev/null 2>&1
+    \   &&
+    \   pass edit $PATH_PASS
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
