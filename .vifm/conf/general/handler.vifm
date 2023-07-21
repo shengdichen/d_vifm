@@ -218,6 +218,10 @@ fileviewer *.rar
 " }}}
 
 " dev {{{
+filextype
+\ *.db,*.db3,*.sqlite,*.sqlite3
+    \ nohup sqlitebrowser -- %f 1>/dev/null 2>&1 &,
+
 " signature {{{
 filetype *.md5
     \ {verify}
