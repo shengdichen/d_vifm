@@ -143,6 +143,8 @@ command! archiveTarGzip
     \ tar --gzip -cv -f _new.tar.gz -- %f
 command! archiveTarXz
     \ tar --xz -cv -f _new.tar.xz -- %f
+command! archiveTarZstd
+    \ tar --zstd -cv -f _new.tar.zst -- %f
 
 command! archiveSevenz
     \ 7z a _new.7z -- %f
