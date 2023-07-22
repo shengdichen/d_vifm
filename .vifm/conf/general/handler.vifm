@@ -166,6 +166,22 @@ fileviewer *.xz,*.lzma,*.lz
     \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
 
+" zstd {{{
+filetype *.tar.zst
+    \ {list}
+    \ tar --zstd -tvf %f | nvim -R,
+    \ {extract}
+    \ tar --zstd -xvf %f,
+fileviewer *.tar.zst
+    \ tar --zstd -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+
+filetype *.zst
+    \ {decompress}
+    \ zstd --keep -d %f,
+fileviewer *.zst
+    \ zstd --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+" }}}
+
 filetype
 \ *.7z,
 \*.iso
