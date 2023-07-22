@@ -123,7 +123,7 @@ fileviewer *.tar.bz2,*.tbz2,*tar.bz,*.tbz
 
 filetype *.bz2,*.bz
     \ {decompress}
-    \ bzip2 -keep -d %f,
+    \ bzip2 --keep -d %f,
 fileviewer *.bz2,*.bz
     \ bzip2 --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
@@ -161,7 +161,7 @@ fileviewer *.tar.xz,*.txz,*tar.lz,*.tlz
 
 filetype *.xz,*.lzma,*.lz
     \ {decompress}
-    \ xz -keep -d %f,
+    \ xz --keep -d %f,
 fileviewer *.xz,*.lzma,*.lz
     \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
 " }}}
