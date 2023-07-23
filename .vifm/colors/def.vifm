@@ -5,26 +5,26 @@ highlight clear
 highlight CurrLine cterm=bold ctermfg=007 ctermbg=237
 
 " generic files
-highlight Win cterm=none ctermfg=255 ctermbg=016
+highlight Win cterm=none ctermfg=255 ctermbg=-1
 
-highlight Directory cterm=none ctermfg=255 ctermbg=016
+highlight Directory cterm=none ctermfg=255 ctermbg=-1
 
-highlight Executable cterm=none ctermfg=002 ctermbg=016
+highlight Executable cterm=none ctermfg=002 ctermbg=-1
 
 highlight Selected cterm=none ctermfg=007 ctermbg=237
 
 " default |$ dircolors| {{{
 " cyan for symbolic links
-highlight Link cterm=none ctermfg=006 ctermbg=016
+highlight Link cterm=none ctermfg=006 ctermbg=-1
 " red for broken links
-highlight BrokenLink cterm=none ctermfg=001 ctermbg=016
+highlight BrokenLink cterm=none ctermfg=001 ctermbg=-1
 
 " purple for sockets and pipes
-highlight Socket cterm=none ctermfg=005 ctermbg=016
-highlight Fifo cterm=bold ctermfg=005 ctermbg=016
+highlight Socket cterm=none ctermfg=005 ctermbg=-1
+highlight Fifo cterm=bold ctermfg=005 ctermbg=-1
 
 " yellow for block devices
-highlight Device cterm=none ctermfg=003 ctermbg=016
+highlight Device cterm=none ctermfg=003 ctermbg=-1
 " }}}
 " }}}
 
@@ -37,14 +37,14 @@ highlight OtherWin cterm=none ctermfg=239 ctermbg=235
 " }}}
 
 " both "gutter" borders along left and right sides
-highlight Border cterm=none ctermfg=015 ctermbg=016
+highlight Border cterm=none ctermfg=015 ctermbg=-1
 
 " currently inactive columns if set to millerview
-highlight AuxWin cterm=none ctermfg=015 ctermbg=016
+highlight AuxWin cterm=none ctermfg=015 ctermbg=-1
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
 " keybinding, taking up the spare pane if existent
-highlight SuggestBox cterm=none ctermfg=255 ctermbg=016
+highlight SuggestBox cterm=none ctermfg=255 ctermbg=-1
 " }}}
 
 " *-lines {{{
@@ -53,28 +53,28 @@ highlight SuggestBox cterm=none ctermfg=255 ctermbg=016
 
 " tab-line {{{
 " active tab
-highlight TabLineSel cterm=none ctermfg=015 ctermbg=016
+highlight TabLineSel cterm=none ctermfg=015 ctermbg=-1
 
 " inactive tabs
-highlight TabLine cterm=none ctermfg=243 ctermbg=016
+highlight TabLine cterm=none ctermfg=243 ctermbg=-1
 " }}}
 
 " top-line (current path) {{{
 " active pane
-highlight TopLineSel cterm=none ctermfg=255 ctermbg=016
+highlight TopLineSel cterm=none ctermfg=255 ctermbg=-1
 
 " inactive pane
-highlight TopLine cterm=none ctermfg=255 ctermbg=016
+highlight TopLine cterm=none ctermfg=255 ctermbg=-1
 " }}}
 
 highlight JobLine cterm=bold,reverse ctermfg=black ctermbg=255
 
-highlight StatusLine cterm=none ctermfg=008 ctermbg=016
+highlight StatusLine cterm=none ctermfg=008 ctermbg=-1
 
 " command-line related
-highlight CmdLine cterm=none ctermfg=255 ctermbg=016
-highlight WildMenu cterm=bold ctermfg=255 ctermbg=016
-highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=016
+highlight CmdLine cterm=none ctermfg=255 ctermbg=-1
+highlight WildMenu cterm=bold ctermfg=255 ctermbg=-1
+highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=-1
 " }}}
 
 highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=red
