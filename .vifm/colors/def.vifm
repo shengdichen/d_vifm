@@ -67,7 +67,7 @@ highlight TopLineSel cterm=none ctermfg=255 ctermbg=-1
 highlight TopLine cterm=none ctermfg=255 ctermbg=-1
 " }}}
 
-highlight JobLine cterm=bold,reverse ctermfg=black ctermbg=255
+highlight JobLine cterm=bold,reverse ctermfg=000 ctermbg=255
 
 highlight StatusLine cterm=none ctermfg=008 ctermbg=-1
 
@@ -77,6 +77,6 @@ highlight WildMenu cterm=bold ctermfg=255 ctermbg=-1
 highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=-1
 " }}}
 
-highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=red
+highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=001
 
 " vim: filetype=vifm foldmethod=marker
