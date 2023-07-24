@@ -2,49 +2,79 @@ highlight clear
 
 " different panes {{{
 " the active pane {{{
-highlight CurrLine cterm=bold ctermfg=007 ctermbg=237
+highlight CurrLine
+    \ cterm=bold ctermfg=007 ctermbg=237
+    \ gui=bold guifg=#e5e5e5 guibg=#3a3a3a
 
 " generic files
-highlight Win cterm=none ctermfg=255 ctermbg=-1
+highlight Win
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
-highlight Directory cterm=none ctermfg=255 ctermbg=-1
+highlight Directory
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
-highlight Executable cterm=none ctermfg=002 ctermbg=-1
+highlight Executable
+    \ cterm=none ctermfg=002 ctermbg=-1
+    \ gui=none guifg=#1fbf1f guibg=-1
 
-highlight Selected cterm=none ctermfg=007 ctermbg=237
+highlight Selected
+    \ cterm=none ctermfg=007 ctermbg=237
+    \ gui=none guifg=#e5e5e5 guibg=#3a3a3a
 
 " default |$ dircolors| {{{
 " cyan for symbolic links
-highlight Link cterm=none ctermfg=006 ctermbg=-1
+highlight Link
+    \ cterm=none ctermfg=006 ctermbg=-1
+    \ gui=none guifg=#1fbfbf guibg=-1
 " red for broken links
-highlight BrokenLink cterm=none ctermfg=001 ctermbg=-1
+highlight BrokenLink
+    \ cterm=none ctermfg=001 ctermbg=-1
+    \ gui=none guifg=#bf1f1f guibg=-1
 
 " purple for sockets and pipes
-highlight Socket cterm=none ctermfg=005 ctermbg=-1
-highlight Fifo cterm=bold ctermfg=005 ctermbg=-1
+highlight Socket
+    \ cterm=none ctermfg=005 ctermbg=-1
+    \ gui=none guifg=#bf1fbf guibg=-1
+highlight Fifo
+    \ cterm=bold ctermfg=005 ctermbg=-1
+    \ gui=none guifg=#bf1fbf guibg=-1
 
 " yellow for block devices
-highlight Device cterm=none ctermfg=003 ctermbg=-1
+highlight Device
+    \ cterm=none ctermfg=003 ctermbg=-1
+    \ gui=none guifg=#bfbf1f guibg=-1
 " }}}
 " }}}
 
 " the inactive pane {{{
 " cursor-line
-highlight OtherLine cterm=none ctermfg=007 ctermbg=233
+highlight OtherLine
+    \ cterm=none ctermfg=007 ctermbg=233
+    \ gui=none guifg=#e5e5e5 guibg=#3a3a3a
 
 " generic files
-highlight OtherWin cterm=none ctermfg=239 ctermbg=235
+highlight OtherWin
+    \ cterm=none ctermfg=239 ctermbg=235
+    \ gui=none guifg=#4e4e4e guibg=#262626
 " }}}
 
 " both "gutter" borders along left and right sides
-highlight Border cterm=none ctermfg=015 ctermbg=-1
+highlight Border
+    \ cterm=none ctermfg=015 ctermbg=-1
+    \ gui=none guifg=#ffffff guibg=-1
 
 " currently inactive columns if set to millerview
-highlight AuxWin cterm=none ctermfg=015 ctermbg=-1
+highlight AuxWin
+    \ cterm=none ctermfg=015 ctermbg=-1
+    \ gui=none guifg=#ffffff guibg=-1
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
 " keybinding, taking up the spare pane if existent
-highlight SuggestBox cterm=none ctermfg=255 ctermbg=-1
+highlight SuggestBox
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 " }}}
 
 " *-lines {{{
@@ -53,30 +83,50 @@ highlight SuggestBox cterm=none ctermfg=255 ctermbg=-1
 
 " tab-line {{{
 " active tab
-highlight TabLineSel cterm=none ctermfg=015 ctermbg=-1
+highlight TabLineSel
+    \ cterm=none ctermfg=015 ctermbg=-1
+    \ gui=none guifg=#ffffff guibg=-1
 
 " inactive tabs
-highlight TabLine cterm=none ctermfg=243 ctermbg=-1
+highlight TabLine
+    \ cterm=none ctermfg=243 ctermbg=-1
+    \ gui=none guifg=#767676 guibg=-1
 " }}}
 
 " top-line (current path) {{{
 " active pane
-highlight TopLineSel cterm=none ctermfg=255 ctermbg=-1
+highlight TopLineSel
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
 " inactive pane
-highlight TopLine cterm=none ctermfg=255 ctermbg=-1
+highlight TopLine
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 " }}}
 
-highlight JobLine cterm=bold,reverse ctermfg=000 ctermbg=255
+highlight JobLine
+    \ cterm=bold,reverse ctermfg=000 ctermbg=255
+    \ gui=bold,reverse guifg=#000000 guibg=#ede3f7
 
-highlight StatusLine cterm=none ctermfg=008 ctermbg=-1
+highlight StatusLine
+    \ cterm=none ctermfg=008 ctermbg=-1
+    \ gui=none guifg=#808080 guibg=-1
 
 " command-line related
-highlight CmdLine cterm=none ctermfg=255 ctermbg=-1
-highlight WildMenu cterm=bold ctermfg=255 ctermbg=-1
-highlight ErrorMsg cterm=bold,italic ctermfg=009 ctermbg=-1
+highlight CmdLine
+    \ cterm=none ctermfg=255 ctermbg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
+highlight WildMenu
+    \ cterm=bold ctermfg=255 ctermbg=-1
+    \ gui=bold guifg=#ede3f7 guibg=-1
+highlight ErrorMsg
+    \ cterm=bold,italic ctermfg=009 ctermbg=-1
+    \ gui=bold,italic guifg=#ff0000 guibg=-1
 " }}}
 
-highlight CmpMismatch cterm=bold ctermfg=255 ctermbg=001
+highlight CmpMismatch
+    \ cterm=bold ctermfg=255 ctermbg=001
+    \ gui=bold guifg=#ede3f7 guibg=#bf1f1f
 
 " vim: filetype=vifm foldmethod=marker
