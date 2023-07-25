@@ -31,7 +31,7 @@ highlight Link
 " red for broken links
 highlight BrokenLink
     \ cterm=none ctermfg=red ctermbg=-1
-    \ gui=none guifg=#ff005f guibg=-1
+    \ gui=none guifg=#ef3347 guibg=-1
 
 " purple for sockets and pipes
 highlight Socket
@@ -122,11 +122,11 @@ highlight WildMenu
     \ gui=bold guifg=#ede3f7 guibg=-1
 highlight ErrorMsg
     \ cterm=bold,italic ctermfg=lightred ctermbg=-1
-    \ gui=bold,italic guifg=#ff005f guibg=-1
+    \ gui=bold,italic guifg=#ef3347 guibg=-1
 " }}}
 
 highlight CmpMismatch
     \ cterm=bold ctermfg=lightwhite ctermbg=red
-    \ gui=bold guifg=#ede3f7 guibg=#ff005f
+    \ gui=bold guifg=#ede3f7 guibg=#ef3347
 
 " vim: filetype=vifm foldmethod=marker
