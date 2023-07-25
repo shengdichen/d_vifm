@@ -4,7 +4,7 @@ highlight clear
 " the active pane {{{
 highlight CurrLine
     \ cterm=bold ctermfg=lightwhite ctermbg=lightblack
-    \ gui=bold guifg=#e5e5e5 guibg=#3a3a3a
+    \ gui=bold guifg=#ede3f7 guibg=#352c37
 
 " generic files
 highlight Win
@@ -17,34 +17,34 @@ highlight Directory
 
 highlight Executable
     \ cterm=none ctermfg=green ctermbg=-1
-    \ gui=none guifg=#1fbf1f guibg=-1
+    \ gui=none guifg=#50fa7b guibg=-1
 
 highlight Selected
     \ cterm=none ctermfg=black ctermbg=white
-    \ gui=none guifg=#e5e5e5 guibg=#3a3a3a
+    \ gui=none guifg=#000000 guibg=#897397
 
 " default |$ dircolors| {{{
 " cyan for symbolic links
 highlight Link
     \ cterm=none ctermfg=cyan ctermbg=-1
-    \ gui=none guifg=#1fbfbf guibg=-1
+    \ gui=none guifg=#8be9fd guibg=-1
 " red for broken links
 highlight BrokenLink
     \ cterm=none ctermfg=red ctermbg=-1
-    \ gui=none guifg=#bf1f1f guibg=-1
+    \ gui=none guifg=#ff005f guibg=-1
 
 " purple for sockets and pipes
 highlight Socket
     \ cterm=none ctermfg=magenta ctermbg=-1
-    \ gui=none guifg=#bf1fbf guibg=-1
+    \ gui=none guifg=#bd93f9 guibg=-1
 highlight Fifo
     \ cterm=bold ctermfg=magenta ctermbg=-1
-    \ gui=none guifg=#bf1fbf guibg=-1
+    \ gui=none guifg=#bd93f9 guibg=-1
 
 " yellow for block devices
 highlight Device
     \ cterm=none ctermfg=yellow ctermbg=-1
-    \ gui=none guifg=#bfbf1f guibg=-1
+    \ gui=none guifg=#f1fa8c guibg=-1
 " }}}
 " }}}
 
@@ -52,23 +52,23 @@ highlight Device
 " cursor-line
 highlight OtherLine
     \ cterm=none ctermfg=white ctermbg=black
-    \ gui=none guifg=#e5e5e5 guibg=#3a3a3a
+    \ gui=none guifg=#897397 guibg=#000000
 
 " generic files
 highlight OtherWin
     \ cterm=none ctermfg=black ctermbg=lightblack
-    \ gui=none guifg=#4e4e4e guibg=#262626
+    \ gui=none guifg=#4e4e4e guibg=#352c37
 " }}}
 
 " both "gutter" borders along left and right sides
 highlight Border
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ffffff guibg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
 " currently inactive columns if set to millerview
 highlight AuxWin
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ffffff guibg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
 " keybinding, taking up the spare pane if existent
@@ -85,12 +85,12 @@ highlight SuggestBox
 " active tab
 highlight TabLineSel
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ffffff guibg=-1
+    \ gui=none guifg=#ede3f7 guibg=-1
 
 " inactive tabs
 highlight TabLine
     \ cterm=none ctermfg=lightblack ctermbg=-1
-    \ gui=none guifg=#767676 guibg=-1
+    \ gui=none guifg=#897397 guibg=-1
 " }}}
 
 " top-line (current path) {{{
@@ -111,7 +111,7 @@ highlight JobLine
 
 highlight StatusLine
     \ cterm=none ctermfg=lightblack ctermbg=-1
-    \ gui=none guifg=#808080 guibg=-1
+    \ gui=none guifg=#897397 guibg=-1
 
 " command-line related
 highlight CmdLine
@@ -122,11 +122,11 @@ highlight WildMenu
     \ gui=bold guifg=#ede3f7 guibg=-1
 highlight ErrorMsg
     \ cterm=bold,italic ctermfg=lightred ctermbg=-1
-    \ gui=bold,italic guifg=#ff0000 guibg=-1
+    \ gui=bold,italic guifg=#ff005f guibg=-1
 " }}}
 
 highlight CmpMismatch
     \ cterm=bold ctermfg=lightwhite ctermbg=red
-    \ gui=bold guifg=#ede3f7 guibg=#bf1f1f
+    \ gui=bold guifg=#ede3f7 guibg=#ff005f
 
 " vim: filetype=vifm foldmethod=marker
