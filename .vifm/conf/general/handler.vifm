@@ -291,7 +291,7 @@ set vixcmd=nvim
 
 " for files, NOT folders (these are handled by vifm itself)
 fileviewer ?*[^/]
-    \ fold -w 119 -s | nl -b a -w 2 -n 'rz' -s '  ',
+    \ fold -w 119 -s %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
 " vim: filetype=vifm foldmethod=marker

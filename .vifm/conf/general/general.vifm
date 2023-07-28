@@ -1,4 +1,7 @@
 " system {{{
+" use vifm's internal fs-operations
+set syscalls
+
 " some more humane settings, default is "fst"
 "   1. removing f: |:filter| will KEEP matched files instead of HIDING
 "   2. removing s: yy, dd and DD will always act on a single file even if a
