@@ -75,14 +75,14 @@ fileviewer
 " vid {{{
 filextype
 \ *.mkv,
-\*.avi,*.mp4,*.webm,*.ts,*.m4v,*.mpg,*.mpeg,*.vob,*.fl[icv],
+\*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
     \ {mpv}
     \ nohup mpv -- %f 1>/dev/null 2>&1 &,
 
 fileviewer
 \ *.mkv,
-\*.avi,*.mp4,*.webm,*.ts,*.m4v,*.mpg,*.mpeg,*.vob,*.fl[icv],
+\*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
     \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
 " }}}
