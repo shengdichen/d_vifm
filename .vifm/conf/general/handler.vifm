@@ -244,7 +244,7 @@ filetype *.asc
     \ !!gpg --verify %f,
 
 filetype *.mfa.gpg
-    \ {pass: copy}
+    \ {pass-mfa: copy}
     \ pass otp -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
 
 filetype *.gpg
