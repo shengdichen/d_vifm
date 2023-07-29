@@ -246,8 +246,6 @@ filetype *.asc
 filetype *.mfa.gpg
     \ {pass: copy}
     \ pass otp -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
-    \ {pass: edit}
-    \ pass edit $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 2>/dev/null,
 
 filetype *.gpg
     \ {pass: edit}
