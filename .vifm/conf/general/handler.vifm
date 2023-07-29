@@ -254,8 +254,6 @@ filetype *.gpg
     \ pass edit $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 2>/dev/null,
     \ {pass: copy}
     \ pass -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
-    \ {pass: view}
-    \ pass $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") | nvim -R,
 " }}}
 
 " web {{{
