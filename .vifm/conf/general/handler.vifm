@@ -91,12 +91,14 @@ fileviewer
 filextype
 \ *.png,*.svg,
 \*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
+\*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
     \ {imv}
     \ nohup imv %f 1>/dev/null 2>&1 &,
 
 fileviewer
 \ *.png,*.svg,
 \*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
+\*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
     \ identify %f
 " }}}
 
