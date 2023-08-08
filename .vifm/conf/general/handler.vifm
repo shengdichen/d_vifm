@@ -89,14 +89,14 @@ fileviewer
 
 " pic {{{
 filextype
-\ *.png,
-\*.jpg,*.jpeg,*.bmp,*.gif,*.xpm
+\ *.png,*.svg,
+\*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
     \ {imv}
     \ nohup imv %f 1>/dev/null 2>&1 &,
 
 fileviewer
-\ *.png,
-\*.jpg,*.jpeg,*.bmp,*.gif,*.xpm
+\ *.png,*.svg,
+\*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
     \ identify %f
 " }}}
 
