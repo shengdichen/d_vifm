@@ -176,7 +176,7 @@ command! passNew
     \ | !
     \   pass generate $PATH_PASS 1>/dev/null 2>&1
     \   &&
-    \   pass edit $PATH_PASS
+    \   pass edit $PATH_PASS 2>/dev/null
 
 command! passNewMfa
     \ :passNewPath
