@@ -61,6 +61,11 @@ command! getSize
 command! list
     \ nvim <(ls -a -C1 %a | tail -n +3)
 
+command! findF
+    \ nvim -R <(find %f -maxdepth %a -type f)
+command! findD
+    \ nvim -R <(find %f -maxdepth %a -type d)
+
 command! diffFile
     \ nvim -d %f %F
 command! diffDirFlat
@@ -75,9 +80,9 @@ command! diffDirRecur
 
 " execute {{{
 command! ex
-    \ !!./%f
+    \ !! $SHELL %f
 command! exx
-    \ !nohup ./%f 1>/dev/null 2>&1 &
+    \ !nohup %SHELL %f 1>/dev/null 2>&1 &
 " }}}
 
 command! tidal
