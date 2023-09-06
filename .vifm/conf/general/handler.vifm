@@ -224,6 +224,10 @@ fileviewer *.rar
 " }}}
 
 " dev {{{
+filextype
+\ *.db,*.db3,*.sqlite,*.sqlite3
+    \ nohup sqlitebrowser -- %f 1>/dev/null 2>&1 &,
+
 " signature {{{
 filetype *.md5
     \ {verify}
@@ -244,6 +248,16 @@ filetype *.sha512
 filetype *.asc
     \ {verify}
     \ !!gpg --verify %f,
+
+filetype *.mfa.gpg
+    \ {pass-mfa: copy}
+    \ pass otp -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
+
+filetype *.gpg
+    \ {pass: edit}
+    \ pass edit $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 2>/dev/null,
+    \ {pass: copy}
+    \ pass -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
 " }}}
 
 " web {{{
