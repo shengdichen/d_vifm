@@ -89,7 +89,7 @@ highlight TabLineSel
 
 " inactive tabs
 highlight TabLine
-    \ cterm=none ctermfg=lightblack ctermbg=-1
+    \ cterm=none ctermfg=white ctermbg=-1
     \ gui=none guifg=#897397 guibg=-1
 " }}}
 
@@ -110,7 +110,7 @@ highlight JobLine
     \ gui=bold,reverse guifg=#000000 guibg=#ede3f7
 
 highlight StatusLine
-    \ cterm=none ctermfg=lightblack ctermbg=-1
+    \ cterm=none ctermfg=white ctermbg=-1
     \ gui=none guifg=#897397 guibg=-1
 
 " command-line related
@@ -121,7 +121,7 @@ highlight WildMenu
     \ cterm=bold ctermfg=lightwhite ctermbg=-1
     \ gui=bold guifg=#ede3f7 guibg=-1
 highlight ErrorMsg
-    \ cterm=bold,italic ctermfg=lightred ctermbg=-1
+    \ cterm=bold,italic ctermfg=red ctermbg=-1
     \ gui=bold,italic guifg=#ef3347 guibg=-1
 " }}}
 
