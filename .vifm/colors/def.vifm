@@ -57,7 +57,7 @@ highlight OtherLine
 " generic files
 highlight OtherWin
     \ cterm=none ctermfg=black ctermbg=lightblack
-    \ gui=none guifg=#4e4e4e guibg=#2b272f
+    \ gui=none guifg=#000000 guibg=#2b272f
 " }}}
 
 " both "gutter" borders along left and right sides
