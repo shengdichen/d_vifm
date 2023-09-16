@@ -44,7 +44,7 @@ highlight Fifo
 " yellow for block devices
 highlight Device
     \ cterm=none ctermfg=yellow ctermbg=-1
-    \ gui=none guifg=#f1fa8c guibg=-1
+    \ gui=none guifg=#efd767 guibg=-1
 " }}}
 " }}}
 
