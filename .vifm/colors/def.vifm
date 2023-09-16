@@ -21,7 +21,7 @@ highlight Executable
 
 highlight Selected
     \ cterm=none ctermfg=black ctermbg=white
-    \ gui=none guifg=#000000 guibg=#897397
+    \ gui=none guifg=#000000 guibg=#97879f
 
 " default |$ dircolors| {{{
 " cyan for symbolic links
@@ -52,7 +52,7 @@ highlight Device
 " cursor-line
 highlight OtherLine
     \ cterm=none ctermfg=white ctermbg=black
-    \ gui=none guifg=#897397 guibg=#000000
+    \ gui=none guifg=#97879f guibg=#000000
 
 " generic files
 highlight OtherWin
@@ -90,7 +90,7 @@ highlight TabLineSel
 " inactive tabs
 highlight TabLine
     \ cterm=none ctermfg=white ctermbg=-1
-    \ gui=none guifg=#897397 guibg=-1
+    \ gui=none guifg=#97879f guibg=-1
 " }}}
 
 " top-line (current path) {{{
@@ -111,7 +111,7 @@ highlight JobLine
 
 highlight StatusLine
     \ cterm=none ctermfg=white ctermbg=-1
-    \ gui=none guifg=#897397 guibg=-1
+    \ gui=none guifg=#97879f guibg=-1
 
 " command-line related
 highlight CmdLine
