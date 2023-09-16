@@ -17,7 +17,7 @@ highlight Directory
 
 highlight Executable
     \ cterm=none ctermfg=green ctermbg=-1
-    \ gui=none guifg=#50fa7b guibg=-1
+    \ gui=none guifg=#3fbf4f guibg=-1
 
 highlight Selected
     \ cterm=none ctermfg=black ctermbg=white
