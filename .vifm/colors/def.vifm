@@ -4,16 +4,16 @@ highlight clear
 " the active pane {{{
 highlight CurrLine
     \ cterm=bold ctermfg=lightwhite ctermbg=lightblack
-    \ gui=bold guifg=#ede3f7 guibg=#2b272f
+    \ gui=bold guifg=#efe3fb guibg=#2b272f
 
 " generic files
 highlight Win
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 highlight Directory
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 highlight Executable
     \ cterm=none ctermfg=green ctermbg=-1
@@ -63,18 +63,18 @@ highlight OtherWin
 " both "gutter" borders along left and right sides
 highlight Border
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 " currently inactive columns if set to millerview
 highlight AuxWin
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 " pane offering suggestions, e.g., subsequent keys to complete toggling a
 " keybinding, taking up the spare pane if existent
 highlight SuggestBox
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 " }}}
 
 " *-lines {{{
@@ -85,7 +85,7 @@ highlight SuggestBox
 " active tab
 highlight TabLineSel
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 " inactive tabs
 highlight TabLine
@@ -97,17 +97,17 @@ highlight TabLine
 " active pane
 highlight TopLineSel
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 
 " inactive pane
 highlight TopLine
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 " }}}
 
 highlight JobLine
     \ cterm=bold,reverse ctermfg=black ctermbg=lightwhite
-    \ gui=bold,reverse guifg=#000000 guibg=#ede3f7
+    \ gui=bold,reverse guifg=#000000 guibg=#efe3fb
 
 highlight StatusLine
     \ cterm=none ctermfg=white ctermbg=-1
@@ -116,10 +116,10 @@ highlight StatusLine
 " command-line related
 highlight CmdLine
     \ cterm=none ctermfg=lightwhite ctermbg=-1
-    \ gui=none guifg=#ede3f7 guibg=-1
+    \ gui=none guifg=#efe3fb guibg=-1
 highlight WildMenu
     \ cterm=bold ctermfg=lightwhite ctermbg=-1
-    \ gui=bold guifg=#ede3f7 guibg=-1
+    \ gui=bold guifg=#efe3fb guibg=-1
 highlight ErrorMsg
     \ cterm=bold,italic ctermfg=red ctermbg=-1
     \ gui=bold,italic guifg=#ef3347 guibg=-1
@@ -127,6 +127,6 @@ highlight ErrorMsg
 
 highlight CmpMismatch
     \ cterm=bold ctermfg=lightwhite ctermbg=red
-    \ gui=bold guifg=#ede3f7 guibg=#ef3347
+    \ gui=bold guifg=#efe3fb guibg=#ef3347
 
 " vim: filetype=vifm foldmethod=marker
