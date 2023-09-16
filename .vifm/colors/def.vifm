@@ -36,10 +36,10 @@ highlight BrokenLink
 " purple for sockets and pipes
 highlight Socket
     \ cterm=none ctermfg=magenta ctermbg=-1
-    \ gui=none guifg=#bd93f9 guibg=-1
+    \ gui=none guifg=#ef77c7 guibg=-1
 highlight Fifo
     \ cterm=bold ctermfg=magenta ctermbg=-1
-    \ gui=none guifg=#bd93f9 guibg=-1
+    \ gui=none guifg=#ef77c7 guibg=-1
 
 " yellow for block devices
 highlight Device
