@@ -4,7 +4,7 @@ highlight clear
 " the active pane {{{
 highlight CurrLine
     \ cterm=bold ctermfg=lightwhite ctermbg=lightblack
-    \ gui=bold guifg=#ede3f7 guibg=#352c37
+    \ gui=bold guifg=#ede3f7 guibg=#2b272f
 
 " generic files
 highlight Win
@@ -57,7 +57,7 @@ highlight OtherLine
 " generic files
 highlight OtherWin
     \ cterm=none ctermfg=black ctermbg=lightblack
-    \ gui=none guifg=#4e4e4e guibg=#352c37
+    \ gui=none guifg=#4e4e4e guibg=#2b272f
 " }}}
 
 " both "gutter" borders along left and right sides
