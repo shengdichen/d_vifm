@@ -2,7 +2,7 @@
 set grepprg=
     \"
     \ag
-        \ --line-numbers --noheading --nobreak
+        \ --line-numbers --noheading
         \ --hidden
         \ %i %a %s
     \"
@@ -22,7 +22,7 @@ command! agFzf
 
 " ag -> fzf -> "<file>:<line_n>:<match>"
 command! agToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --hidden . | fzf 2>/dev/tty')
 
 " "<file>:<line_n>:<match>" -> nvim
 command! matchToNvim
