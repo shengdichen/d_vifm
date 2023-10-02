@@ -71,6 +71,7 @@ nnoremap <c-p>
     \ gT
 " }}}
 
+" preview {{{
 " toggle previewing
 nnoremap w
     \ :if &quickview == 0 |
@@ -79,5 +80,9 @@ nnoremap w
     \ execute "view | only" |
     \ endif
     \ <cr>
+
+" disable full-screen previewing: open in dedicated handler instead
+nnoremap e <nop>
+" }}}
 
 " vim: filetype=vifm foldmethod=marker
