@@ -46,7 +46,7 @@ command matchToNavigation
 " }}}
 
 " file-system {{{
-command! hardlink
+command! linkSoft
     \ cp -al %f ../%a
 
 command! getSize
