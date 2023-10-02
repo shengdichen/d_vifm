@@ -49,7 +49,7 @@ command matchToNavigation
 command! linkSoft
     \ cp -al %f ../%a
 
-command! getSize
+command! size
     \ nvim <(du -d0 -h -c %f)
 
 command! list
