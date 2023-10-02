@@ -41,9 +41,10 @@ nnoremap fg
 
 nnoremap af
     \ :touch<space>
-
 nnoremap ad
     \ :mkdir<space>
+nnoremap an
+    \ :!wget<space>
 
 nnoremap <cr>
     \ :tmuxSplitWindowVertEdit
