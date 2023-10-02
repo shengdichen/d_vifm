@@ -71,12 +71,12 @@ nnoremap <c-p>
     \ gT
 " }}}
 
-" toggle visibility of preview window in a separate pane
-" NOTE: to preview in fullscreen, press "e" in N_Mode
+" toggle previewing
 nnoremap w
     \ :if &quickview == 0 |
-    \ execute "split" | execute "view!" |
-    \ else | execute "view" | execute "only" |
+    \ execute "split | view!" |
+    \ else |
+    \ execute "view | only" |
     \ endif
     \ <cr>
 
