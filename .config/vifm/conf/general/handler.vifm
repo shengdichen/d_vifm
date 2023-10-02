@@ -314,4 +314,8 @@ fileviewer ?*[^/]
     \ fold -w 119 -s %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
+filetype *.tmux
+    \ {source}
+    \ tmux source-file %f,
+
 " vim: filetype=vifm foldmethod=marker
