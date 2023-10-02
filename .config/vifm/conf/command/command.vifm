@@ -167,11 +167,11 @@ command! passView
 
 command! passEdit
     \ :passInternalPath %f:p
-    \ | !pass edit $PATH_PASS
+    \ | !!pass edit $PATH_PASS 2>/dev/null
 
 command! passCopy
     \ :passInternalPath %f:p
-    \ | !pass -c $PATH_PASS
+    \ | !pass -c $PATH_PASS 1>/dev/null
 
 command! passNewPath
     \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
