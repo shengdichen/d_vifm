@@ -62,6 +62,7 @@ nnoremap s
 " shell in split
 nnoremap S
     \ :tmuxSplitVert
+    \ <cr>
 " new terminal
 nnoremap <c-s>
     \ :!foot vifm %d %D &
