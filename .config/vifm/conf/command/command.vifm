@@ -118,19 +118,6 @@ command! tmuxSplitWindowVertDupl
     \ :execute "!tmux split-window -v -t :. vifm"
 " }}}
 " }}}
-
-" misc {{{
-command! tmuxSetLayout
-    \ :execute "!tmux select-layout main-vertical"
-
-command! tmuxPanePrevious
-    \ :execute "!tmux select-pane -t :.-1"
-command! tmuxPaneNext
-    \ :execute "!tmux select-pane -t :.+1"
-
-command! tmuxPaneLast
-    \ :execute "!tmux select-pane -t :.{last}"
-" }}}
 " }}}
 
 " archive {{{
