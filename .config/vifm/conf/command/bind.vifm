@@ -1,3 +1,7 @@
+nnoremap rr
+    \ :resource
+    \ <cr>
+
 " navigation {{{
 " unmap {{{
 nnoremap <up> <nop>

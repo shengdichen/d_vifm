@@ -1,3 +1,6 @@
+command! resource
+    \ :source "$HOME/.config/vifm/vifmrc"
+
 " search {{{
 set grepprg=
     \"
