@@ -9,10 +9,10 @@ set grepprg=
 
 " NOTE:
 "   1. MUST set |noquickview| before launching fzf
-command fzfSetup
+command! fzfSetup
     \ :set noquickview
 
-command cleanup
+command! cleanup
     \ :unlet $VIFM_TMP_RES | :only
 
 command! agFzf
@@ -39,7 +39,7 @@ command! findToFzfToMatch
     \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
 
 " <path> -> vifm
-command matchToNavigation
+command! matchToNavigation
     \ :if $VIFM_TMP_RES != ''
     \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
