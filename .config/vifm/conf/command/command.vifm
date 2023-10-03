@@ -88,36 +88,18 @@ command! spectrogram
     \ imv %c.png %m
 
 " tmux  {{{
-" new pane {{{
-" shell {{{
-" NOTE:
-"   shell's working-directory set to that of the invoking vifm-window
+command! tmuxSplitHorz
+    \ :execute "!tmux split-window -h -t :." %a
 
-command! tmuxSplitWindowHorz
-    \ :execute "!tmux split-window -h -t :."
+command! tmuxSplitVert
+    \ :execute "!tmux split-window -v -t :." %a
 
-command! tmuxSplitWindowVert
-    \ :execute "!tmux split-window -v -t :."
-" }}}
-
-" edit in nvim {{{
-command! tmuxSplitWindowHorzEdit
-    \ :execute "!tmux split-window -h -t :. nvim -O '%f'"
-
-command! tmuxSplitWindowVertEdit
-    \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
-" }}}
-
-" duplicate current vifm-session {{{
-command! tmuxSplitWindowHorzDupl
+command! tmuxDuplicate
     \ :write |
-    \ :execute "!tmux split-window -h -t :. vifm"
+    \ :tmuxSplitVert "vifm"
 
-command! tmuxSplitWindowVertDupl
-    \ :write |
-    \ :execute "!tmux split-window -v -t :. vifm"
-" }}}
-" }}}
+command! tmuxSetLayout
+    \ :execute "!tmux select-layout main-vertical"
 " }}}
 
 " archive {{{

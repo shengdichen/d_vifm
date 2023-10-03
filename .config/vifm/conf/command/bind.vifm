@@ -47,13 +47,13 @@ nnoremap an
     \ :!wget<space>
 
 nnoremap <cr>
-    \ :tmuxSplitWindowVertEdit
+    \ :tmuxSplitVert "nvim -O '%f'"
     \ |
     \ :tmuxSetLayout
     \ <cr>
 
 nnoremap H
-    \ :tmuxSplitWindowVertDupl
+    \ :tmuxDuplicate
     \ <cr>
 
 " shell in-place
@@ -61,7 +61,7 @@ nnoremap s
     \ :shell!<cr>
 " shell in split
 nnoremap S
-    \ :tmuxSplitWindowVert
+    \ :tmuxSplitVert
 " new terminal
 nnoremap <c-s>
     \ :!foot vifm %d %D &
