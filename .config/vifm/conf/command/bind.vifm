@@ -44,9 +44,9 @@ nnoremap fg
 " }}}
 
 nnoremap af
-    \ :touch<space>
+    \ :tch<space>
 nnoremap ad
-    \ :mkdir<space>
+    \ :mkd<space>
 nnoremap an
     \ :!wget<space>
 

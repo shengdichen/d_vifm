@@ -49,6 +49,10 @@ command! matchToNavigation
 " }}}
 
 " file-system {{{
+command! mkd
+    \ :mkdir "%a"
+command! tch
+    \ :touch "%a"
 command! linkSoft
     \ cp -al %f ../%a
 
