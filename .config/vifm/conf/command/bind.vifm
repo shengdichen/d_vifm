@@ -60,16 +60,10 @@ nnoremap H
     \ :tmuxDuplicate
     \ <cr>
 
-" shell in-place
 nnoremap s
-    \ :shell!<cr>
-" shell in split
-nnoremap S
-    \ :tmuxSplitVert
-    \ <cr>
-" new terminal
-nnoremap <c-s>
     \ :!tmux.sh %d<cr>
+nnoremap S
+    \ :shell!<cr>
 
 " tab {{{
 nnoremap <c-t>
