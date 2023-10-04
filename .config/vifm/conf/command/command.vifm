@@ -83,7 +83,7 @@ command! diffDirRecur
 command! ex
     \ !! $SHELL %f
 command! exx
-    \ !nohup %SHELL %f 1>/dev/null 2>&1 &
+    \ !nohup $SHELL %f 1>/dev/null 2>&1 &
 " }}}
 
 command! tidal
