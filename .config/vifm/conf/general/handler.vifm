@@ -293,9 +293,9 @@ fileviewer *.o
 
 filetype ?*,*
     \ {nvim}
-    \ nvim -O %f,
+    \ fs.sh "nvim" "open" %f,
     \ {diff}
-    \ nvim -d %f,
+    \ fs.sh "nvim" "diff" %f,
     \ {nvim.tmux}
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
