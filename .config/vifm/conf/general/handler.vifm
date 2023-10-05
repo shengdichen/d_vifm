@@ -1,3 +1,8 @@
+" NOTE:
+"   1. %f VS "%f"
+"   a) %f := one array of unescaped filenames
+"   b) "%f" := one space-separated string of escaped filenames
+
 " matched {{{
 " dir {{{
 " NOTE:
