@@ -60,7 +60,7 @@ nnoremap H
     \ <cr>
 
 nnoremap s
-    \ :!tmux.sh "shell" %d<cr>
+    \ :!tmux.sh "shell" "%d"<cr>
 nnoremap S
     \ :shell!<cr>
 
