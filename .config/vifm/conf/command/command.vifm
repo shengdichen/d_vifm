@@ -94,17 +94,6 @@ command! spectrogram
     \ &&
     \ imv %c.png
 
-" tmux  {{{
-command! tmuxSplitHorz
-    \ :execute "!tmux split-window -h -t :." %a
-
-command! tmuxSplitVert
-    \ :execute "!tmux split-window -v -t :." %a
-
-command! tmuxSetLayout
-    \ :execute "!tmux select-layout main-vertical"
-" }}}
-
 " archive {{{
 command! archiveTar
     \ tar -cv -f _new.tar -- %f

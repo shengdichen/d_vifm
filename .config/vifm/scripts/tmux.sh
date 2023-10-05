@@ -41,7 +41,15 @@ function split_file() {
         idx_target="2"
     fi
 
-    create_split ":.${idx_target}" "nvim -O ${*}"
+    local flag
+    if [[ "${1}" == "open" ]]; then
+        flag="O"
+    elif [[ "${1}" == "diff" ]]; then
+        flag="d"
+    fi
+
+    # filename(s) in one string, with special-chars (e.g. spaces) escaped
+    create_split ":.${idx_target}" "nvim -${flag} ${2}"
 }
 
 function main() {

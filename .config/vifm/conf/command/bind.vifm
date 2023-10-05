@@ -51,7 +51,7 @@ nnoremap an
     \ :!wget<space>
 
 nnoremap <cr>
-    \ :!tmux.sh "file" "%f"<cr>
+    \ :!tmux.sh "file" "open" "%f"<cr>
 
 nnoremap H
     \ :write
