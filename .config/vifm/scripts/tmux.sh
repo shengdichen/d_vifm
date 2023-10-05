@@ -16,14 +16,25 @@ function create_split() {
     tmux split-window -v -t ":."
 }
 
-function main() {
-    if next_pane_is_zsh; then
-        cd_next_pane "${1}"
-    else
-        create_split
-    fi
+function split_vifm() {
+    tmux split-window -v -t ":." "vifm"
+}
 
-    unset -f next_pane_is_zsh cd_next_pane create_split
+function main() {
+    case "${1}" in
+        "shell" )
+            if next_pane_is_zsh; then
+                cd_next_pane "${2}"
+            else
+                create_split
+            fi
+            ;;
+        "vifm" )
+            split_vifm
+            ;;
+    esac
+
+    unset -f next_pane_is_zsh cd_next_pane create_split split_vifm
 }
 main "${@}"
 unset -f main

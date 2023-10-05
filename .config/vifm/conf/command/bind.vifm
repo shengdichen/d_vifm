@@ -57,11 +57,13 @@ nnoremap <cr>
     \ <cr>
 
 nnoremap H
-    \ :tmuxDuplicate
+    \ :write
+    \ |
+    \ :!tmux.sh "vifm"<cr>
     \ <cr>
 
 nnoremap s
-    \ :!tmux.sh %d<cr>
+    \ :!tmux.sh "shell" %d<cr>
 nnoremap S
     \ :shell!<cr>
 

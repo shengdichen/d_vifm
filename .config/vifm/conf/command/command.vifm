@@ -101,10 +101,6 @@ command! tmuxSplitHorz
 command! tmuxSplitVert
     \ :execute "!tmux split-window -v -t :." %a
 
-command! tmuxDuplicate
-    \ :write |
-    \ :tmuxSplitVert "vifm"
-
 command! tmuxSetLayout
     \ :execute "!tmux select-layout main-vertical"
 " }}}
