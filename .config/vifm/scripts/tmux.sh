@@ -20,6 +20,15 @@ function split_vifm() {
     tmux split-window -v -t ":." "vifm"
 }
 
+function split_file() {
+    local idx_target="1"
+    if next_pane_is_zsh; then
+        idx_target="2"
+    fi
+
+    tmux split-window -v -t ":.${idx_target}" "nvim -O ${*}"
+}
+
 function main() {
     case "${1}" in
         "shell" )
@@ -32,6 +41,8 @@ function main() {
         "vifm" )
             split_vifm
             ;;
+        "file" )
+            split_file "${@:2}"
     esac
 
     unset -f next_pane_is_zsh cd_next_pane create_split split_vifm
