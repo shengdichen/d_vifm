@@ -10,7 +10,7 @@
 "   prepend a "?" to force matching such dirs
 filextype ?*/
     \ {mpv}
-    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
+    \ media.sh "mpv" %f,
 " }}}
 
 " document {{{
