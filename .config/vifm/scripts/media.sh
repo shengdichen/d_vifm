@@ -1,8 +1,7 @@
 source "util.sh"
 
 function __mpv() {
-    nohup mpv "${@}" 1>/dev/null 2>&1 &
-
+    spawn_proc "mpv" "${@}"
 }
 
 function __info_ffmpeg() {

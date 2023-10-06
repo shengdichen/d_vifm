@@ -11,3 +11,7 @@ function format_standard() {
     local len_max="${1:-119}"
     cat - | truncate_longline "${len_max}" | prepend_linenumber
 }
+
+function spawn_proc() {
+    nohup "${@}" 1>/dev/null 2>&1 &
+}
