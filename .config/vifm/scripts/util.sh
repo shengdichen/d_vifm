@@ -12,6 +12,10 @@ function format_standard() {
     cat - | truncate_longline "${len_max}" | prepend_linenumber
 }
 
+function nvim_ro() {
+    cat - | nvim -R -c "set nomodifiable" "${@}"
+}
+
 function spawn_proc() {
     nohup "${@}" 1>/dev/null 2>&1 &
 }
