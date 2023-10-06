@@ -309,9 +309,13 @@ filetype ?*,*
 set vicmd=vi
 set vixcmd=nvim
 
-" for files, NOT folders (these are handled by vifm itself)
+" files (NOT folders)
 fileviewer ?*[^/]
     \ handler.sh "preview" %f,
+
+" folders (NOT files)
+fileviewer ?*/
+    \ handler.sh "tree" %f,
 " }}}
 
 filetype *.tmux
