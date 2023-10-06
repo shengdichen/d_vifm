@@ -35,10 +35,7 @@ filextype *.ps,*.eps,*.ps.gz,*.djvu
 " }}}
 
 filextype *.xopp
-    \ {xournal++_wayland}
     \ handler.sh "xournalpp" %f,
-    \ {xournal++}
-    \ WAYLAND_DISPLAY='' handler.sh "xournalpp" %f,
 
 filextype *.lyx
     \ {lyx_wayland}
@@ -48,10 +45,7 @@ filextype *.lyx
 
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
-    \ {libreoffice_wayland}
     \ handler.sh "libreoffice" %f,
-    \ {libreoffice}
-    \ WAYLAND_DISPLAY='' handler.sh "libreoffice" %f,
 
 fileviewer *.doc
     \ catdoc %f,
