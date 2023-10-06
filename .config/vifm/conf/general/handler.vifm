@@ -311,7 +311,7 @@ set vixcmd=nvim
 
 " for files, NOT folders (these are handled by vifm itself)
 fileviewer ?*[^/]
-    \ fold -w 119 -s %f | nl -b a -w 2 -n 'rz' -s '  ',
+    \ fs.sh "preview" %f,
 " }}}
 
 filetype *.tmux
