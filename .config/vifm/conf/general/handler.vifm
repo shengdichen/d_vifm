@@ -93,7 +93,7 @@ filextype
 \*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
 \*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
     \ {imv}
-    \ nohup imv %f 1>/dev/null 2>&1 &,
+    \ handler.sh "imv" %f,
 
 fileviewer
 \ *.png,*.svg,
@@ -226,7 +226,7 @@ fileviewer *.rar
 " dev {{{
 filextype
 \ *.db,*.db3,*.sqlite,*.sqlite3
-    \ nohup sqlitebrowser -- %f 1>/dev/null 2>&1 &,
+    \ handler.sh "sqlitebrowser" %f,
 
 " signature {{{
 filetype *.md5
