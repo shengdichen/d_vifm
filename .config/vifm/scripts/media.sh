@@ -6,7 +6,7 @@ function __mpv() {
 }
 
 function __info_ffmpeg() {
-    ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | format_standard
+    ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | format_standard ""
 }
 
 function main() {

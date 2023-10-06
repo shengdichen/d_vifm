@@ -1,5 +1,6 @@
 function truncate_longline() {
-    cat - | fold -w 119 -s
+    local len_max=${1}
+    cat - | fold -w "${len_max}" -s
 }
 
 function prepend_linenumber() {
@@ -7,5 +8,6 @@ function prepend_linenumber() {
 }
 
 function format_standard() {
-    cat - | truncate_longline | prepend_linenumber
+    local len_max="${1:-119}"
+    cat - | truncate_longline "${len_max}" | prepend_linenumber
 }
