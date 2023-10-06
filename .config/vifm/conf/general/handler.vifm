@@ -9,7 +9,6 @@
 "   1. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
 "   prepend a "?" to force matching such dirs
 filextype ?*/
-    \ {mpv}
     \ media.sh "mpv" %f,
 " }}}
 
@@ -67,14 +66,13 @@ filextype
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ {mpv}
-    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
+    \ media.sh "mpv" %f,
 
 fileviewer
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
+    \ media.sh "info" %f,
 " }}}
 
 " vid {{{
@@ -82,14 +80,13 @@ filextype
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ {mpv}
-    \ nohup mpv -- %f 1>/dev/null 2>&1 &,
+    \ media.sh "mpv" %f,
 
 fileviewer
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ ffprobe -loglevel quiet -show_format -pretty %f 2>&1 | cat -n,
+    \ media.sh "info" %f,
 " }}}
 
 " pic {{{
