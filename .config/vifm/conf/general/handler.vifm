@@ -297,11 +297,9 @@ filetype ?*,*
     \ {diff}
     \ nvim -d %f,
     \ {nvim.tmux}
-    \ tmux split-window -h -t :. nvim -O %f &&
-        \ tmux select-layout main-vertical,
+    \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
-    \ tmux split-window -h -t :. nvim -d %f &&
-        \ tmux select-layout main-vertical,
+    \ tmux.sh "file" "diff" "%f",
     \ {vi}
     \ vi %f,
 

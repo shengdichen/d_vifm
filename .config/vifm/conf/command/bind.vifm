@@ -51,17 +51,16 @@ nnoremap an
     \ :!wget<space>
 
 nnoremap <cr>
-    \ :tmuxSplitVert "nvim -O '%f'"
-    \ |
-    \ :tmuxSetLayout
-    \ <cr>
+    \ :!tmux.sh "file" "open" "%f"<cr>
 
 nnoremap H
-    \ :tmuxDuplicate
+    \ :write
+    \ |
+    \ :!tmux.sh "vifm"<cr>
     \ <cr>
 
 nnoremap s
-    \ :!tmux.sh %d<cr>
+    \ :!tmux.sh "shell" "%d"<cr>
 nnoremap S
     \ :shell!<cr>
 
