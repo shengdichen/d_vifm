@@ -9,7 +9,7 @@
 "   1. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
 "   prepend a "?" to force matching such dirs
 filextype ?*/
-    \ media.sh "mpv" %f,
+    \ handler.sh "mpv" %f,
 " }}}
 
 " document {{{
@@ -66,13 +66,13 @@ filextype
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ media.sh "mpv" %f,
+    \ handler.sh "mpv" %f,
 
 fileviewer
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ media.sh "info" %f,
+    \ handler.sh "info_ffmpeg" %f,
 " }}}
 
 " vid {{{
@@ -80,13 +80,13 @@ filextype
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ media.sh "mpv" %f,
+    \ handler.sh "mpv" %f,
 
 fileviewer
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ media.sh "info" %f,
+    \ handler.sh "info_ffmpeg" %f,
 " }}}
 
 " pic {{{
@@ -295,9 +295,9 @@ fileviewer *.o
 
 filetype ?*,*
     \ {nvim}
-    \ fs.sh "nvim" "open" %f,
+    \ handler.sh "nvim" "open" %f,
     \ {diff}
-    \ fs.sh "nvim" "diff" %f,
+    \ handler.sh "nvim" "diff" %f,
     \ {nvim.tmux}
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
@@ -311,7 +311,7 @@ set vixcmd=nvim
 
 " for files, NOT folders (these are handled by vifm itself)
 fileviewer ?*[^/]
-    \ fs.sh "preview" %f,
+    \ handler.sh "preview" %f,
 " }}}
 
 filetype *.tmux
