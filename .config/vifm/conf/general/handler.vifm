@@ -16,11 +16,11 @@ filextype ?*/
 " pdf-related {{{
 filextype *.pdf
     \ {zathura}
-    \ nohup zathura %f 1>/dev/null 2>&1 &,
+    \ handler.sh "zathura" %f,
     \ {pdfarranger}
-    \ nohup pdfarranger %f 1>/dev/null 2>&1 &,
+    \ handler.sh "pdfarranger" %f,
     \ {xournal++}
-    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ handler.sh "xournalpp" %f,
 
 filetype *.pdf
     \ {as text}
@@ -31,27 +31,27 @@ fileviewer *.pdf
 
 filextype *.ps,*.eps,*.ps.gz,*.djvu
     \ {zathura}
-    \ zathura %f,
+    \ handler.sh "zathura" %f,
 " }}}
 
 filextype *.xopp
     \ {xournal++_wayland}
-    \ nohup xournalpp %f 1>/dev/null 2>&1 &,
+    \ handler.sh "xournalpp" %f,
     \ {xournal++}
-    \ nohup WAYLAND_DISPLAY='' xournalpp %f 1>/dev/null 2>&1 &,
+    \ WAYLAND_DISPLAY='' handler.sh "xournalpp" %f,
 
 filextype *.lyx
     \ {lyx_wayland}
-    \ nohup lyx %f 1>/dev/null 2>&1 &,
+    \ handler.sh "lyx" %f,
     \ {lyx}
-    \ nohup WAYLAND_DISPLAY='' lyx %f 1>/dev/null 2>&1 &,
+    \ WAYLAND_DISPLAY='' handler.sh "lyx" %f,
 
 " "office"-related {{{
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
     \ {libreoffice_wayland}
-    \ nohup libreoffice %f 1>/dev/null 2>&1 &,
+    \ handler.sh "libreoffice" %f,
     \ {libreoffice}
-    \ nohup WAYLAND_DISPLAY='' libreoffice %f 1>/dev/null 2>&1 &,
+    \ WAYLAND_DISPLAY='' handler.sh "libreoffice" %f,
 
 fileviewer *.doc
     \ catdoc %f,
