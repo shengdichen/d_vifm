@@ -95,7 +95,7 @@ fileviewer
 \ *.png,*.svg,
 \*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
 \*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
-    \ identify %f
+    \ handler.sh "info_image" %f,
 " }}}
 
 filetype *.torrent

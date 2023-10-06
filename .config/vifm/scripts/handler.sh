@@ -23,8 +23,15 @@ function __tree() {
     tree -a -l "${@}" | format_standard ""
 }
 
-function __info_ffmpeg() {
-    ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | format_standard ""
+function __info_media() {
+    case "${1}" in
+        "ffmpeg" )
+            ffprobe -loglevel quiet -show_format -pretty "${2}" 2>&1 | format_standard ""
+            ;;
+        "image" )
+            identify "${@:2}"
+            ;;
+    esac | format_standard ""
 }
 
 function main() {
@@ -42,10 +49,14 @@ function main() {
             spawn_proc "${1}" "${@:2}"
             ;;
         "info_ffmpeg" )
-            __info_ffmpeg "${2}"
+            __info_media "ffmpeg" "${2}"
+            ;;
+        "info_image" )
+            __info_media "image" "${@:2}"
+            ;;
     esac
 
-    unset -f __nvim __preview __tree __info_ffmpeg
+    unset -f __nvim __preview __tree __info_media
 }
 main "${@}"
 unset -f main
