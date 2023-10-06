@@ -1,18 +1,21 @@
+command! resource
+    \ :source "$HOME/.config/vifm/vifmrc"
+
 " search {{{
 set grepprg=
     \"
     \ag
-        \ --line-numbers --noheading --nobreak
+        \ --line-numbers --noheading
         \ --hidden
         \ %i %a %s
     \"
 
 " NOTE:
 "   1. MUST set |noquickview| before launching fzf
-command fzfSetup
+command! fzfSetup
     \ :set noquickview
 
-command cleanup
+command! cleanup
     \ :unlet $VIFM_TMP_RES | :only
 
 command! agFzf
@@ -22,7 +25,7 @@ command! agFzf
 
 " ag -> fzf -> "<file>:<line_n>:<match>"
 command! agToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --nobreak --hidden . | fzf 2>/dev/tty')
+    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --hidden . | fzf 2>/dev/tty')
 
 " "<file>:<line_n>:<match>" -> nvim
 command! matchToNvim
@@ -39,23 +42,21 @@ command! findToFzfToMatch
     \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
 
 " <path> -> vifm
-command matchToNavigation
+command! matchToNavigation
     \ :if $VIFM_TMP_RES != ''
     \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
     \ | :endif
 " }}}
 
 " file-system {{{
-command! mkcd
-    \ :mkdir %a | cd %a
 command! mkd
     \ :mkdir "%a"
 command! tch
     \ :touch "%a"
-command! hardlink
+command! linkSoft
     \ cp -al %f ../%a
 
-command! getSize
+command! size
     \ nvim <(du -d0 -h -c %f)
 
 command! list
@@ -82,7 +83,7 @@ command! diffDirRecur
 command! ex
     \ !! $SHELL %f
 command! exx
-    \ !nohup %SHELL %f 1>/dev/null 2>&1 &
+    \ !nohup $SHELL %f 1>/dev/null 2>&1 &
 " }}}
 
 command! tidal
@@ -91,52 +92,21 @@ command! tidal
 command! spectrogram
     \ sox %c -n spectrogram -o %c.png
     \ &&
-    \ imv %c.png %m
+    \ imv %c.png
 
 " tmux  {{{
-" new pane {{{
-" shell {{{
-" NOTE:
-"   shell's working-directory set to that of the invoking vifm-window
+command! tmuxSplitHorz
+    \ :execute "!tmux split-window -h -t :." %a
 
-command! tmuxSplitWindowHorz
-    \ :execute "!tmux split-window -h -t :."
+command! tmuxSplitVert
+    \ :execute "!tmux split-window -v -t :." %a
 
-command! tmuxSplitWindowVert
-    \ :execute "!tmux split-window -v -t :."
-" }}}
-
-" edit in nvim {{{
-command! tmuxSplitWindowHorzEdit
-    \ :execute "!tmux split-window -h -t :. nvim -O '%f'"
-
-command! tmuxSplitWindowVertEdit
-    \ :execute "!tmux split-window -v -t :. nvim -O '%f'"
-" }}}
-
-" duplicate current vifm-session {{{
-command! tmuxSplitWindowHorzDupl
+command! tmuxDuplicate
     \ :write |
-    \ :execute "!tmux split-window -h -t :. vifm"
+    \ :tmuxSplitVert "vifm"
 
-command! tmuxSplitWindowVertDupl
-    \ :write |
-    \ :execute "!tmux split-window -v -t :. vifm"
-" }}}
-" }}}
-
-" misc {{{
 command! tmuxSetLayout
     \ :execute "!tmux select-layout main-vertical"
-
-command! tmuxPanePrevious
-    \ :execute "!tmux select-pane -t :.-1"
-command! tmuxPaneNext
-    \ :execute "!tmux select-pane -t :.+1"
-
-command! tmuxPaneLast
-    \ :execute "!tmux select-pane -t :.{last}"
-" }}}
 " }}}
 
 " archive {{{
@@ -167,11 +137,11 @@ command! passView
 
 command! passEdit
     \ :passInternalPath %f:p
-    \ | !pass edit $PATH_PASS
+    \ | !!pass edit $PATH_PASS 2>/dev/null
 
 command! passCopy
     \ :passInternalPath %f:p
-    \ | !pass -c $PATH_PASS
+    \ | !pass -c $PATH_PASS 1>/dev/null
 
 command! passNewPath
     \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')

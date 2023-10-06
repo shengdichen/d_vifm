@@ -1,3 +1,8 @@
+nnoremap rr
+    \ :resource
+    \ <cr>
+
+" navigation {{{
 " unmap {{{
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -11,7 +16,6 @@ nnoremap <home> <nop>
 nnoremap <end> <nop>
 " }}}
 
-" navigation {{{
 nnoremap J 4j
 nnoremap K 4k
 
@@ -22,6 +26,7 @@ mnoremap J 4j
 mnoremap K 4k
 " }}}
 
+" fzf {{{
 nnoremap ff
     \ :agFzf
     \ <cr>
@@ -36,15 +41,23 @@ nnoremap fd
 nnoremap fg
     \ :findFzf -type f
     \ <cr>
+" }}}
+
+nnoremap af
+    \ :tch<space>
+nnoremap ad
+    \ :mkd<space>
+nnoremap an
+    \ :!wget<space>
 
 nnoremap <cr>
-    \ :tmuxSplitWindowVertEdit
+    \ :tmuxSplitVert "nvim -O '%f'"
     \ |
     \ :tmuxSetLayout
     \ <cr>
 
 nnoremap H
-    \ :tmuxSplitWindowVertDupl
+    \ :tmuxDuplicate
     \ <cr>
 
 " shell in-place
@@ -52,7 +65,8 @@ nnoremap s
     \ :shell!<cr>
 " shell in split
 nnoremap S
-    \ :tmuxSplitWindowVert
+    \ :tmuxSplitVert
+    \ <cr>
 " new terminal
 nnoremap <c-s>
     \ :!foot vifm %d %D &
@@ -69,13 +83,18 @@ nnoremap <c-p>
     \ gT
 " }}}
 
-" toggle visibility of preview window in a separate pane
-" NOTE: to preview in fullscreen, press "e" in N_Mode
+" preview {{{
+" toggle previewing
 nnoremap w
     \ :if &quickview == 0 |
-    \ execute "split" | execute "view!" |
-    \ else | execute "view" | execute "only" |
+    \ execute "split | view!" |
+    \ else |
+    \ execute "view | only" |
     \ endif
     \ <cr>
+
+" disable full-screen previewing: open in dedicated handler instead
+nnoremap e <nop>
+" }}}
 
 " vim: filetype=vifm foldmethod=marker
