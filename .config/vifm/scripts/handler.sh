@@ -23,10 +23,6 @@ function __tree() {
     tree -a -l "${@}" | format_standard ""
 }
 
-function __mpv() {
-    spawn_proc "mpv" "${@}"
-}
-
 function __info_ffmpeg() {
     ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | format_standard ""
 }
@@ -42,14 +38,14 @@ function main() {
         "tree" )
             __tree "${@:2}"
             ;;
-        "mpv" )
-            __mpv "${@:2}"
+        "mpv" | "imv" | "zathura" | "pdfarranger" | "xournalpp" | "lyx" | "libreoffice" | "sqlitebrowser" )
+            spawn_proc "${1}" "${@:2}"
             ;;
         "info_ffmpeg" )
             __info_ffmpeg "${2}"
     esac
 
-    unset -f __nvim __preview __tree __mpv __info_ffmpeg
+    unset -f __nvim __preview __tree __info_ffmpeg
 }
 main "${@}"
 unset -f main
