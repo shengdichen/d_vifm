@@ -6,8 +6,9 @@ function next_pane_is_zsh() {
 
 function cd_next_pane() {
     local target="${1}"
+    # C-U := clear existing input
     tmux send-keys -t ":.+1" \
-        "cd ${target}" "Enter"
+        "C-U" "cd ${target}" "Enter"
 
     tmux select-pane -Z -t ":.+1"
 }
