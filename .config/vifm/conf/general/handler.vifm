@@ -305,11 +305,11 @@ set vixcmd=nvim
 
 " files (NOT folders)
 fileviewer ?*[^/]
-    \ handler.sh "preview" %f,
+    \ handler.sh "preview" "file" %f,
 
 " folders (NOT files)
 fileviewer ?*/
-    \ handler.sh "tree" %f,
+    \ handler.sh "preview" "dir" %f,
 " }}}
 
 filetype *.tmux
