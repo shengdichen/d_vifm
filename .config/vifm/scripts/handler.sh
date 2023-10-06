@@ -26,7 +26,10 @@ function __tree() {
 function __info_media() {
     case "${1}" in
         "ffmpeg" )
-            ffprobe -loglevel quiet -show_format -pretty "${2}" 2>&1 | format_standard ""
+            for f in "${@:2}"; do
+                ffprobe -loglevel quiet -show_format -pretty "${f}" 2>&1
+                echo
+            done | head -n -1
             ;;
         "image" )
             identify "${@:2}"
@@ -49,7 +52,7 @@ function main() {
             spawn_proc "${1}" "${@:2}"
             ;;
         "info_ffmpeg" )
-            __info_media "ffmpeg" "${2}"
+            __info_media "ffmpeg" "${@:2}"
             ;;
         "info_image" )
             __info_media "image" "${@:2}"
