@@ -109,25 +109,25 @@ fileviewer *.torrent
 filetype *.tar
     \ {list}
     \ tar -tvf %f | nvim -R,
-    \ {extract}
-    \ tar -xvf %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "tar" %f,
 fileviewer *.tar
-    \ tar -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "tar" %f,
 
 " bzip2 {{{
 filetype *.tar.bz2,*.tbz2,*tar.bz,*.tbz
     \ {list}
     \ tar --bzip2 -tvf %f | nvim -R,
-    \ {extract}
-    \ tar --bzip2 -xvf %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "bzip2" "multi" %f,
 fileviewer *.tar.bz2,*.tbz2,*tar.bz,*.tbz
-    \ tar --bzip2 -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "bzip2" "multi" %f,
 
 filetype *.bz2,*.bz
-    \ {decompress}
-    \ bzip2 --keep -d %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "bzip2" "single" %f,
 fileviewer *.bz2,*.bz
-    \ bzip2 --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "bzip2" "single" %f,
 " }}}
 
 " gzip {{{
@@ -140,61 +140,61 @@ fileviewer *.[1-8n].gz
 filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
     \ {list}
     \ tar --gzip -tvf %f | nvim -R,
-    \ {extract}
-    \ tar --gzip -xvf %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "gzip" "multi" %f,
 fileviewer *.tar.gz,*.tgz,*.tar.Z,*.taz
-    \ tar --gzip -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "gzip" "multi" %f,
 
 filetype *.gz,*.z
-    \ {decompress}
-    \ gzip --keep -d %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "gzip" "single" %f,
 fileviewer *.gz,*.z
-    \ gzip --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "gzip" "single" %f,
 " }}}
 
 " xz {{{
 filetype *.tar.xz,*.txz,*tar.lz,*.tlz
     \ {list}
     \ tar --xz -tvf %f | nvim -R,
-    \ {extract}
-    \ tar --xz -xvf %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "xz" "multi" %f,
 fileviewer *.tar.xz,*.txz,*tar.lz,*.tlz
-    \ tar --xz -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "xz" "multi" %f,
 
 filetype *.xz,*.lzma,*.lz
-    \ {decompress}
-    \ xz --keep -d %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "xz" "single" %f,
 fileviewer *.xz,*.lzma,*.lz
-    \ xz --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "xz" "single" %f,
 " }}}
 
 " zstd {{{
 filetype *.tar.zst
     \ {list}
     \ tar --zstd -tvf %f | nvim -R,
-    \ {extract}
-    \ tar --zstd -xvf %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "zstd" "multi" %f,
 fileviewer *.tar.zst
-    \ tar --zstd -tvf %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "zstd" "multi" %f,
 
 filetype *.zst
-    \ {decompress}
-    \ zstd --keep -d %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "zstd" "single" %f,
 fileviewer *.zst
-    \ zstd --keep --stdout -d %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "zstd" "single" %f,
 " }}}
 
 filetype
 \ *.7z,
 \*.iso
     \ {list}
-    \ 7z l %f |  nvim -R,
-    \ {extract}
-    \ 7z x %f,
+    \ handler.sh "archive" "list" "7z-nvim" %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "7z" %f,
 fileviewer
 \ *.7z,
 \*.iso
-    \ 7z l %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "7z" %f,
 
 filetype
 \ *.zip,
@@ -202,21 +202,21 @@ filetype
 \*.[ejw]ar
     \ {list}
     \ unzip -l %f | nvim -R,
-    \ {extract}
-    \ unzip %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "zip" %f,
 fileviewer
 \ *.zip,
 \*.apk,*.apkg,
 \*.[ejw]ar
-    \ unzip -l %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "zip" %f,
 
 filetype *.rar
     \ {list}
-    \ unrar l %f | nvim -R,
-    \ {extract}
-    \ unrar x %f,
+    \ handler.sh "archive" "list" "unrar-nvim" %f,
+    \ {unmake}
+    \ handler.sh "archive" "unmake" "unrar" %f,
 fileviewer *.rar
-    \ unrar v %f | nl -b a -w 2 -n 'rz' -s '  '
+    \ handler.sh "archive" "list" "unrar" %f,
 " }}}
 
 " dev {{{
@@ -310,6 +310,27 @@ fileviewer ?*[^/]
 " folders (NOT files)
 fileviewer ?*/
     \ handler.sh "preview" "dir" %f,
+
+filetype ?*,*
+    \ {placeholder}
+    \ echo 1,
+    \ handler.sh "archive" "make" "tar" %f,
+    \ {placeholder}
+    \ echo 2,
+    \ handler.sh "archive" "make" "multi" "bzip2" %f,
+    \ handler.sh "archive" "make" "multi" "gzip" %f,
+    \ handler.sh "archive" "make" "multi" "xz" %f,
+    \ handler.sh "archive" "make" "multi" "zstd" %f,
+    \ handler.sh "archive" "make" "multi" "7z" %f,
+    \ handler.sh "archive" "make" "multi" "zip" %f,
+    \ {placeholder}
+    \ echo 3,
+    \ handler.sh "archive" "make" "single" "bzip2" %f,
+    \ handler.sh "archive" "make" "single" "gzip" %f,
+    \ handler.sh "archive" "make" "single" "xz" %f,
+    \ handler.sh "archive" "make" "single" "zstd" %f,
+    \ handler.sh "archive" "make" "single" "7z" %f,
+    \ handler.sh "archive" "make" "single" "zip" %f,
 " }}}
 
 filetype *.tmux
