@@ -2,6 +2,14 @@
 "   1. %f VS "%f"
 "   a) %f := one array of unescaped filenames
 "   b) "%f" := one space-separated string of escaped filenames
+"
+"   2. type-specific positioning relative to generic
+"   a) handler:
+"       1) specific BEFORE generic
+"       -> use specific by default, generic available with :f
+"       2) specific AFTER generic
+"       -> use generic by default, specific available with :f
+"   b) previewer: specific ALWAYS BEFORE generic
 
 " matched {{{
 " dir {{{
