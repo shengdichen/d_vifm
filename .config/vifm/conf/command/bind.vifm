@@ -56,7 +56,7 @@ nnoremap <cr>
 nnoremap H
     \ :write
     \ |
-    \ :!tmux.sh "vifm"<cr>
+    \ :!tmux.sh "vifm"
     \ <cr>
 
 nnoremap s
