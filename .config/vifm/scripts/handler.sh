@@ -60,14 +60,20 @@ function __info_media() {
     case "${1}" in
         "ffmpeg" )
             for f in "${@:2}"; do
-                ffprobe -loglevel quiet -show_format -pretty "${f}" 2>&1
+                echo "Path: ${f}"
+                ffprobe -loglevel quiet -show_format -pretty "${f}" 2>&1 | \
+                    format_standard ""
                 echo
             done | head -n -1
             ;;
         "image" )
-            identify "${@:2}"
+            for f in "${@:2}"; do
+                echo "Path: ${f}"
+                identify "${f}" | format_standard ""
+                echo
+            done | head -n -1
             ;;
-    esac | format_standard ""
+    esac
 }
 
 function __archive() {
