@@ -29,12 +29,9 @@ function insert_separator() {
 }
 
 function join_with_linebreak() {
-    local n_breaks="${1:-1}"
-
-    while read -r l; do
-        echo "${l}"
-        for __ in $(seq "${n_breaks}"); do
-            echo
-        done
-    done | head -n "-${n_breaks}"
+    for f in "${@:2}"; do
+        echo "Path: ${f}"
+        "${1}" "${f}"
+        echo
+    done | head -n -1
 }

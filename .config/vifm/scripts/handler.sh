@@ -38,17 +38,10 @@ function __preview() {
     else
         case "${1}" in
             "file" )
-                for f in "${@:2}"; do
-                    echo "Path: ${f}"
-                    __file "${f}"
-                    echo
-                done | head -n -1
+                join_with_linebreak __file "${@:2}"
                 ;;
             "dir" )
-                for f in "${@:2}"; do
-                    __dir "${f}"
-                    echo
-                done | head -n -1
+                join_with_linebreak __dir "${@:2}"
                 ;;
         esac
     fi
