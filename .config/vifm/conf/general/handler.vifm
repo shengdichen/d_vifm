@@ -12,14 +12,6 @@
 "   b) previewer: specific ALWAYS BEFORE generic
 
 " matched {{{
-" dir {{{
-" NOTE:
-"   1. */ alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
-"   prepend a "?" to force matching such dirs
-filextype ?*/
-    \ handler.sh "mpv" %f,
-" }}}
-
 " document {{{
 " pdf-related {{{
 filextype *.pdf
@@ -233,35 +225,46 @@ fileviewer *.o
 " }}}
 " }}}
 
-" default {{{
-" NOTE:
-"   1.  must be placed AFTER all matching-based handlers above
-"   2.  use |?*| and |*| to match all
-
-filetype ?*,*
-    \ {nvim}
-    \ handler.sh "nvim" "open" %f,
-    \ {diff}
-    \ handler.sh "nvim" "diff" %f,
-    \ {nvim.tmux}
-    \ tmux.sh "file" "open" "%f",
-    \ {diff.tmux}
-    \ tmux.sh "file" "diff" "%f",
-    \ {vi}
-    \ vi %f,
-
+" generic {{{
 " notably used for bulk-renaming
 set vicmd=vi
 set vixcmd=nvim
 
-" files (NOT folders)
-fileviewer ?*[^/]
+" NOTE:
+"   1. * alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
+"   prepend a "?" to force matching such dirs
+"   a. all files (NOT folders) =: ?*[^/],*[^/]
+"   b. all dirs (NOT files) =: ?*/,*/
+"   c. all files and dirs =: ?*,*
+
+filetype ?*[^/],*[^/]
+    \ {nvim}
+    \ handler.sh "nvim" "open" %f,
+    \ {diff}
+    \ handler.sh "nvim" "diff" %f,
+fileviewer ?*[^/],*[^/]
     \ handler.sh "preview" "file" %f,
 
-" folders (NOT files)
-fileviewer ?*/
+filetype ?*/,*/
+    \ {nvim}
+    \ handler.sh "nvim" "open" %f,
+    \ {diff}
+    \ handler.sh "nvim" "diff" %f,
+filextype ?*/,*/
+    \ handler.sh "mpv" %f,
+fileviewer ?*/,*/
     \ handler.sh "preview" "dir" %f,
 " }}}
+
+filetype ?*,*
+    \ {nvim.tmux}
+    \ tmux.sh "file" "open" "%f",
+    \ {diff.tmux}
+    \ tmux.sh "file" "diff" "%f",
+
+filetype *.tmux
+    \ {source}
+    \ tmux source-file %f,
 
 " archive {{{
 filetype *.tar
@@ -327,9 +330,5 @@ filetype ?*,*
     \ handler.sh "archive" "make" "single" "7z" %f,
     \ handler.sh "archive" "make" "single" "zip" %f,
 " }}}
-
-filetype *.tmux
-    \ {source}
-    \ tmux source-file %f,
 
 " vim: filetype=vifm foldmethod=marker
