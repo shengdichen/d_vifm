@@ -231,6 +231,30 @@ function __archive() {
     unset -f __list __unmake __make
 }
 
+function __pass() {
+    local pass_dir="password-store"  # intentionally without leading dot
+    local target
+    target=$(
+        echo "${2}" | sed "s/^.*\.${pass_dir}\/\(.*\).gpg$/\1/" \
+    )
+
+    local pw_time=7
+    if [[ "${target}" == *.mfa ]]; then
+        PASSWORD_STORE_CLIP_TIME="${pw_time}" \
+            pass otp code -c "${target}" 1>/dev/null
+    else
+        local mode="${1}"
+        if [[ "${mode}" == "edit" ]]; then
+            pass edit "${target}" 2>/dev/null
+        elif [[ "${mode}" == "show" ]]; then
+            pass show "${target}" | nvim_ro
+        else
+            PASSWORD_STORE_CLIP_TIME="${pw_time}" \
+                pass -c "${target}" 1>/dev/null
+        fi
+    fi
+}
+
 function main() {
     case "${1}" in
         "nvim" )
@@ -251,9 +275,12 @@ function main() {
         "archive" )
             __archive "${@:2}"
             ;;
+        "pass" )
+            __pass "${@:2}"
+            ;;
     esac
 
-    unset -f __nvim __preview __tree __info_media __archive
+    unset -f __nvim __preview __tree __info_media __archive __pass
 }
 main "${@}"
 unset -f main

@@ -190,15 +190,13 @@ filetype *.asc
     \ {verify}
     \ !!gpg --verify %f,
 
-filetype *.mfa.gpg
-    \ {pass-mfa: copy}
-    \ pass otp -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
-
 filetype *.gpg
     \ {pass: edit}
-    \ pass edit $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 2>/dev/null,
+    \ handler.sh "pass" "edit" %f:p,
+    \ {pass: show}
+    \ handler.sh "pass" "show" %f:p,
     \ {pass: copy}
-    \ pass -c $(echo %f:p | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/") 1>/dev/null,
+    \ handler.sh "pass" "copy" %f:p,
 " }}}
 
 " web {{{
