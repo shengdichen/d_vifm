@@ -94,24 +94,6 @@ command! spectrogram
     \ &&
     \ imv %c.png
 
-" archive {{{
-command! archiveTar
-    \ tar -cv -f _new.tar -- %f
-command! archiveTarBzip2
-    \ tar --bzip2 -cv -f _new.tar.bz2 -- %f
-command! archiveTarGzip
-    \ tar --gzip -cv -f _new.tar.gz -- %f
-command! archiveTarXz
-    \ tar --xz -cv -f _new.tar.xz -- %f
-command! archiveTarZstd
-    \ tar --zstd -cv -f _new.tar.zst -- %f
-
-command! archiveSevenz
-    \ 7z a _new.7z -- %f
-command! archiveZip
-    \ zip -r _new.zip -- %f
-" }}}
-
 " pass {{{
 command! passInternalPath
     \ :let $PATH_PASS = system('echo %a | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/"')
