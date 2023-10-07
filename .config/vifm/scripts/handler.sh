@@ -11,16 +11,49 @@ function __nvim() {
 }
 
 function __preview() {
-    case "${1}" in
-        "file" )
-            cat "${@:2}"
-            ;;
-        "dir" )
-            # -a := show hidden files
-            # -l := follow links
-            tree -a -l "${@:2}"
-            ;;
-    esac | format_standard ""
+    function __file() {
+        local f="${1}"
+        if [[ -s "${f}" ]]; then
+            format_standard <"${f}"
+        else
+            echo "## PLACEHOLDER (EMPTY FILE) ##"
+        fi
+    }
+
+    function __dir() {
+        # -a := show hidden files
+        # -l := follow links
+        tree -a -l "${1}" | format_standard ""
+    }
+
+    if (( "${#}" <= 2 )); then
+         case "${1}" in
+            "file" )
+                __file "${2}"
+                ;;
+            "dir" )
+                __dir "${2}"
+                ;;
+        esac
+    else
+        case "${1}" in
+            "file" )
+                for f in "${@:2}"; do
+                    echo "Path: ${f}"
+                    __file "${f}"
+                    echo
+                done | head -n -1
+                ;;
+            "dir" )
+                for f in "${@:2}"; do
+                    __dir "${f}"
+                    echo
+                done | head -n -1
+                ;;
+        esac
+    fi
+
+    unset -f __file __dir
 }
 
 function __info_media() {
