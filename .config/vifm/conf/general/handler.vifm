@@ -117,9 +117,9 @@ fileviewer *.bz2,*.bz
 " gzip {{{
 " man-page
 filetype *.[1-8n].gz
-    \ man -l %f | nvim -R -c "set filetype=man",
+    \ handler.sh "archive" "list" "man-nvim" %f,
 fileviewer *.[1-8n].gz
-    \ man -l %f | nl -b a -w 2 -n 'rz' -s '  ',
+    \ handler.sh "archive" "list" "man" %f,
 
 fileviewer *.tar.gz,*.tgz,*.tar.Z,*.taz
     \ handler.sh "archive" "list" "gzip" "multi" %f,

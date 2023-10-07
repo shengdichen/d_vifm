@@ -45,6 +45,20 @@ function __archive() {
                 tar -tvf "${f}" | prepend_linenumber
                 echo
             done | head -n -1
+        elif [[ "${1}" == "man" ]]; then
+            for f in "${@:2}"; do
+                man -l "${f}" | tail -n +2 | prepend_linenumber
+                printf "\n"
+                printf "%0.s/" {1..79}
+                printf "\n\n"
+            done | head -n -3
+        elif [[ "${1}" == "man-nvim" ]]; then
+            for f in "${@:2}"; do
+                man -l "${f}" | tail -n +2
+                printf "\n"
+                printf "%0.s/" {1..79}
+                printf "\n\n"
+            done | head -n -3 | nvim_ro "-c" "set filetype=man"
         elif [[ "${1}" == "7z" ]]; then
             for f in "${@:2}"; do
                 echo "Archive: ${f}"
