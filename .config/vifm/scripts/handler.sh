@@ -48,16 +48,12 @@ function __archive() {
         elif [[ "${1}" == "man" ]]; then
             for f in "${@:2}"; do
                 man -l "${f}" | tail -n +2 | prepend_linenumber
-                printf "\n"
-                printf "%0.s/" {1..79}
-                printf "\n\n"
+                insert_separator ""
             done | head -n -3
         elif [[ "${1}" == "man-nvim" ]]; then
             for f in "${@:2}"; do
                 man -l "${f}" | tail -n +2
-                printf "\n"
-                printf "%0.s/" {1..79}
-                printf "\n\n"
+                insert_separator ""
             done | head -n -3 | nvim_ro "-c" "set filetype=man"
         elif [[ "${1}" == "7z" ]]; then
             for f in "${@:2}"; do
@@ -68,9 +64,7 @@ function __archive() {
         elif [[ "${1}" == "7z-nvim" ]]; then
             for f in "${@:2}"; do
                 7z l "${f}" | tail -n +3
-                printf "\n"
-                printf "%0.s/" {1..79}
-                printf "\n\n"
+                insert_separator ""
             done | head -n -3 | nvim_ro
         elif [[ "${1}" == "zip" ]]; then
             for f in "${@:2}"; do
