@@ -28,10 +28,28 @@ function insert_separator() {
     printf "\n\n"
 }
 
-function join_with_linebreak() {
-    for f in "${@:2}"; do
-        echo "Path: ${f}"
-        "${1}" "${f}"
-        echo
-    done | head -n -1
+function join_outputs() {
+    local separator="echo" separator_cutaway="1"
+    while (( ${#} > 0 )); do
+        case "${1}" in
+            "-c" | "--cmd" )
+                local cmd="${2}"
+                shift; shift
+                ;;
+            "-s" | "--separator" )
+                if [[ "${2}" == "separator" ]]; then
+                    separator="insert_separator" separator_cutaway="3"
+                fi
+                shift; shift
+                ;;
+            "--" )
+                local files=("${@:2}")
+                break
+        esac
+    done
+
+    for f in "${files[@]}"; do
+        "${cmd}" "${f}"
+        $separator
+    done | head -n "-${separator_cutaway}"
 }

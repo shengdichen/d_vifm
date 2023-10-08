@@ -12,9 +12,9 @@ function __nvim() {
 
 function __preview() {
     function __file() {
-        local f="${1}"
-        if [[ -s "${f}" ]]; then
-            format_standard <"${f}"
+        echo "Path: ${1}"
+        if [[ -s "${1}" ]]; then
+            format_standard <"${1}"
         else
             echo "## PLACEHOLDER (EMPTY FILE) ##"
         fi
@@ -38,10 +38,10 @@ function __preview() {
     else
         case "${1}" in
             "file" )
-                join_with_linebreak __file "${@:2}"
+                join_outputs -c __file -- "${@:2}"
                 ;;
             "dir" )
-                join_with_linebreak __dir "${@:2}"
+                join_outputs -c __dir -- "${@:2}"
                 ;;
         esac
     fi
