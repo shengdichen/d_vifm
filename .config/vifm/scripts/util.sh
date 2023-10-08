@@ -21,10 +21,22 @@ function spawn_proc() {
 }
 
 function insert_separator() {
-    local sep="${1:-/}"
+    local char="/" len="79"
+    while (( ${#} > 0 )); do
+        case "${1}" in
+            "-c" | "--char" )
+                char="${2}"
+                shift; shift
+                ;;
+            "-l" | "len" )
+                len="${2}"
+                shift; shift
+                ;;
+        esac
+    done
 
     printf "\n"
-    printf "%0.s${sep}" {1..79}
+    printf "%0.s${char}" $(seq "${len}")
     printf "\n\n"
 }
 
