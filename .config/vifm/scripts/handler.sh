@@ -22,21 +22,20 @@ function __preview() {
     function __dir() {
         # -a := show hidden files
         # -l := follow links
-        tree -a -l "${1}" | format_standard ""
+        tree -a -l "${1}"
     }
 
     function __ffmpeg() {
-        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | \
-            format_standard ""
+        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
     }
 
     function __image() {
-        identify "${f}" | format_standard ""
+        identify "${f}"
     }
 
     case "${1}" in
         "file" )
-            join_outputs -c __file -- "${@:2}"
+            join_outputs -c __file --format "off" -- "${@:2}"
             ;;
         "dir" )
             join_outputs -c __dir --print-path "never" -- "${@:2}"
