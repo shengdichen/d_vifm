@@ -1,15 +1,15 @@
 function truncate_longline() {
     local len_max=${1}
-    cat - | fold -w "${len_max}" -s
+    fold -w "${len_max}" -s
 }
 
 function prepend_linenumber() {
-    cat - | nl -b a -w 2 -n 'rz' -s '  '
+    nl -b a -w 2 -n 'rz' -s '  '
 }
 
 function format_standard() {
     local len_max="${1:-119}"
-    cat - | truncate_longline "${len_max}" | prepend_linenumber
+    truncate_longline "${len_max}" | prepend_linenumber
 }
 
 function format_output() {
@@ -31,7 +31,6 @@ function format_output() {
         esac
     done
 
-    cat - | \
     if [[ "${width}" != "off" ]]; then
         fold -w "${width}" -s
     else
@@ -45,7 +44,7 @@ function format_output() {
 }
 
 function nvim_ro() {
-    cat - | nvim -R -c "set nomodifiable" "${@}"
+    nvim -R -c "set nomodifiable" "${@}"
 }
 
 function spawn_proc() {
