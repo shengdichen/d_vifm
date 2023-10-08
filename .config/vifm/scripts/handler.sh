@@ -78,7 +78,7 @@ function __archive() {
                 -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "zip" ]]; then
-            function __f() { unzip -l "${1}" ; }
+            function __f() { unzip -l "${1}" | tail -n +2 ; }
             join_outputs -c "__f" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "unrar" ]]; then
