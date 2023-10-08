@@ -79,15 +79,17 @@ function __archive() {
             unset -f __f
         elif [[ "${1}" == "zip" ]]; then
             function __f() { unzip -l "${1}" | tail -n +2 ; }
-            join_outputs -c "__f" -- "${@:2}"
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "unrar" ]]; then
             function __f() { unrar l "${1}" | tail -n +5 | head -n -1 ; }
-            join_outputs -c "__f" -- "${@:2}"
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "unrar-nvim" ]]; then
             function __f() { unrar v "${1}" | tail -n +5 | head -n -1 ; }
-            join_outputs -c "__f" --format "off" --output "nvim" -- "${@:2}"
+            join_outputs -c "__f" \
+                --format "off" -s "separator" --output "nvim" \
+                -- "${@:2}"
             unset -f __f
         else
             if [[ "${2}" == "multi" ]]; then
