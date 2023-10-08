@@ -54,76 +54,52 @@ function __preview() {
 function __archive() {
     function __list() {
         if [[ "${1}" == "tar" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                tar -tvf "${f}" | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { tar -tvf "${1}" ; }
+            join_outputs -c "__f" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "man" ]]; then
-            for f in "${@:2}"; do
-                man -l "${f}" | tail -n +2 | prepend_linenumber
-                insert_separator ""
-            done | head -n -3
+            function __f() { man -l "${1}" | tail -n +2 ; }
+            join_outputs -c "__f" --format "linenumber" -s "separator" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "man-nvim" ]]; then
-            for f in "${@:2}"; do
-                man -l "${f}" | tail -n +2
-                insert_separator ""
-            done | head -n -3 | nvim_ro "-c" "set filetype=man"
+            function __f() { man -l "${1}" | tail -n +2 ; }
+            join_outputs -c "__f" --format "off" -s "separator" \
+                --output "nvim" --output-nvim-extra "-c set filetype=man" \
+                -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "7z" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                7z l "${f}" | tail -n +19 | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { 7z l "${1}" | tail -n +19 ; }
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "7z-nvim" ]]; then
-            for f in "${@:2}"; do
-                7z l "${f}" | tail -n +3
-                insert_separator ""
-            done | head -n -3 | nvim_ro
+            function __f() { 7z l "${1}" | tail -n +3 ; }
+            join_outputs \
+                -c "__f" -s "separator" --format "off" --output "nvim" \
+                -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "zip" ]]; then
-            for f in "${@:2}"; do
-                unzip -l "${f}" | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { unzip -l "${1}" ; }
+            join_outputs -c "__f" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "unrar" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                unrar l "${f}" | tail -n +5 | head -n -1 | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { unrar l "${1}" | tail -n +5 | head -n -1 ; }
+            join_outputs -c "__f" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "unrar-nvim" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                unrar v "${f}" | tail -n +5 | head -n -1 | prepend_linenumber
-                echo
-            done | head -n -1 | nvim_ro
+            function __f() { unrar v "${1}" | tail -n +5 | head -n -1 ; }
+            join_outputs -c "__f" --format "off" --output "nvim" -- "${@:2}"
+            unset -f __f
         else
             if [[ "${2}" == "multi" ]]; then
-                for f in "${@:3}"; do
-                    echo "Archive: ${f}"
-                    tar --"${1}" -tvf "${f}" | prepend_linenumber
-                    echo
-                done | head -n -1
+                local mode="--${1}"
+                function __f() { tar "${mode}" -tvf "${1}" ; }
+                join_outputs -c "__f" -- "${@:3}"
+                unset -f __f
             else
-                for f in "${@:3}"; do
-                    echo "Archive: ${f}"
-                    case "${1}" in
-                        "bzip2" )
-                            bzip2 --keep -d --stdout "${f}"
-                            ;;
-                        "gzip" )
-                            gzip --keep -d --stdout "${f}"
-                            ;;
-                        "xz" )
-                            xz --keep -d --stdout "${f}"
-                            ;;
-                        "zstd" )
-                            zstd --keep -d --stdout "${f}"
-                            ;;
-                    esac | prepend_linenumber
-                    echo
-                done | head -n -1
-
+                local mode="${1}"
+                function __f() { "${mode}" --keep -d --stdout "${1}" ; }
+                join_outputs -c "__f" -- "${@:3}"
+                unset -f __f
             fi
         fi
     }
