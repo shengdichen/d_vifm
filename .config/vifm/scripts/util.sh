@@ -50,7 +50,24 @@ function format_output() {
 }
 
 function nvim_ro() {
-    nvim -R -c "set nomodifiable" "${@}"
+    # NOTE::
+    #   (n)vim prefers files passed as cmd-arg over stdin, e.g.,
+    #   -> $ ls | nvim ""
+    #   will open current directory instead of reading stdin
+    #
+    #   here, only forward to (n)vim if the one arg is not the empty-string
+
+    function __f() {
+        nvim -R -c "set nomodifiable" "${@}"
+    }
+
+    if (( ${#} > 1 )); then
+        __f "${@}"
+    elif [[ -n "${1}" ]]; then
+        __f "${1}"
+    else
+        __f
+    fi
 }
 
 function spawn_proc() {
@@ -82,6 +99,7 @@ function join_outputs() {
     local print_path="multiple"
     local n_files="0"
     local format="standard"
+    local output="stdout" output_nvim_extra=""
     while (( ${#} > 0 )); do
         case "${1}" in
             "-c" | "--cmd" )
@@ -100,6 +118,16 @@ function join_outputs() {
                 ;;
             "--format" )
                 format="${2}"
+                shift; shift
+                ;;
+            "--output" )
+                if [[ "${2}" == "stdout" || "${2}" == "nvim" ]]; then
+                    output="${2}"
+                fi
+                shift; shift
+                ;;
+            "--output-nvim-extra" )
+                output_nvim_extra="${2}"
                 shift; shift
                 ;;
             "--" )
@@ -123,5 +151,10 @@ function join_outputs() {
             "off") cat;;
         esac
         $separator
-    done | head -n "-${separator_cutaway}"
+    done | head -n "-${separator_cutaway}" | \
+        if [[ "${output}" == "nvim" ]]; then
+            nvim_ro "${output_nvim_extra}"
+        else
+            cat
+        fi
 }
