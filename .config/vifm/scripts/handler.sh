@@ -110,44 +110,42 @@ function __archive() {
     }
 
     function __unmake() {
-        if [[ "${1}" == "tar" ]]; then
-            for f in "${@:2}"; do
-                tar -xvf "${f}"
-            done
-        elif [[ "${1}" == "7z" ]]; then
-            for f in "${@:2}"; do
-                7z x "${f}"
-            done
-        elif [[ "${1}" == "zip" ]]; then
-            for f in "${@:2}"; do
-                unzip "${f}"
-            done
-        elif [[ "${1}" == "unrar" ]]; then
-            for f in "${@:2}"; do
-                unrar x "${f}"
-            done
+        local type mode
+        while (( ${#} > 0 )); do
+            case "${1}" in
+                "-t" | "--type" )
+                    type="${2}"
+                    shift; shift
+                    ;;
+                "-m" | "--mode" )
+                    mode="${2}"
+                    shift; shift
+                    ;;
+                "--" )
+                    files=("${@:2}")
+                    break
+            esac
+        done
+
+        if [[ "${type}" == "tar" ]]; then
+            function __f() { tar -xvf "${1}" ; }
+        elif [[ "${type}" == "7z" ]]; then
+            function __f() { 7z x "${1}" ; }
+        elif [[ "${type}" == "zip" ]]; then
+            function __f() { unzip "${1}" ; }
+        elif [[ "${type}" == "unrar" ]]; then
+            function __f() { unrar x "${1}" ; }
         else
-            if [[ "${2}" == "multi" ]]; then
-                for f in "${@:3}"; do
-                    tar --"${1}" -xvf "${f}"
-                done
+            if [[ "${mode}" == "multi" ]]; then
+                function __f() { tar "--${type}" -xvf "${1}" ; }
             else
-                case "${1}" in
-                    "bzip2" )
-                        bzip2 --keep -d "${@:3}"
-                        ;;
-                    "gzip" )
-                        gzip --keep -d "${@:3}"
-                        ;;
-                    "xz" )
-                        xz --keep -d "${@:3}"
-                        ;;
-                    "zstd" )
-                        zstd --keep -d "${@:3}"
-                        ;;
-                esac
+                function __f() { "${type}" --keep -d "${1}" ; }
             fi
         fi
+        join_outputs -c "__f" \
+            --print-path "always" -s "separator" \
+            -- "${files[@]}"
+        unset -f __f
     }
 
     function __make() {
