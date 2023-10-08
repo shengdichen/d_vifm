@@ -59,11 +59,14 @@ function __archive() {
             unset -f __f
         elif [[ "${1}" == "man" ]]; then
             function __f() { man -l "${1}" | tail -n +2 ; }
-            join_outputs -c "__f" --format "linenumber" -s "separator" -- "${@:2}"
+            join_outputs -c "__f" \
+                --format "linenumber" -s "separator" \
+                -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "man-nvim" ]]; then
             function __f() { man -l "${1}" | tail -n +2 ; }
-            join_outputs -c "__f" --format "off" -s "separator" \
+            join_outputs -c "__f" \
+                --format "off" -s "separator" \
                 --output "nvim" --output-nvim-extra "-c set filetype=man" \
                 -- "${@:2}"
             unset -f __f
@@ -73,8 +76,8 @@ function __archive() {
             unset -f __f
         elif [[ "${1}" == "7z-nvim" ]]; then
             function __f() { 7z l "${1}" | tail -n +3 ; }
-            join_outputs \
-                -c "__f" -s "separator" --format "off" --output "nvim" \
+            join_outputs -c "__f" \
+                --format "off" -s "separator" --output "nvim" \
                 -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "zip" ]]; then
