@@ -42,6 +42,8 @@ function insert_separator() {
 
 function join_outputs() {
     local separator="echo" separator_cutaway="1"
+    local print_path="multiple"
+    local n_files="0"
     while (( ${#} > 0 )); do
         case "${1}" in
             "-c" | "--cmd" )
@@ -54,13 +56,24 @@ function join_outputs() {
                 fi
                 shift; shift
                 ;;
+            "--print-path" )
+                print_path="${2}"
+                shift; shift
+                ;;
             "--" )
                 local files=("${@:2}")
+                n_files="${#files[@]}"
                 break
         esac
     done
 
     for f in "${files[@]}"; do
+        if [[ \
+            "${print_path}" == "always" || \
+            ("${print_path}" == "multiple" && "${n_files}" -gt 1) \
+        ]]; then
+            echo "Path: ${f}"
+        fi
         "${cmd}" "${f}"
         $separator
     done | head -n "-${separator_cutaway}"

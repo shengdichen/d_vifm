@@ -12,7 +12,6 @@ function __nvim() {
 
 function __preview() {
     function __file() {
-        echo "Path: ${1}"
         if [[ -s "${1}" ]]; then
             format_standard <"${1}"
         else
@@ -26,25 +25,14 @@ function __preview() {
         tree -a -l "${1}" | format_standard ""
     }
 
-    if (( "${#}" <= 2 )); then
-         case "${1}" in
-            "file" )
-                __file "${2}"
-                ;;
-            "dir" )
-                __dir "${2}"
-                ;;
-        esac
-    else
-        case "${1}" in
-            "file" )
-                join_outputs -c __file -- "${@:2}"
-                ;;
-            "dir" )
-                join_outputs -c __dir -- "${@:2}"
-                ;;
-        esac
-    fi
+    case "${1}" in
+        "file" )
+            join_outputs -c __file -- "${@:2}"
+            ;;
+        "dir" )
+            join_outputs -c __dir --print-path "never" -- "${@:2}"
+            ;;
+    esac
 
     unset -f __file __dir
 }
