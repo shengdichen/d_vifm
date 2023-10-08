@@ -15,6 +15,7 @@ function format_standard() {
 function format_output() {
     local width=119
     local linenumber=true
+    local files=()
     while (( ${#} > 0 )); do
         case "${1}" in
             "-w" | "--max-width" )
@@ -26,11 +27,16 @@ function format_output() {
                 shift; shift
                 ;;
             "--" )
-                local files=("${@:2}")
+                files=("${@:2}")
                 break
         esac
     done
 
+    if (( ${#files[@]} > 0 )); then
+        cat "${files[@]}"
+    else
+        cat
+    fi | \
     if [[ "${width}" != "off" ]]; then
         fold -w "${width}" -s
     else
