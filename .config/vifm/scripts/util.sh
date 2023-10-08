@@ -121,7 +121,7 @@ function join_outputs() {
                 shift; shift
                 ;;
             "--output" )
-                if [[ "${2}" == "stdout" || "${2}" == "nvim" ]]; then
+                if [[ "${2}" == "stdout" || "${2}" == "nvim" || "${2}" == "null" ]]; then
                     output="${2}"
                 fi
                 shift; shift
@@ -152,9 +152,9 @@ function join_outputs() {
         esac
         $separator
     done | head -n "-${separator_cutaway}" | \
-        if [[ "${output}" == "nvim" ]]; then
-            nvim_ro "${output_nvim_extra}"
-        else
+        if [[ "${output}" == "stdout" ]]; then
             cat
+        elif [[ "${output}" == "nvim" ]]; then
+            nvim_ro "${output_nvim_extra}"
         fi
 }
