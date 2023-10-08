@@ -25,6 +25,15 @@ function __preview() {
         tree -a -l "${1}" | format_standard ""
     }
 
+    function __ffmpeg() {
+        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1 | \
+            format_standard ""
+    }
+
+    function __image() {
+        identify "${f}" | format_standard ""
+    }
+
     case "${1}" in
         "file" )
             join_outputs -c __file -- "${@:2}"
@@ -32,29 +41,15 @@ function __preview() {
         "dir" )
             join_outputs -c __dir --print-path "never" -- "${@:2}"
             ;;
-    esac
-
-    unset -f __file __dir
-}
-
-function __info_media() {
-    case "${1}" in
         "ffmpeg" )
-            for f in "${@:2}"; do
-                echo "Path: ${f}"
-                ffprobe -loglevel quiet -show_format -pretty "${f}" 2>&1 | \
-                    format_standard ""
-                echo
-            done | head -n -1
+            join_outputs -c __ffmpeg -- "${@:2}"
             ;;
         "image" )
-            for f in "${@:2}"; do
-                echo "Path: ${f}"
-                identify "${f}" | format_standard ""
-                echo
-            done | head -n -1
+            join_outputs -c __image -- "${@:2}"
             ;;
     esac
+
+    unset -f __file __dir __ffmpeg __image
 }
 
 function __archive() {
@@ -280,12 +275,6 @@ function main() {
         "mpv" | "imv" | "zathura" | "pdfarranger" | "xournalpp" | "lyx" | "libreoffice" | "sqlitebrowser" )
             spawn_proc "${1}" "${@:2}"
             ;;
-        "info_ffmpeg" )
-            __info_media "ffmpeg" "${@:2}"
-            ;;
-        "info_image" )
-            __info_media "image" "${@:2}"
-            ;;
         "archive" )
             __archive "${@:2}"
             ;;
@@ -294,7 +283,7 @@ function main() {
             ;;
     esac
 
-    unset -f __nvim __preview __tree __info_media __archive __pass
+    unset -f __nvim __preview __tree __archive __pass
 }
 main "${@}"
 unset -f main
