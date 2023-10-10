@@ -22,7 +22,8 @@ function __preview() {
     function __dir() {
         # -a := show hidden files
         # -l := follow links
-        tree -a -l "${1}"
+        # -L 1 := list only immediate children
+        tree -a -l -L 1 --filelimit 197 "${1}"
     }
 
     function __ffmpeg() {
