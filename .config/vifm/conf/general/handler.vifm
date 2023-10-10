@@ -66,7 +66,7 @@ fileviewer
 \ *.flac,*.wav,*.ape,
 \*.mp3,*.m4a,*.m4b,
 \*.wma,*.ac3,*.og[agx],*.spx,*.opus
-    \ handler.sh "info_ffmpeg" %f,
+    \ handler.sh "preview" "ffmpeg" %f,
 " }}}
 
 " vid {{{
@@ -80,7 +80,7 @@ fileviewer
 \ *.mkv,
 \*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
 \*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
-    \ handler.sh "info_ffmpeg" %f,
+    \ handler.sh "preview" "ffmpeg" %f,
 " }}}
 
 " pic {{{
@@ -95,7 +95,7 @@ fileviewer
 \ *.png,*.svg,
 \*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
 \*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
-    \ handler.sh "info_image" %f,
+    \ handler.sh "preview" "image" %f,
 " }}}
 
 filetype *.torrent
@@ -143,7 +143,7 @@ filetype
     \ {list}
     \ handler.sh "archive" "list" "7z-nvim" %f,
     \ {unmake}
-    \ handler.sh "archive" "unmake" "7z" %f,
+    \ handler.sh "archive" "unmake" -t 7z -- %f,
 fileviewer
 \ *.7z,
 \*.iso
@@ -159,7 +159,7 @@ filetype *.rar
     \ {list}
     \ handler.sh "archive" "list" "unrar-nvim" %f,
     \ {unmake}
-    \ handler.sh "archive" "unmake" "unrar" %f,
+    \ handler.sh "archive" "unmake" -t unrar -- %f,
 fileviewer *.rar
     \ handler.sh "archive" "list" "unrar" %f,
 " }}}
@@ -269,45 +269,42 @@ filetype *.tmux
 " archive {{{
 filetype *.tar
     \ {unmake}
-    \ handler.sh "archive" "unmake" "tar" %f,
+    \ handler.sh "archive" "unmake" -t tar -- %f,
 
 filetype *.tar.bz2,*.tbz2,*tar.bz,*.tbz
     \ {unmake}
-    \ handler.sh "archive" "unmake" "bzip2" "multi" %f,
-
+    \ handler.sh "archive" "unmake" -t bzip2 -m multi -- %f,
 filetype *.bz2,*.bz
     \ {unmake}
-    \ handler.sh "archive" "unmake" "bzip2" "single" %f,
-fileviewer *.bz2,*.bz
-    \ handler.sh "archive" "list" "bzip2" "single" %f,
+    \ handler.sh "archive" "unmake" -t bzip2 -m single -- %f,
 
 filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
     \ {unmake}
-    \ handler.sh "archive" "unmake" "gzip" "multi" %f,
+    \ handler.sh "archive" "unmake" -t gzip -m multi -- %f,
 filetype *.gz,*.z
     \ {unmake}
-    \ handler.sh "archive" "unmake" "gzip" "single" %f,
+    \ handler.sh "archive" "unmake" -t gzip -m single -- %f,
 
 filetype *.tar.xz,*.txz,*tar.lz,*.tlz
     \ {unmake}
-    \ handler.sh "archive" "unmake" "xz" "multi" %f,
+    \ handler.sh "archive" "unmake" -t xz -m multi -- %f,
 filetype *.xz,*.lzma,*.lz
     \ {unmake}
-    \ handler.sh "archive" "unmake" "xz" "single" %f,
+    \ handler.sh "archive" "unmake" -t xz -m single -- %f,
 
 filetype *.tar.zst
     \ {unmake}
-    \ handler.sh "archive" "unmake" "zstd" "multi" %f,
+    \ handler.sh "archive" "unmake" -t zstd -m multi -- %f,
 filetype *.zst
     \ {unmake}
-    \ handler.sh "archive" "unmake" "zstd" "single" %f,
+    \ handler.sh "archive" "unmake" -t zstd -m single -- %f,
 
 filetype
 \ *.zip,
 \*.apk,*.apkg,
 \*.[ejw]ar
     \ {unmake}
-    \ handler.sh "archive" "unmake" "zip" %f,
+    \ handler.sh "archive" "unmake" -t zip -- %f,
 
 filetype ?*,*
     \ {placeholder}

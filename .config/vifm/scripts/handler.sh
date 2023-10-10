@@ -12,9 +12,8 @@ function __nvim() {
 
 function __preview() {
     function __file() {
-        local f="${1}"
-        if [[ -s "${f}" ]]; then
-            format_standard <"${f}"
+        if [[ -s "${1}" ]]; then
+            format_standard <"${1}"
         else
             echo "## PLACEHOLDER (EMPTY FILE) ##"
         fi
@@ -23,175 +22,130 @@ function __preview() {
     function __dir() {
         # -a := show hidden files
         # -l := follow links
-        tree -a -l "${1}" | format_standard ""
+        tree -a -l "${1}"
     }
 
-    if (( "${#}" <= 2 )); then
-         case "${1}" in
-            "file" )
-                __file "${2}"
-                ;;
-            "dir" )
-                __dir "${2}"
-                ;;
-        esac
-    else
-        case "${1}" in
-            "file" )
-                for f in "${@:2}"; do
-                    echo "Path: ${f}"
-                    __file "${f}"
-                    echo
-                done | head -n -1
-                ;;
-            "dir" )
-                for f in "${@:2}"; do
-                    __dir "${f}"
-                    echo
-                done | head -n -1
-                ;;
-        esac
-    fi
+    function __ffmpeg() {
+        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
+    }
 
-    unset -f __file __dir
-}
+    function __image() {
+        identify "${f}"
+    }
 
-function __info_media() {
     case "${1}" in
+        "file" )
+            join_outputs -c __file --format "off" -- "${@:2}"
+            ;;
+        "dir" )
+            join_outputs -c __dir --print-path "never" -- "${@:2}"
+            ;;
         "ffmpeg" )
-            for f in "${@:2}"; do
-                echo "Path: ${f}"
-                ffprobe -loglevel quiet -show_format -pretty "${f}" 2>&1 | \
-                    format_standard ""
-                echo
-            done | head -n -1
+            join_outputs -c __ffmpeg -- "${@:2}"
             ;;
         "image" )
-            for f in "${@:2}"; do
-                echo "Path: ${f}"
-                identify "${f}" | format_standard ""
-                echo
-            done | head -n -1
+            join_outputs -c __image -- "${@:2}"
             ;;
     esac
+
+    unset -f __file __dir __ffmpeg __image
 }
 
 function __archive() {
     function __list() {
         if [[ "${1}" == "tar" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                tar -tvf "${f}" | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { tar -tvf "${1}" ; }
+            join_outputs -c "__f" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "man" ]]; then
-            for f in "${@:2}"; do
-                man -l "${f}" | tail -n +2 | prepend_linenumber
-                insert_separator ""
-            done | head -n -3
+            function __f() { man -l "${1}" | tail -n +2 ; }
+            join_outputs -c "__f" \
+                --format "linenumber" -s "separator" \
+                -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "man-nvim" ]]; then
-            for f in "${@:2}"; do
-                man -l "${f}" | tail -n +2
-                insert_separator ""
-            done | head -n -3 | nvim_ro "-c" "set filetype=man"
+            function __f() { man -l "${1}" | tail -n +2 ; }
+            join_outputs -c "__f" \
+                --format "off" -s "separator" \
+                --output "nvim" --output-nvim-extra "-c set filetype=man" \
+                -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "7z" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                7z l "${f}" | tail -n +19 | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { 7z l "${1}" | tail -n +19 ; }
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "7z-nvim" ]]; then
-            for f in "${@:2}"; do
-                7z l "${f}" | tail -n +3
-                insert_separator ""
-            done | head -n -3 | nvim_ro
+            function __f() { 7z l "${1}" | tail -n +3 ; }
+            join_outputs -c "__f" \
+                --format "off" -s "separator" --output "nvim" \
+                -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "zip" ]]; then
-            for f in "${@:2}"; do
-                unzip -l "${f}" | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { unzip -l "${1}" | tail -n +2 ; }
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "unrar" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                unrar l "${f}" | tail -n +5 | head -n -1 | prepend_linenumber
-                echo
-            done | head -n -1
+            function __f() { unrar l "${1}" | tail -n +5 | head -n -1 ; }
+            join_outputs -c "__f" -s "separator" -- "${@:2}"
+            unset -f __f
         elif [[ "${1}" == "unrar-nvim" ]]; then
-            for f in "${@:2}"; do
-                echo "Archive: ${f}"
-                unrar v "${f}" | tail -n +5 | head -n -1 | prepend_linenumber
-                echo
-            done | head -n -1 | nvim_ro
+            function __f() { unrar v "${1}" | tail -n +5 | head -n -1 ; }
+            join_outputs -c "__f" \
+                --format "off" -s "separator" --output "nvim" \
+                -- "${@:2}"
+            unset -f __f
         else
             if [[ "${2}" == "multi" ]]; then
-                for f in "${@:3}"; do
-                    echo "Archive: ${f}"
-                    tar --"${1}" -tvf "${f}" | prepend_linenumber
-                    echo
-                done | head -n -1
+                local mode="--${1}"
+                function __f() { tar "${mode}" -tvf "${1}" ; }
+                join_outputs -c "__f" -- "${@:3}"
+                unset -f __f
             else
-                for f in "${@:3}"; do
-                    echo "Archive: ${f}"
-                    case "${1}" in
-                        "bzip2" )
-                            bzip2 --keep -d --stdout "${f}"
-                            ;;
-                        "gzip" )
-                            gzip --keep -d --stdout "${f}"
-                            ;;
-                        "xz" )
-                            xz --keep -d --stdout "${f}"
-                            ;;
-                        "zstd" )
-                            zstd --keep -d --stdout "${f}"
-                            ;;
-                    esac | prepend_linenumber
-                    echo
-                done | head -n -1
-
+                local mode="${1}"
+                function __f() { "${mode}" --keep -d --stdout "${1}" ; }
+                join_outputs -c "__f" -- "${@:3}"
+                unset -f __f
             fi
         fi
     }
 
     function __unmake() {
-        if [[ "${1}" == "tar" ]]; then
-            for f in "${@:2}"; do
-                tar -xvf "${f}"
-            done
-        elif [[ "${1}" == "7z" ]]; then
-            for f in "${@:2}"; do
-                7z x "${f}"
-            done
-        elif [[ "${1}" == "zip" ]]; then
-            for f in "${@:2}"; do
-                unzip "${f}"
-            done
-        elif [[ "${1}" == "unrar" ]]; then
-            for f in "${@:2}"; do
-                unrar x "${f}"
-            done
+        local type mode
+        while (( ${#} > 0 )); do
+            case "${1}" in
+                "-t" | "--type" )
+                    type="${2}"
+                    shift; shift
+                    ;;
+                "-m" | "--mode" )
+                    mode="${2}"
+                    shift; shift
+                    ;;
+                "--" )
+                    files=("${@:2}")
+                    break
+            esac
+        done
+
+        if [[ "${type}" == "tar" ]]; then
+            function __f() { tar -xvf "${1}" ; }
+        elif [[ "${type}" == "7z" ]]; then
+            function __f() { 7z x "${1}" ; }
+        elif [[ "${type}" == "zip" ]]; then
+            function __f() { unzip "${1}" ; }
+        elif [[ "${type}" == "unrar" ]]; then
+            function __f() { unrar x "${1}" ; }
         else
-            if [[ "${2}" == "multi" ]]; then
-                for f in "${@:3}"; do
-                    tar --"${1}" -xvf "${f}"
-                done
+            if [[ "${mode}" == "multi" ]]; then
+                function __f() { tar "--${type}" -xvf "${1}" ; }
             else
-                case "${1}" in
-                    "bzip2" )
-                        bzip2 --keep -d "${@:3}"
-                        ;;
-                    "gzip" )
-                        gzip --keep -d "${@:3}"
-                        ;;
-                    "xz" )
-                        xz --keep -d "${@:3}"
-                        ;;
-                    "zstd" )
-                        zstd --keep -d "${@:3}"
-                        ;;
-                esac
+                function __f() { "${type}" --keep -d "${1}" ; }
             fi
         fi
+        join_outputs -c "__f" \
+            --print-path "always" -s "separator" \
+            -- "${files[@]}"
+        unset -f __f
     }
 
     function __make() {
@@ -299,12 +253,6 @@ function main() {
         "mpv" | "imv" | "zathura" | "pdfarranger" | "xournalpp" | "lyx" | "libreoffice" | "sqlitebrowser" )
             spawn_proc "${1}" "${@:2}"
             ;;
-        "info_ffmpeg" )
-            __info_media "ffmpeg" "${@:2}"
-            ;;
-        "info_image" )
-            __info_media "image" "${@:2}"
-            ;;
         "archive" )
             __archive "${@:2}"
             ;;
@@ -313,7 +261,7 @@ function main() {
             ;;
     esac
 
-    unset -f __nvim __preview __tree __info_media __archive __pass
+    unset -f __nvim __preview __tree __archive __pass
 }
 main "${@}"
 unset -f main
