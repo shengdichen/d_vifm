@@ -4,6 +4,12 @@ function next_pane_is_zsh() {
     [[ "${cmd_next_pane}" == "zsh" ]]
 }
 
+function respawn_if_dead() {
+    if (( $(tmux display-message -p -t "${1}" -F "#{pane_dead}") == "1" )); then
+        tmux respawn-pane
+    fi
+}
+
 function cd_next_pane() {
     local target="${1}"
     # C-U := clear existing input
@@ -26,6 +32,7 @@ function create_split() {
 function split_shell() {
     if next_pane_is_zsh; then
         cd_next_pane "${1}"
+        respawn_if_dead ":."
     else
         create_split
     fi
