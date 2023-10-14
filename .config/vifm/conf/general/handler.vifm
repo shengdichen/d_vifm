@@ -309,23 +309,23 @@ filetype
 filetype ?*,*
     \ {placeholder}
     \ echo 1,
-    \ handler.sh "archive" "make" "tar" %f,
+    \ handler.sh "archive" "make" -t tar -- %f,
     \ {placeholder}
     \ echo 2,
-    \ handler.sh "archive" "make" "multi" "bzip2" %f,
-    \ handler.sh "archive" "make" "multi" "gzip" %f,
-    \ handler.sh "archive" "make" "multi" "xz" %f,
-    \ handler.sh "archive" "make" "multi" "zstd" %f,
-    \ handler.sh "archive" "make" "multi" "7z" %f,
-    \ handler.sh "archive" "make" "multi" "zip" %f,
+    \ handler.sh "archive" "make" -m multi -t bzip2 -- %f,
+    \ handler.sh "archive" "make" -m multi -t gzip -- %f,
+    \ handler.sh "archive" "make" -m multi -t xz -- %f,
+    \ handler.sh "archive" "make" -m multi -t zstd -- %f,
+    \ handler.sh "archive" "make" -m multi -t 7z -- %f,
+    \ handler.sh "archive" "make" -m multi -t zip -- %f,
     \ {placeholder}
     \ echo 3,
-    \ handler.sh "archive" "make" "single" "bzip2" %f,
-    \ handler.sh "archive" "make" "single" "gzip" %f,
-    \ handler.sh "archive" "make" "single" "xz" %f,
-    \ handler.sh "archive" "make" "single" "zstd" %f,
-    \ handler.sh "archive" "make" "single" "7z" %f,
-    \ handler.sh "archive" "make" "single" "zip" %f,
+    \ handler.sh "archive" "make" -m single -t bzip2 -- %f,
+    \ handler.sh "archive" "make" -m single -t gzip -- %f,
+    \ handler.sh "archive" "make" -m single -t xz -- %f,
+    \ handler.sh "archive" "make" -m single -t zstd -- %f,
+    \ handler.sh "archive" "make" -m single -t 7z -- %f,
+    \ handler.sh "archive" "make" -m single -t zip -- %f,
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
