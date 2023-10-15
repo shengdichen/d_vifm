@@ -237,26 +237,26 @@ set vixcmd=nvim
 "   b. all dirs (NOT files) =: ?*/,*/
 "   c. all files and dirs =: ?*,*
 
-filetype ?*[^/],*[^/]
+filetype /^.*[^\/]$/
     \ {nvim}
     \ handler.sh "nvim" "open" %f,
     \ {diff}
     \ handler.sh "nvim" "diff" %f,
-fileviewer ?*[^/],*[^/]
+fileviewer /^.*[^\/]$/
     \ handler.sh "preview" "file" %f,
 
-filetype ?*/,*/
+filetype /^.*\/$/
     \ {nvim}
     \ handler.sh "nvim" "open" %f,
     \ {diff}
     \ handler.sh "nvim" "diff" %f,
-filextype ?*/,*/
+filextype /^.*\/$/
     \ handler.sh "mpv" %f,
-fileviewer ?*/,*/
+fileviewer /^.*\/$/
     \ handler.sh "preview" "dir" %f,
 " }}}
 
-filetype ?*,*
+filetype /^.*$/
     \ {nvim.tmux}
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
@@ -306,7 +306,7 @@ filetype
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zip -- %f,
 
-filetype ?*,*
+filetype /^.*$/
     \ {placeholder}
     \ echo 1,
     \ handler.sh "archive" "make" -t tar -- %f,
