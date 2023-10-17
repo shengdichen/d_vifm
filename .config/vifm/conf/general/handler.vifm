@@ -56,7 +56,7 @@ filextype /^.*\.lyx$/
     \ WAYLAND_DISPLAY='' handler.sh "lyx" %f,
 
 " "office"-related {{{
-filextype /^.*\.odt$/,/^.*\.doc$/,/^.*\.docx$/,/^.*\.xls$/,/^.*\.xlsx$/,/^.*\.odp$/,/^.*\.pptx$/
+filextype /^.*\.od[tp]$/,/^.*\.docx?$/,/^.*\.xlsx?$/,/^.*\.pptx?$/
     \ handler.sh "libreoffice" %f,
 
 fileviewer /^.*\.doc$/
