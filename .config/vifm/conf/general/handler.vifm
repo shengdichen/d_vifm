@@ -121,9 +121,9 @@ fileviewer /^.*\.torrent$/
 fileviewer /^.*\.tar$/
     \ handler.sh "archive" "list" "tar" %f,
 
-fileviewer /^.*\.tar.bz2$/,/^.*\.tbz2$/,/^.*\.tar\.bz$/,/^.*\.tbz$/
+fileviewer /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
     \ handler.sh "archive" "list" "bzip2" "multi" %f,
-fileviewer /^.*\.bz2$/,/^.*\.bz$/
+fileviewer /^.*\.bz2?$/
     \ handler.sh "archive" "list" "bzip2" "single" %f,
 
 " gzip {{{
@@ -133,15 +133,15 @@ filetype {{/usr/share/**/*.gz}}
 fileviewer {{/usr/share/**/*.gz}}
     \ handler.sh "archive" "list" "man" %f,
 
-fileviewer /^.*\.tar\.gz$/,/^.*\.tgz$/,/^.*\.tar.\Z$/,/^.*\.taz$/
+fileviewer /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
     \ handler.sh "archive" "list" "gzip" "multi" %f,
-fileviewer /^.*\.gz$/,/^.*\.z$/
+fileviewer /^.*\.g?z$/
     \ handler.sh "archive" "list" "gzip" "single" %f,
 " }}}
 
-fileviewer /^.*\.tar\.xz$/,/^.*\.txz$/,/^.*\.tar\.lz$/,/^.*\.tlz$/
+fileviewer /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
     \ handler.sh "archive" "list" "xz" "multi" %f,
-fileviewer /^.*\.xz$/,/^.*\.lzma$/,/^.*\.lz$/
+fileviewer /^.*\.[xl]z$/,/^.*\.lzma$/
     \ handler.sh "archive" "list" "xz" "single" %f,
 
 fileviewer /^.*\.tar\.zst$/
@@ -157,7 +157,7 @@ filetype /^.*\.7z$/,/^.*\.iso$/
 fileviewer /^.*\.7z$/,/^.*\.iso$/
     \ handler.sh "archive" "list" "7z" %f,
 
-fileviewer /^.*\.zip$/,/^.*\.apk$/,/^.*\.apkg$/,/^.*\.[ejw]ar$/
+fileviewer /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
     \ handler.sh "archive" "list" "zip" %f,
 
 filetype /^.*\.rar$/
@@ -269,24 +269,24 @@ filetype /^.*\.tar$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t tar -- %f,
 
-filetype /^.*\.tar\.bz2$/,/^.*\.tbz2$/,/^.*\.tar\.bz$/,/^.*\.tbz$/
+filetype /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t bzip2 -m multi -- %f,
-filetype /^.*\.bz2$/,/^.*\.bz$/
+filetype /^.*\.bz2?$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t bzip2 -m single -- %f,
 
-filetype /^.*\.tar\.gz$/,/^.*\.tgz$/,/^.*\.tar\.Z$/,/^.*\.taz$/
+filetype /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t gzip -m multi -- %f,
-filetype /^.*\.gz$/,/^.*\.z$/
+filetype /^.*\.g?z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t gzip -m single -- %f,
 
-filetype /^.*\.tar\.xz$/,/^.*\.txz$/,/^.*\.tar\.lz$/,/^.*\.tlz$/
+filetype /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t xz -m multi -- %f,
-filetype /^.*\.xz$/,/^.*\.lzma$/,/^.*\.lz$/
+filetype /^.*\.[xl]z$/,/^.*\.lzma$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t xz -m single -- %f,
 
@@ -297,7 +297,7 @@ filetype /^.*\.zst$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zstd -m single -- %f,
 
-filetype /^.*\.zip$/,/^.*\.apk$/,/^.*\.apkg$/,/^.*\.[ejw]ar$/
+filetype /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zip -- %f,
 
