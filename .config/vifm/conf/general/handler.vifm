@@ -170,8 +170,7 @@ fileviewer /^.*\.rar$/
 " }}}
 
 " dev {{{
-filextype
-\ /^.*\.db$/,/^.*\.db3$/,/^.*\.sqlite$/,/^.*\.sqlite3$/
+filextype /^.*\.db3?$/,/^.*\.sqlite3?$/
     \ handler.sh "sqlitebrowser" %f,
 
 " signature {{{
