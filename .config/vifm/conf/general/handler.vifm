@@ -1,4 +1,4 @@
-" NOTE:
+" NOTE {{{
 "   1. %f VS "%f"
 "   a) %f := one array of unescaped filenames
 "   b) "%f" := one space-separated string of escaped filenames
@@ -10,6 +10,18 @@
 "       2) specific AFTER generic
 "       -> use generic by default, specific available with :f
 "   b) previewer: specific ALWAYS BEFORE generic
+"
+"   3. glob VS regex (:h vifm-patterns)
+"   a) glob: * alone will NOT match leading-dot
+"   -> prepend ? to force matching such dirs
+"       1) files (NOT folders) =: ?*[^/],*[^/]
+"       2) dirs (NOT files) =: ?*/,*/
+"       3) files and dirs =: ?*,*
+"   b) regex
+"       1) files =: /^.*[^\/]$/
+"       2) dirs =: /^.*\/$/
+"       3) files and dirs =: /^.*$/
+" }}}
 
 " matched {{{
 " document {{{
@@ -223,19 +235,6 @@ filetype *.o
 fileviewer *.o
     \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
-" }}}
-
-" generic {{{
-" notably used for bulk-renaming
-set vicmd=vi
-set vixcmd=nvim
-
-" NOTE:
-"   1. * alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
-"   prepend a "?" to force matching such dirs
-"   a. all files (NOT folders) =: ?*[^/],*[^/]
-"   b. all dirs (NOT files) =: ?*/,*/
-"   c. all files and dirs =: ?*,*
 
 filetype /^.*[^\/]$/
     \ {nvim}
@@ -256,11 +255,17 @@ fileviewer /^.*\/$/
     \ handler.sh "preview" "dir" %f,
 " }}}
 
+" generic {{{
+" notably used for bulk-renaming
+set vicmd=vi
+set vixcmd=nvim
+
 filetype /^.*$/
     \ {nvim.tmux}
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
     \ tmux.sh "file" "diff" "%f",
+" }}}
 
 filetype *.tmux
     \ {source}
