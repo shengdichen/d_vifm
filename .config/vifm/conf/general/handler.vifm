@@ -98,15 +98,15 @@ fileviewer
 " pic {{{
 filextype
 \ /^.*\.png$/,/^.*\.svg$/,
-\/^.*\.jpg$/,/^.*\.jpeg$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
+\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
     \ {imv}
     \ handler.sh "imv" %f,
 
 fileviewer
 \ /^.*\.png$/,/^.*\.svg$/,
-\/^.*\.jpg$/,/^.*\.jpeg$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
+\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
     \ handler.sh "preview" "image" %f,
 " }}}
 
