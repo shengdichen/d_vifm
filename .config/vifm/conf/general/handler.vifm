@@ -190,7 +190,7 @@ filetype *.asc
     \ {verify}
     \ !!gpg --verify %f,
 
-filetype *.gpg
+filetype //^.*\/\.password-store\/.*gpg$//
     \ {pass: edit}
     \ handler.sh "pass" "edit" %f:p,
     \ {pass: show}
