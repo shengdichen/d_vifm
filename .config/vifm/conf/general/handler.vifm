@@ -70,13 +70,13 @@ fileviewer /^.*\.docx$/
 " aud {{{
 filextype
 \ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
-\/^.*\.mp3$/,/^.*\.m4a$/,/^.*\.m4b$/,
+\/^.*\.mp3$/,/^.*\.m4[ab]$/,
 \/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
     \ handler.sh "mpv" %f,
 
 fileviewer
 \ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
-\/^.*\.mp3$/,/^.*\.m4a$/,/^.*\.m4b$/,
+\/^.*\.mp3$/,/^.*\.m4[ab]$/,
 \/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
     \ handler.sh "preview" "ffmpeg" %f,
 " }}}
@@ -84,13 +84,13 @@ fileviewer
 " vid {{{
 filextype
 \ /^.*\.mkv$/,
-\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,/^.*\.mpg$/,/^.*\.mpeg$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
+\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
 \/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
     \ handler.sh "mpv" %f,
 
 fileviewer
 \ /^.*\.mkv$/,
-\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,/^.*\.mpg$/,/^.*\.mpeg$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
+\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
 \/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
     \ handler.sh "preview" "ffmpeg" %f,
 " }}}
@@ -99,14 +99,14 @@ fileviewer
 filextype
 \ /^.*\.png$/,/^.*\.svg$/,
 \/^.*\.jpg$/,/^.*\.jpeg$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heif$/,/^.*\.heifs$/,/^.*\.heic$/,/^.*\.heics$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
     \ {imv}
     \ handler.sh "imv" %f,
 
 fileviewer
 \ /^.*\.png$/,/^.*\.svg$/,
 \/^.*\.jpg$/,/^.*\.jpeg$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heif$/,/^.*\.heifs$/,/^.*\.heic$/,/^.*\.heics$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avci$/,/^.*\.avcs$/,/^.*\.avif$/
     \ handler.sh "preview" "image" %f,
 " }}}
 
