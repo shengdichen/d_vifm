@@ -149,22 +149,15 @@ fileviewer /^.*\.tar\.zst$/
 fileviewer /^.*\.zst$/
     \ handler.sh "archive" "list" "zstd" "single" %f,
 
-filetype
-\ /^.*\.7z$/,
-\/^.*\.iso$/
+filetype /^.*\.7z$/,/^.*\.iso$/
     \ {list}
     \ handler.sh "archive" "list" "7z-nvim" %f,
     \ {unmake}
     \ handler.sh "archive" "unmake" -t 7z -- %f,
-fileviewer
-\ /^.*\.7z$/,
-\/^.*\.iso$/
+fileviewer /^.*\.7z$/,/^.*\.iso$/
     \ handler.sh "archive" "list" "7z" %f,
 
-fileviewer
-\ /^.*\.zip$/,
-\/^.*\.apk$/,/^.*\.apkg$/,
-\/^.*\.[ejw]ar$/
+fileviewer /^.*\.zip$/,/^.*\.apk$/,/^.*\.apkg$/,/^.*\.[ejw]ar$/
     \ handler.sh "archive" "list" "zip" %f,
 
 filetype /^.*\.rar$/
@@ -304,10 +297,7 @@ filetype /^.*\.zst$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zstd -m single -- %f,
 
-filetype
-\ /^.*\.zip$/,
-\/^.*\.apk$/,/^.*\.apkg$/,
-\/^.*\.[ejw]ar$/
+filetype /^.*\.zip$/,/^.*\.apk$/,/^.*\.apkg$/,/^.*\.[ejw]ar$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zip -- %f,
 
