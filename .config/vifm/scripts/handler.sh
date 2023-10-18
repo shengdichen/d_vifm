@@ -150,58 +150,60 @@ function __archive() {
     }
 
     function __make() {
-        if [[ "${1}" == "tar" ]]; then
-            tar -cv -f "_new.tar" -- "${@:2}"
-        elif [[ "${1}" == "multi" ]]; then
-            case "${2}" in
-                "tar" )
-                    tar -cv -f "_new.tar" -- "${@:3}"
+        local type mode
+        while (( ${#} > 0 )); do
+            case "${1}" in
+                "-t" | "--type" )
+                    type="${2}"
+                    shift; shift
                     ;;
+                "-m" | "--mode" )
+                    mode="${2}"
+                    shift; shift
+                    ;;
+                "--" )
+                    files=("${@:2}")
+                    break
+            esac
+        done
+
+        if [[ "${type}" == "tar" ]]; then
+            function __f() { tar -cv -f "_new.tar" -- "${@}" ; }
+        elif [[ "${mode}" == "multi" ]]; then
+            case "${type}" in
                 "bzip2" )
-                    tar --bzip2 -cv -f "_new.tar.bz2" -- "${@:3}"
-                    ;;
+                    function __f() { tar "--${type}" -cv -f "_new.tar.bz2" -- "${@}" ; } ;;
                 "gzip" )
-                    tar --gzip -cv -f "_new.tar.gz" -- "${@:3}"
-                    ;;
+                    function __f() { tar "--${type}" -cv -f "_new.tar.gz" -- "${@}" ; } ;;
                 "xz" )
-                    tar --xz -cv -f "_new.tar.xz" -- "${@:3}"
-                    ;;
+                    function __f() { tar "--${type}" -cv -f "_new.tar.${type}" -- "${@}" ; } ;;
                 "zstd" )
-                    tar --zstd -cv -f "_new.tar.zst" -- "${@:3}"
-                    ;;
+                    function __f() { tar "--${type}" -cv -f "_new.tar.zst" -- "${@}" ; } ;;
                 "7z" )
-                    7z a "_new.7z" -- "${@:3}"
-                    ;;
+                    function __f() { 7z a "_new.7z" -- "${@}" ; } ;;
                 "zip" )
-                    zip -r "_new.zip" -- "${@:3}"
-                    ;;
+                    function __f() { zip -r "_new.zip" -- "${@}" ; } ;;
             esac
         else
-            case "${2}" in
-                "bzip2" )
-                    bzip2 --keep "${@:3}"
-                    ;;
-                "gzip" )
-                    gzip --keep "${@:3}"
-                    ;;
-                "xz" )
-                    xz --keep "${@:3}"
-                    ;;
-                "zstd" )
-                    zstd --keep "${@:3}"
-                    ;;
+            case "${type}" in
+                "bzip2" | "gzip" | "xz" | "zstd" )
+                    function __f() { "${type}" --keep "${@}" ; } ;;
                 "7z" )
-                    for f in "${@:3}"; do
-                        7z a "${f}.7z" -- "${f}"
-                    done
-                    ;;
+                    function __f() {
+                        for f in "${@}"; do
+                            7z a "${f}.7z" -- "${f}"
+                        done
+                    } ;;
                 "zip" )
-                    for f in "${@:3}"; do
-                        zip -r "${f}.zip" -- "${f}"
-                    done
-                    ;;
+                    function __f() {
+                        for f in "${@}"; do
+                            zip -r "${f}.zip" -- "${f}"
+                        done
+                    } ;;
             esac
         fi
+
+        __f "${files[@]}"
     }
 
     case "${1}" in

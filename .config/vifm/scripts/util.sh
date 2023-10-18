@@ -1,3 +1,75 @@
+function make_pattern() {
+    # NOTE:
+    #   assume (the only) pattern is |zst|, will NOT match:
+    #   a. |.zst| (no filename, suffix only)
+    #   b. |.zstt| (does not end with suffix)
+    #   c. |file:zst| (suffix not preceded by .)
+    #   d. |zst| (no filename, suffix not preceded by .)
+
+    local regex="^.+"
+    local p
+    for p in "${@}"; do
+        regex="${regex}\.${p}"
+    done
+    echo "${regex}$"
+}
+
+function match_pattern() {
+    local filename pattern
+    while (( ${#} > 0 )); do
+        case "${1}" in
+            "-n" | "--name" )
+                filename="${2}"
+                shift; shift
+                ;;
+            "-r" | "--raw" )
+                pattern="${2}"
+                shift; shift
+                ;;
+            "-f" | "--fragments" )
+                local mode="join"
+                local fragments_to_join=("${@:2}")
+                break
+        esac
+    done
+
+    if [[ "${mode}" == "join" ]]; then
+        pattern=$(make_pattern "${fragments_to_join[@]}")
+    fi
+    [[ "${filename}" =~ ${pattern} ]]
+}
+
+function match_patterns() {
+    local filename patterns=() singletons=()
+    while (( ${#} > 0 )); do
+        case "${1}" in
+            "-n" | "--name" )
+                filename="${2}"
+                shift; shift
+                ;;
+            "-r" | "--raw" )
+                patterns+=("${2}")
+                shift; shift
+                ;;
+            "-s" | "--singletons" )
+                singletons=("${@:2}")
+                break
+                ;;
+        esac
+    done
+    for s in "${singletons[@]}"; do
+        patterns+=("$(make_pattern "${s}")")
+    done
+
+    local p
+    for p in "${patterns[@]}"; do
+        if match_pattern -n "${filename}" -r "${p}"; then
+            return
+        fi
+    done
+    false
+}
+
 function truncate_longline() {
     local len_max=${1}
     fold -w "${len_max}" -s
