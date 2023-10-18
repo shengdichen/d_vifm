@@ -1,4 +1,4 @@
-" NOTE:
+" NOTE {{{
 "   1. %f VS "%f"
 "   a) %f := one array of unescaped filenames
 "   b) "%f" := one space-separated string of escaped filenames
@@ -10,11 +10,23 @@
 "       2) specific AFTER generic
 "       -> use generic by default, specific available with :f
 "   b) previewer: specific ALWAYS BEFORE generic
+"
+"   3. glob VS regex (:h vifm-patterns)
+"   a) glob: * alone will NOT match leading-dot
+"   -> prepend ? to force matching such dirs
+"       1) files (NOT folders) =: ?*[^/],*[^/]
+"       2) dirs (NOT files) =: ?*/,*/
+"       3) files and dirs =: ?*,*
+"   b) regex
+"       1) files =: /^.*[^\/]$/
+"       2) dirs =: /^.*\/$/
+"       3) files and dirs =: /^.*$/
+" }}}
 
 " matched {{{
 " document {{{
 " pdf-related {{{
-filextype *.pdf
+filextype /^.*\.pdf$/
     \ {zathura}
     \ handler.sh "zathura" %f,
     \ {pdfarranger}
@@ -22,34 +34,34 @@ filextype *.pdf
     \ {xournal++}
     \ handler.sh "xournalpp" %f,
 
-filetype *.pdf
+filetype /^.*\.pdf$/
     \ {as text}
     \ pdftotext -nopgbrk %f - | cat -n | less,
 
-fileviewer *.pdf
+fileviewer /^.*\.pdf$/
     \ pdftotext -nopgbrk %f - | cat -n,
 
-filextype *.ps,*.eps,*.ps.gz,*.djvu
+filextype /^.*\.ps$/,/^.*\.eps$/,/^.*\.ps\.gz$/,/^.*\.djvu$/
     \ {zathura}
     \ handler.sh "zathura" %f,
 " }}}
 
-filextype *.xopp
+filextype /^.*\.xopp$/
     \ handler.sh "xournalpp" %f,
 
-filextype *.lyx
+filextype /^.*\.lyx$/
     \ {lyx_wayland}
     \ handler.sh "lyx" %f,
     \ {lyx}
     \ WAYLAND_DISPLAY='' handler.sh "lyx" %f,
 
 " "office"-related {{{
-filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
+filextype /^.*\.od[tp]$/,/^.*\.docx?$/,/^.*\.xlsx?$/,/^.*\.pptx?$/
     \ handler.sh "libreoffice" %f,
 
-fileviewer *.doc
+fileviewer /^.*\.doc$/
     \ catdoc %f,
-fileviewer *.docx
+fileviewer /^.*\.docx$/
     \ docx2txt.pl %f -
 " }}}
 " }}}
@@ -57,61 +69,65 @@ fileviewer *.docx
 " media {{{
 " aud {{{
 filextype
-\ *.flac,*.wav,*.ape,
-\*.mp3,*.m4a,*.m4b,
-\*.wma,*.ac3,*.og[agx],*.spx,*.opus
+\ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
+\/^.*\.mp3$/,/^.*\.m4[ab]$/,
+\/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
     \ handler.sh "mpv" %f,
 
 fileviewer
-\ *.flac,*.wav,*.ape,
-\*.mp3,*.m4a,*.m4b,
-\*.wma,*.ac3,*.og[agx],*.spx,*.opus
+\ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
+\/^.*\.mp3$/,/^.*\.m4[ab]$/,
+\/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
     \ handler.sh "preview" "ffmpeg" %f,
 " }}}
 
 " vid {{{
 filextype
-\ *.mkv,
-\*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
-\*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
+\ /^.*\.mkv$/,
+\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,
+\/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
+\/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,
+\/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
     \ handler.sh "mpv" %f,
 
 fileviewer
-\ *.mkv,
-\*.avi,*.mp4,*.webm,*.ts,*.m[4o]v,*.mpg,*.mpeg,*.vob,*.fl[icv],
-\*.wmv,*.dat,*.3gp,*.ogv,*.m2v,*.mts,*.r[am],*.qt,*.divx,*.as[fx]
+\ /^.*\.mkv$/,
+\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,
+\/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
+\/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,
+\/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
     \ handler.sh "preview" "ffmpeg" %f,
 " }}}
 
 " pic {{{
 filextype
-\ *.png,*.svg,
-\*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
-\*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
+\ /^.*\.png$/,/^.*\.svg$/,
+\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
     \ {imv}
     \ handler.sh "imv" %f,
 
 fileviewer
-\ *.png,*.svg,
-\*.jpg,*.jpeg,*.bmp,*webp,*.gif,*.xpm
-\*.heif,*.heifs,*.heic,*.heics,*.avci,*.avcs,*.avif
+\ /^.*\.png$/,/^.*\.svg$/,
+\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
+\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
     \ handler.sh "preview" "image" %f,
 " }}}
 
-filetype *.torrent
+filetype /^.*\.torrent$/
     \ {info: transmission}
     \ transmission-show %f | nvim -R,
-fileviewer *.torrent
+fileviewer /^.*\.torrent$/
     \ transmission-show -D -T %f,
 " }}}
 
 " archive {{{
-fileviewer *.tar
+fileviewer /^.*\.tar$/
     \ handler.sh "archive" "list" "tar" %f,
 
-fileviewer *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+fileviewer /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
     \ handler.sh "archive" "list" "bzip2" "multi" %f,
-fileviewer *.bz2,*.bz
+fileviewer /^.*\.bz2?$/
     \ handler.sh "archive" "list" "bzip2" "single" %f,
 
 " gzip {{{
@@ -121,76 +137,68 @@ filetype {{/usr/share/**/*.gz}}
 fileviewer {{/usr/share/**/*.gz}}
     \ handler.sh "archive" "list" "man" %f,
 
-fileviewer *.tar.gz,*.tgz,*.tar.Z,*.taz
+fileviewer /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
     \ handler.sh "archive" "list" "gzip" "multi" %f,
-fileviewer *.gz,*.z
+fileviewer /^.*\.g?z$/
     \ handler.sh "archive" "list" "gzip" "single" %f,
 " }}}
 
-fileviewer *.tar.xz,*.txz,*tar.lz,*.tlz
+fileviewer /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
     \ handler.sh "archive" "list" "xz" "multi" %f,
-fileviewer *.xz,*.lzma,*.lz
+fileviewer /^.*\.[xl]z$/,/^.*\.lzma$/
     \ handler.sh "archive" "list" "xz" "single" %f,
 
-fileviewer *.tar.zst
+fileviewer /^.*\.tar\.zst$/
     \ handler.sh "archive" "list" "zstd" "multi" %f,
-fileviewer *.zst
+fileviewer /^.*\.zst$/
     \ handler.sh "archive" "list" "zstd" "single" %f,
 
-filetype
-\ *.7z,
-\*.iso
+filetype /^.*\.7z$/,/^.*\.iso$/
     \ {list}
     \ handler.sh "archive" "list" "7z-nvim" %f,
     \ {unmake}
     \ handler.sh "archive" "unmake" -t 7z -- %f,
-fileviewer
-\ *.7z,
-\*.iso
+fileviewer /^.*\.7z$/,/^.*\.iso$/
     \ handler.sh "archive" "list" "7z" %f,
 
-fileviewer
-\ *.zip,
-\*.apk,*.apkg,
-\*.[ejw]ar
+fileviewer /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
     \ handler.sh "archive" "list" "zip" %f,
 
-filetype *.rar
+filetype /^.*\.rar$/
     \ {list}
     \ handler.sh "archive" "list" "unrar-nvim" %f,
     \ {unmake}
     \ handler.sh "archive" "unmake" -t unrar -- %f,
-fileviewer *.rar
+fileviewer /^.*\.rar$/
     \ handler.sh "archive" "list" "unrar" %f,
 " }}}
 
 " dev {{{
-filextype
-\ *.db,*.db3,*.sqlite,*.sqlite3
+filextype /^.*\.db3?$/,/^.*\.sqlite3?$/
     \ handler.sh "sqlitebrowser" %f,
 
 " signature {{{
-filetype *.md5
+filetype /^.*\.md5$/
     \ {verify}
     \ md5sum -c %f %S,
 
-filetype *.sha1
+filetype /^.*\.sha1$/
     \ {verify}
     \ sha1sum -c %f %S,
 
-filetype *.sha256
+filetype /^.*\.sha256$/
     \ {verify}
     \ sha256sum -c %f %S,
 
-filetype *.sha512
+filetype /^.*\.sha512$/
     \ {verify}
     \ sha512sum -c %f %S,
 
-filetype *.asc
+filetype /^.*\.asc$/
     \ {verify}
     \ !!gpg --verify %f,
 
-filetype *.gpg
+filetype //^.*\/\.password-store\/.*gpg$//
     \ {pass: edit}
     \ handler.sh "pass" "edit" %f:p,
     \ {pass: show}
@@ -200,13 +208,13 @@ filetype *.gpg
 " }}}
 
 " web {{{
-filetype *.html,*.htm
+filetype /^.*\.html?$/
     \ {edit}
     \ nvim %f,
     \ {view}
     \ w3m -T text/html -dump %f | nvim -R,
 
-filextype *.html,*.htm
+filextype /^.*\.html?$/
     \ {fd}
     \ firefox-developer-edition --private-window %f 1>/dev/null 2>&1 &,
     \ {ff}
@@ -214,15 +222,33 @@ filextype *.html,*.htm
     \ {chromium}
     \ chromium --incognito --new-window %f 1>/dev/null 2>&1 &,
 
-fileviewer *.html,*.htm
+fileviewer /^.*\.html?$/
     \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
 
-filetype *.o
+filetype /^.*\.o$/
     \ nm %f | nvim -R,
-fileviewer *.o
+fileviewer /^.*\.o$/
     \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
+
+filetype /^.*[^\/]$/
+    \ {nvim}
+    \ handler.sh "nvim" "open" %f,
+    \ {diff}
+    \ handler.sh "nvim" "diff" %f,
+fileviewer /^.*[^\/]$/
+    \ handler.sh "preview" "file" %f,
+
+filetype /^.*\/$/
+    \ {nvim}
+    \ handler.sh "nvim" "open" %f,
+    \ {diff}
+    \ handler.sh "nvim" "diff" %f,
+filextype /^.*\/$/
+    \ handler.sh "mpv" %f,
+fileviewer /^.*\/$/
+    \ handler.sh "preview" "dir" %f,
 " }}}
 
 " generic {{{
@@ -230,83 +256,55 @@ fileviewer *.o
 set vicmd=vi
 set vixcmd=nvim
 
-" NOTE:
-"   1. * alone will NOT match dirs with leading-dot (e.g., |.git|), we thus
-"   prepend a "?" to force matching such dirs
-"   a. all files (NOT folders) =: ?*[^/],*[^/]
-"   b. all dirs (NOT files) =: ?*/,*/
-"   c. all files and dirs =: ?*,*
-
-filetype ?*[^/],*[^/]
-    \ {nvim}
-    \ handler.sh "nvim" "open" %f,
-    \ {diff}
-    \ handler.sh "nvim" "diff" %f,
-fileviewer ?*[^/],*[^/]
-    \ handler.sh "preview" "file" %f,
-
-filetype ?*/,*/
-    \ {nvim}
-    \ handler.sh "nvim" "open" %f,
-    \ {diff}
-    \ handler.sh "nvim" "diff" %f,
-filextype ?*/,*/
-    \ handler.sh "mpv" %f,
-fileviewer ?*/,*/
-    \ handler.sh "preview" "dir" %f,
-" }}}
-
-filetype ?*,*
+filetype /^.*$/
     \ {nvim.tmux}
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
     \ tmux.sh "file" "diff" "%f",
+" }}}
 
-filetype *.tmux
+filetype /^.*\.tmux$/
     \ {source}
     \ tmux source-file %f,
 
 " archive {{{
-filetype *.tar
+filetype /^.*\.tar$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t tar -- %f,
 
-filetype *.tar.bz2,*.tbz2,*tar.bz,*.tbz
+filetype /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t bzip2 -m multi -- %f,
-filetype *.bz2,*.bz
+filetype /^.*\.bz2?$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t bzip2 -m single -- %f,
 
-filetype *.tar.gz,*.tgz,*.tar.Z,*.taz
+filetype /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t gzip -m multi -- %f,
-filetype *.gz,*.z
+filetype /^.*\.g?z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t gzip -m single -- %f,
 
-filetype *.tar.xz,*.txz,*tar.lz,*.tlz
+filetype /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t xz -m multi -- %f,
-filetype *.xz,*.lzma,*.lz
+filetype /^.*\.[xl]z$/,/^.*\.lzma$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t xz -m single -- %f,
 
-filetype *.tar.zst
+filetype /^.*\.tar\.zst$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zstd -m multi -- %f,
-filetype *.zst
+filetype /^.*\.zst$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zstd -m single -- %f,
 
-filetype
-\ *.zip,
-\*.apk,*.apkg,
-\*.[ejw]ar
+filetype /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
     \ {unmake}
     \ handler.sh "archive" "unmake" -t zip -- %f,
 
-filetype ?*,*
+filetype /^.*$/
     \ {placeholder}
     \ echo 1,
     \ handler.sh "archive" "make" -t tar -- %f,
