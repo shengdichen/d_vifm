@@ -255,6 +255,19 @@ function __spectrogram() {
     spawn_proc imv "${outputs[@]}"
 }
 
+function __run() {
+    case "$1" in
+        "py" )
+            tmux split
+            poetry shell
+            ;;
+        "js" | "ts" )
+            ;;
+        *)
+            ;;
+    esac
+}
+
 function main() {
     case "${1}" in
         "nvim" )
@@ -275,9 +288,12 @@ function main() {
         "spectrogram" )
             __spectrogram "${@:2}"
             ;;
+        "run" )
+            __run "${@:2}"
+            ;;
     esac
 
-    unset -f __nvim __preview __tree __archive __pass  __spectrogram
+    unset -f __nvim __preview __tree __archive __pass  __spectrogram __run
 }
 main "${@}"
 unset -f main
