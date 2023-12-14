@@ -11,10 +11,9 @@ function respawn_if_dead() {
 }
 
 function cd_next_pane() {
-    local target="${1}"
     # C-U := clear existing input
     tmux send-keys -t ":.+1" \
-        "C-U" "cd ${target}" "Enter"
+        "C-U" "cd ${1}" "Enter"
 
     tmux select-pane -Z -t ":.+1"
 }
@@ -80,6 +79,9 @@ function main() {
             ;;
         "file")
             split_file "${@:2}"
+            ;;
+        *)
+            echo "Huh, what about tmux?"
             ;;
     esac
 
