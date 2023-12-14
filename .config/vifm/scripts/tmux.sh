@@ -19,11 +19,19 @@ function cd_next_pane() {
     tmux select-pane -Z -t ":.+1"
 }
 
+is_poetry_env() {
+    (cd "${1}" && poetry env info >/dev/null 2>&1)
+}
+
 function create_split() {
     if ((${#} == 0)); then
         tmux split-window -v
     elif ((${#} == 1)); then
-        tmux split-window "${1}"
+        if is_poetry_env "${1}"; then
+            tmux split-window "poetry run ${SHELL}"
+        else
+            tmux split-window
+        fi
     else
         tmux split-window -v -t "${1}" "${2}"
     fi
@@ -34,7 +42,7 @@ function split_shell() {
         cd_next_pane "${1}"
         respawn_if_dead ":."
     else
-        create_split
+        create_split "${1}"
     fi
 }
 
@@ -55,8 +63,11 @@ function split_file() {
         flag="d"
     fi
 
-    # filename(s) in one string, with special-chars (e.g. spaces) escaped
-    create_split ":.${idx_target}" "nvim -${flag} ${2}"
+    local cmd="nvim -${flag} ${3}"
+    if is_poetry_env "${2}"; then
+        cmd="poetry run ${cmd}"
+    fi
+    create_split ":.${idx_target}" "${cmd}"
 }
 
 function main() {
@@ -72,7 +83,7 @@ function main() {
             ;;
     esac
 
-    unset -f next_pane_is_zsh cd_next_pane create_split split_shell split_vifm split_file
+    unset -f next_pane_is_zsh cd_next_pane is_poetry_env create_split split_shell split_vifm split_file
 }
 main "${@}"
 unset -f main
