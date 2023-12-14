@@ -5,7 +5,7 @@ function next_pane_is_zsh() {
 }
 
 function respawn_if_dead() {
-    if (( $(tmux display-message -p -t "${1}" -F "#{pane_dead}") == "1" )); then
+    if (($(tmux display-message -p -t "${1}" -F "#{pane_dead}") == "1")); then
         tmux respawn-pane
     fi
 }
@@ -20,9 +20,9 @@ function cd_next_pane() {
 }
 
 function create_split() {
-    if (( ${#} == 0 )); then
+    if ((${#} == 0)); then
         tmux split-window -v
-    elif (( ${#} == 1 )); then
+    elif ((${#} == 1)); then
         tmux split-window "${1}"
     else
         tmux split-window -v -t "${1}" "${2}"
@@ -61,14 +61,15 @@ function split_file() {
 
 function main() {
     case "${1}" in
-        "shell" )
+        "shell")
             split_shell "${2}"
             ;;
-        "vifm" )
+        "vifm")
             split_vifm
             ;;
-        "file" )
+        "file")
             split_file "${@:2}"
+            ;;
     esac
 
     unset -f next_pane_is_zsh cd_next_pane create_split split_shell split_vifm split_file
