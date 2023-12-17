@@ -269,7 +269,7 @@ filetype /^.*\.tmux$/
 
 filetype /^.*\.py$/
     \ {run}
-    \ handler.sh "run" %f,
+    \ handler.sh run py %f,
 
 " archive {{{
 filetype /^.*\.tar$/

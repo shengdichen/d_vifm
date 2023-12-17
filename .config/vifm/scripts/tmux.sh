@@ -1,16 +1,16 @@
-function next_pane_is_zsh() {
+next_pane_is_zsh() {
     local cmd_next_pane
     cmd_next_pane=$(tmux display-message -p -t ":.+1" -F "#{pane_current_command}")
     [[ "${cmd_next_pane}" == "zsh" ]]
 }
 
-function respawn_if_dead() {
+respawn_if_dead() {
     if (($(tmux display-message -p -t "${1}" -F "#{pane_dead}") == "1")); then
         tmux respawn-pane
     fi
 }
 
-function cd_next_pane() {
+cd_next_pane() {
     # C-U := clear existing input
     tmux send-keys -t ":.+1" \
         "C-U" "cd ${1}" "Enter"
@@ -22,7 +22,7 @@ is_poetry_env() {
     (cd "${1}" && poetry env info >/dev/null 2>&1)
 }
 
-function create_split() {
+create_split() {
     if ((${#} == 0)); then
         tmux split-window -v
     elif ((${#} == 1)); then
@@ -36,7 +36,7 @@ function create_split() {
     fi
 }
 
-function split_shell() {
+split_shell() {
     if next_pane_is_zsh; then
         cd_next_pane "${1}"
         respawn_if_dead ":."
@@ -45,11 +45,11 @@ function split_shell() {
     fi
 }
 
-function split_vifm() {
+split_vifm() {
     create_split "vifm"
 }
 
-function split_file() {
+split_file() {
     local idx_target="1"
     if next_pane_is_zsh; then
         idx_target="2"
@@ -69,7 +69,7 @@ function split_file() {
     create_split ":.${idx_target}" "${cmd}"
 }
 
-function main() {
+main() {
     case "${1}" in
         "shell")
             split_shell "${2}"
