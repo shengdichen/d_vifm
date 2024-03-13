@@ -261,6 +261,8 @@ filetype /^.*$/
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
     \ tmux.sh "file" "diff" "%f",
+    \ {send}
+    \ mpv.sh %f:p,
 " }}}
 
 filetype /^.*\.tmux$/
