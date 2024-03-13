@@ -1,28 +1,28 @@
 #!/usr/bin/env dash
 
-__send() {
-    local _append=""
-    while [ "${#}" -gt 0 ]; do
-        case "${1}" in
-            "--append")
-                _append="yes"
-                shift
-                ;;
-            "--")
-                shift && break
-                ;;
-            *)
-                exit 3
-                ;;
-        esac
-    done
+__fzf() {
+    fzf --reverse --height=37%
+}
+
+__to_socket() {
+    socat - ~/.local/state/mpv/throw.sok
+}
+
+__play_throw() {
+    if [ "${1}" = "--" ]; then shift; fi
+
+    local _mode
+    _mode="$(for _mode in "replace" "append"; do
+        printf "%s\n" "${_mode}"
+    done | __fzf)"
 
     for _target in "${@}"; do
-        if [ "${_append}" ]; then
+        if [ "${_mode}" = "append" ]; then
             printf "loadfile \"%s\" append-play\n" "${_target}"
         else
             printf "loadfile \"%s\" replace\n" "${_target}"
-        fi | socat - ~/.local/state/mpv/throw.sok
+        fi | __to_socket
     done
+    printf "set pause no\n" | __to_socket
 }
-__send "${@}"
+__play_throw "${@}"
