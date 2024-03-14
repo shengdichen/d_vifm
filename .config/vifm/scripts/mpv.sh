@@ -16,13 +16,17 @@ __play_throw() {
         printf "%s\n" "${_mode}"
     done | __fzf)"
 
-    for _target in "${@}"; do
-        if [ "${_mode}" = "append" ]; then
-            printf "loadfile \"%s\" append-play\n" "${_target}"
-        else
-            printf "loadfile \"%s\" replace\n" "${_target}"
-        fi | __to_socket
-    done
+    local _counter=0
+    find "${@}" -type f -print |
+        sort |
+        while IFS="" read -r _file; do
+            if [ "${_mode}" = "replace" ] && [ "${_counter}" -eq 0 ]; then
+                _counter="$((_counter + 1))"
+                printf "loadfile \"%s\" replace\n" "${_file}" | __to_socket
+            else
+                printf "loadfile \"%s\" append\n" "${_file}" | __to_socket
+            fi
+        done
     printf "set pause no\n" | __to_socket
 }
 __play_throw "${@}"
