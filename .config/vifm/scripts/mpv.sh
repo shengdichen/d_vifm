@@ -5,7 +5,7 @@ __fzf() {
 }
 
 __to_socket() {
-    socat - ~/.local/state/mpv/throw.sok
+    printf "%s\n" "${1}" | socat - ~/.local/state/mpv/throw.sok
 }
 
 __play_throw() {
@@ -22,11 +22,11 @@ __play_throw() {
         while IFS="" read -r _file; do
             if [ "${_mode}" = "replace" ] && [ "${_counter}" -eq 0 ]; then
                 _counter="$((_counter + 1))"
-                printf "loadfile \"%s\" replace\n" "${_file}" | __to_socket
+                __to_socket "loadfile \"${_file}\" replace"
             else
-                printf "loadfile \"%s\" append\n" "${_file}" | __to_socket
+                __to_socket "loadfile \"${_file}\" append"
             fi
         done
-    printf "set pause no\n" | __to_socket
+    __to_socket "set pause no"
 }
 __play_throw "${@}"
