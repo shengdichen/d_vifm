@@ -29,4 +29,45 @@ __play_throw() {
         done
     __to_socket "set pause no"
 }
-__play_throw "${@}"
+
+__play_adhoc() {
+    if [ "${1}" = "--" ]; then shift; fi
+    find "${@}" -type f -print |
+        sort |
+        xargs -d "\n" -- \
+            mpv \
+            --no-save-position-on-quit \
+            --no-resume-playback \
+            --
+}
+
+__main() {
+    local _mode="adhoc"
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--mode")
+                _mode="${2}"
+                shift && shift
+                ;;
+            "--")
+                shift && break
+                ;;
+            *)
+                exit 3
+                ;;
+        esac
+    done
+
+    case "${_mode}" in
+        "adhoc")
+            __play_adhoc -- "${@}"
+            ;;
+        "throw")
+            __play_throw -- "${@}"
+            ;;
+        *)
+            exit 3
+            ;;
+    esac
+}
+__main "${@}"
