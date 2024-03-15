@@ -123,12 +123,12 @@ fileviewer /^.*\.torrent$/
 
 " archive {{{
 fileviewer /^.*\.tar$/
-    \ handler.sh "archive" "list" "tar" %f,
+    \ archive.sh preview -- %f,
 
 fileviewer /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
-    \ handler.sh "archive" "list" "bzip2" "multi" %f,
+    \ archive.sh preview -- %f,
 fileviewer /^.*\.bz2?$/
-    \ handler.sh "archive" "list" "bzip2" "single" %f,
+    \ archive.sh preview -- %f,
 
 " gzip {{{
 " man-page
@@ -138,39 +138,33 @@ fileviewer {{/usr/share/**/*.gz}}
     \ handler.sh "archive" "list" "man" %f,
 
 fileviewer /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
-    \ handler.sh "archive" "list" "gzip" "multi" %f,
+    \ archive.sh preview -- %f,
 fileviewer /^.*\.g?z$/
-    \ handler.sh "archive" "list" "gzip" "single" %f,
+    \ archive.sh preview -- %f,
 " }}}
 
 fileviewer /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
-    \ handler.sh "archive" "list" "xz" "multi" %f,
+    \ archive.sh preview -- %f,
 fileviewer /^.*\.[xl]z$/,/^.*\.lzma$/
-    \ handler.sh "archive" "list" "xz" "single" %f,
+    \ archive.sh preview -- %f,
 
 fileviewer /^.*\.tar\.zst$/
-    \ handler.sh "archive" "list" "zstd" "multi" %f,
+    \ archive.sh preview -- %f,
 fileviewer /^.*\.zst$/
-    \ handler.sh "archive" "list" "zstd" "single" %f,
+    \ archive.sh preview -- %f,
 
 filetype /^.*\.7z$/,/^.*\.iso$/
-    \ {list}
-    \ handler.sh "archive" "list" "7z-nvim" %f,
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t 7z -- %f,
+    \ archive.sh view -- %f,
 fileviewer /^.*\.7z$/,/^.*\.iso$/
-    \ handler.sh "archive" "list" "7z" %f,
+    \ archive.sh preview -- %f,
 
 fileviewer /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
-    \ handler.sh "archive" "list" "zip" %f,
+    \ archive.sh preview -- %f,
 
 filetype /^.*\.rar$/
-    \ {list}
-    \ handler.sh "archive" "list" "unrar-nvim" %f,
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t unrar -- %f,
+    \ archive.sh view -- %f,
 fileviewer /^.*\.rar$/
-    \ handler.sh "archive" "list" "unrar" %f,
+    \ archive.sh preview -- %f,
 " }}}
 
 " dev {{{
@@ -272,62 +266,23 @@ filetype /^.*\.tmux$/,/^.*\.py$/,/^.*\.sh$/
     \ direct.sh -- %f,
 
 " archive {{{
-filetype /^.*\.tar$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t tar -- %f,
-
-filetype /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t bzip2 -m multi -- %f,
-filetype /^.*\.bz2?$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t bzip2 -m single -- %f,
-
-filetype /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t gzip -m multi -- %f,
-filetype /^.*\.g?z$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t gzip -m single -- %f,
-
-filetype /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t xz -m multi -- %f,
-filetype /^.*\.[xl]z$/,/^.*\.lzma$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t xz -m single -- %f,
-
-filetype /^.*\.tar\.zst$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t zstd -m multi -- %f,
-filetype /^.*\.zst$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t zstd -m single -- %f,
-
-filetype /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
-    \ {unmake}
-    \ handler.sh "archive" "unmake" -t zip -- %f,
+filetype
+\ /^.*\.tar$/,
+\/^.*\.tar\.bz2?$/,/^.*\.tbz2?$/,
+\/^.*\.bz2?$/,
+\/^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/,
+\/^.*\.g?z$/,
+\/^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/,
+\/^.*\.[xl]z$/,/^.*\.lzma$/,
+\/^.*\.tar\.zst$/,
+\/^.*\.zst$/,
+\/^.*\.7z$/,/^.*\.iso$/
+\/^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/,
+\/^.*\.rar$/,
+    \ archive.sh unmake -- %f,
 
 filetype /^.*$/
-    \ {placeholder}
-    \ echo 1,
-    \ handler.sh "archive" "make" -t tar -- %f,
-    \ {placeholder}
-    \ echo 2,
-    \ handler.sh "archive" "make" -m multi -t bzip2 -- %f,
-    \ handler.sh "archive" "make" -m multi -t gzip -- %f,
-    \ handler.sh "archive" "make" -m multi -t xz -- %f,
-    \ handler.sh "archive" "make" -m multi -t zstd -- %f,
-    \ handler.sh "archive" "make" -m multi -t 7z -- %f,
-    \ handler.sh "archive" "make" -m multi -t zip -- %f,
-    \ {placeholder}
-    \ echo 3,
-    \ handler.sh "archive" "make" -m single -t bzip2 -- %f,
-    \ handler.sh "archive" "make" -m single -t gzip -- %f,
-    \ handler.sh "archive" "make" -m single -t xz -- %f,
-    \ handler.sh "archive" "make" -m single -t zstd -- %f,
-    \ handler.sh "archive" "make" -m single -t 7z -- %f,
-    \ handler.sh "archive" "make" -m single -t zip -- %f,
+    \ archive.sh make -- %f,
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
