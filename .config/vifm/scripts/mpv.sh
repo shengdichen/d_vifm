@@ -1,11 +1,13 @@
 #!/usr/bin/env dash
 
+SOCKET_DIR="${HOME}/.local/state/mpv"
+
 __fzf() {
     fzf --reverse --height=37%
 }
 
 __to_socket() {
-    printf "%s\n" "${1}" | socat - "${HOME}/.local/state/mpv/${2}.sok"
+    printf "%s\n" "${1}" | socat - "${SOCKET_DIR}/${2}.sok"
 }
 
 __find_files() {
@@ -19,6 +21,19 @@ __play_socket() {
         shift && shift
     fi
     if [ "${1}" = "--" ]; then shift; fi
+
+    __mpv_socket() {
+        __find_files "${@}" | xargs -d "\n" -- \
+            nohup mpv \
+            --input-ipc-server="${SOCKET_DIR}/${_socket}.sok" \
+            --
+    }
+    if ! pgrep -u "$(whoami)" -a |
+        cut -d " " -f 2- |
+        grep -q "^mpv.*--input-ipc-server=.*/\.local/state/mpv/${_socket}\.sok"; then
+        __mpv_socket "${@}" >/dev/null 2>&1 &
+        return
+    fi
 
     local _mode
     _mode="$(for _mode in "replace" "append"; do
