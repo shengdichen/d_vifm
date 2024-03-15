@@ -267,13 +267,9 @@ filetype /^.*$/
     \ mpv.sh --mode throw -- %f:p,
 " }}}
 
-filetype /^.*\.tmux$/
-    \ {source}
-    \ tmux source-file %f,
-
-filetype /^.*\.py$/
-    \ {run}
-    \ handler.sh run py %f,
+filetype /^.*\.tmux$/,/^.*\.py$/,/^.*\.sh$/
+    \ {direct}
+    \ direct.sh -- %f,
 
 " archive {{{
 filetype /^.*\.tar$/

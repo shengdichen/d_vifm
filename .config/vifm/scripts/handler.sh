@@ -270,29 +270,6 @@ function __spectrogram() {
     spawn_proc imv "${outputs[@]}"
 }
 
-function __run() {
-    case "$1" in
-        "py")
-            tmux split "poetry run python ${2}"
-            ;;
-        "js" | "ts") ;;
-        *) ;;
-    esac
-}
-
-function __venv() {
-    case "$1" in
-        "py")
-            if poetry env info 1>/dev/null 2>&1; then
-                poetry run nvim "${@}"
-            fi
-            ;;
-        *)
-            echo default
-            ;;
-    esac
-}
-
 function main() {
     case "${1}" in
         "nvim")
@@ -313,12 +290,9 @@ function main() {
         "spectrogram")
             __spectrogram "${@:2}"
             ;;
-        "run")
-            __run "${@:2}"
-            ;;
     esac
 
-    unset -f __nvim __preview __tree __archive __pass __spectrogram __run
+    unset -f __nvim __preview __tree __archive __pass __spectrogram
 }
 main "${@}"
 unset -f main
