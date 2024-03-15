@@ -8,6 +8,10 @@ __to_socket() {
     printf "%s\n" "${1}" | socat - "${HOME}/.local/state/mpv/${2}.sok"
 }
 
+__find_files() {
+    find "${@}" -type f -print | sort
+}
+
 __play_socket() {
     local _socket="throw"
     if [ "${1}" = "-s" ]; then
@@ -22,8 +26,7 @@ __play_socket() {
     done | __fzf)"
 
     local _counter=0
-    find "${@}" -type f -print |
-        sort |
+    __find_files "${@}" |
         while IFS="" read -r _file; do
             if [ "${_mode}" = "replace" ] && [ "${_counter}" -eq 0 ]; then
                 _counter="$((_counter + 1))"
@@ -35,15 +38,27 @@ __play_socket() {
     __to_socket "set pause no" "${_socket}"
 }
 
-__play_adhoc() {
+__play_new() {
+    local _record=""
+    if [ "${1}" = "--record" ]; then
+        _record="yes"
+        shift
+    fi
     if [ "${1}" = "--" ]; then shift; fi
-    find "${@}" -type f -print |
-        sort |
-        xargs -d "\n" -- \
+
+    if [ "${_record}" ]; then
+        __find_files "${@}" | xargs -d "\n" -- \
+            mpv \
+            --save-position-on-quit \
+            --resume-playback \
+            --
+    else
+        __find_files "${@}" | xargs -d "\n" -- \
             mpv \
             --no-save-position-on-quit \
             --no-resume-playback \
             --
+    fi
 }
 
 __main() {
@@ -65,7 +80,10 @@ __main() {
 
     case "${_mode}" in
         "adhoc")
-            __play_adhoc -- "${@}"
+            __play_new -- "${@}"
+            ;;
+        "record")
+            __play_new --record -- "${@}"
             ;;
         "throw")
             __play_socket -- "${@}"
