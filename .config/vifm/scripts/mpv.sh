@@ -5,10 +5,15 @@ __fzf() {
 }
 
 __to_socket() {
-    printf "%s\n" "${1}" | socat - ~/.local/state/mpv/throw.sok
+    printf "%s\n" "${1}" | socat - "${HOME}/.local/state/mpv/${2}.sok"
 }
 
-__play_throw() {
+__play_socket() {
+    local _socket="throw"
+    if [ "${1}" = "-s" ]; then
+        _socket="${2}"
+        shift && shift
+    fi
     if [ "${1}" = "--" ]; then shift; fi
 
     local _mode
@@ -22,12 +27,12 @@ __play_throw() {
         while IFS="" read -r _file; do
             if [ "${_mode}" = "replace" ] && [ "${_counter}" -eq 0 ]; then
                 _counter="$((_counter + 1))"
-                __to_socket "loadfile \"${_file}\" replace"
+                __to_socket "loadfile \"${_file}\" replace" "${_socket}"
             else
-                __to_socket "loadfile \"${_file}\" append"
+                __to_socket "loadfile \"${_file}\" append" "${_socket}"
             fi
         done
-    __to_socket "set pause no"
+    __to_socket "set pause no" "${_socket}"
 }
 
 __play_adhoc() {
@@ -63,7 +68,7 @@ __main() {
             __play_adhoc -- "${@}"
             ;;
         "throw")
-            __play_throw -- "${@}"
+            __play_socket -- "${@}"
             ;;
         *)
             exit 3
