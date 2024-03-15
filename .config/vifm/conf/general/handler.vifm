@@ -267,6 +267,10 @@ filetype /^.*\.tmux$/
     \ {source}
     \ tmux source-file %f,
 
+filetype /^.*\.py$/
+    \ {run}
+    \ handler.sh run py %f,
+
 " archive {{{
 filetype /^.*\.tar$/
     \ {unmake}

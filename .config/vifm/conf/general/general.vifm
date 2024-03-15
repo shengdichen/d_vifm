@@ -38,13 +38,14 @@ set vifminfo=
 delmarks!
 
 mark h ~/
-
-mark d ~/Dots/
-
 mark m ~/mnt/
-mark f ~/mnt/FUSE/ptr/
-
 mark x ~/xdg/
+mark d ~/dot/
+mark p ~/dot/dot/d_prv/
+
+mark t ~/.config/tmux/script/
+mark v ~/.config/vifm/conf/
+mark n ~/.config/nvim/conf/rpre/plugin/
 " }}}
 
 " vim: filetype=vifm foldmethod=marker

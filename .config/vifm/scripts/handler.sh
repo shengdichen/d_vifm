@@ -35,16 +35,16 @@ function __preview() {
     }
 
     case "${1}" in
-        "file" )
+        "file")
             join_outputs -c __file --format "off" -- "${@:2}"
             ;;
-        "dir" )
+        "dir")
             join_outputs -c __dir --print-path "never" -- "${@:2}"
             ;;
-        "ffmpeg" )
+        "ffmpeg")
             join_outputs -c __ffmpeg -- "${@:2}"
             ;;
-        "image" )
+        "image")
             join_outputs -c __image -- "${@:2}"
             ;;
     esac
@@ -55,42 +55,42 @@ function __preview() {
 function __archive() {
     function __list() {
         if [[ "${1}" == "tar" ]]; then
-            function __f() { tar -tvf "${1}" ; }
+            function __f() { tar -tvf "${1}"; }
             join_outputs -c "__f" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "man" ]]; then
-            function __f() { man -l "${1}" | tail -n +2 ; }
+            function __f() { man -l "${1}" | tail -n +2; }
             join_outputs -c "__f" \
                 --format "linenumber" -s "separator" \
                 -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "man-nvim" ]]; then
-            function __f() { man -l "${1}" | tail -n +2 ; }
+            function __f() { man -l "${1}" | tail -n +2; }
             join_outputs -c "__f" \
                 --format "off" -s "separator" \
                 --output "nvim" --output-nvim-extra "-c set filetype=man" \
                 -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "7z" ]]; then
-            function __f() { 7z l "${1}" | tail -n +19 ; }
+            function __f() { 7z l "${1}" | tail -n +19; }
             join_outputs -c "__f" -s "separator" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "7z-nvim" ]]; then
-            function __f() { 7z l "${1}" | tail -n +3 ; }
+            function __f() { 7z l "${1}" | tail -n +3; }
             join_outputs -c "__f" \
                 --format "off" -s "separator" --output "nvim" \
                 -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "zip" ]]; then
-            function __f() { unzip -l "${1}" | tail -n +2 ; }
+            function __f() { unzip -l "${1}" | tail -n +2; }
             join_outputs -c "__f" -s "separator" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "unrar" ]]; then
-            function __f() { unrar l "${1}" | tail -n +5 | head -n -1 ; }
+            function __f() { unrar l "${1}" | tail -n +5 | head -n -1; }
             join_outputs -c "__f" -s "separator" -- "${@:2}"
             unset -f __f
         elif [[ "${1}" == "unrar-nvim" ]]; then
-            function __f() { unrar v "${1}" | tail -n +5 | head -n -1 ; }
+            function __f() { unrar v "${1}" | tail -n +5 | head -n -1; }
             join_outputs -c "__f" \
                 --format "off" -s "separator" --output "nvim" \
                 -- "${@:2}"
@@ -98,12 +98,12 @@ function __archive() {
         else
             if [[ "${2}" == "multi" ]]; then
                 local mode="--${1}"
-                function __f() { tar "${mode}" -tvf "${1}" ; }
+                function __f() { tar "${mode}" -tvf "${1}"; }
                 join_outputs -c "__f" -- "${@:3}"
                 unset -f __f
             else
                 local mode="${1}"
-                function __f() { "${mode}" --keep -d --stdout "${1}" ; }
+                function __f() { "${mode}" --keep -d --stdout "${1}"; }
                 join_outputs -c "__f" -- "${@:3}"
                 unset -f __f
             fi
@@ -112,35 +112,38 @@ function __archive() {
 
     function __unmake() {
         local type mode
-        while (( ${#} > 0 )); do
+        while ((${#} > 0)); do
             case "${1}" in
-                "-t" | "--type" )
+                "-t" | "--type")
                     type="${2}"
-                    shift; shift
+                    shift
+                    shift
                     ;;
-                "-m" | "--mode" )
+                "-m" | "--mode")
                     mode="${2}"
-                    shift; shift
+                    shift
+                    shift
                     ;;
-                "--" )
+                "--")
                     files=("${@:2}")
                     break
+                    ;;
             esac
         done
 
         if [[ "${type}" == "tar" ]]; then
-            function __f() { tar -xvf "${1}" ; }
+            function __f() { tar -xvf "${1}"; }
         elif [[ "${type}" == "7z" ]]; then
-            function __f() { 7z x "${1}" ; }
+            function __f() { 7z x "${1}"; }
         elif [[ "${type}" == "zip" ]]; then
-            function __f() { unzip "${1}" ; }
+            function __f() { unzip "${1}"; }
         elif [[ "${type}" == "unrar" ]]; then
-            function __f() { unrar x "${1}" ; }
+            function __f() { unrar x "${1}"; }
         else
             if [[ "${mode}" == "multi" ]]; then
-                function __f() { tar "--${type}" -xvf "${1}" ; }
+                function __f() { tar "--${type}" -xvf "${1}"; }
             else
-                function __f() { "${type}" --keep -d "${1}" ; }
+                function __f() { "${type}" --keep -d "${1}"; }
             fi
         fi
         join_outputs -c "__f" \
@@ -151,55 +154,67 @@ function __archive() {
 
     function __make() {
         local type mode
-        while (( ${#} > 0 )); do
+        while ((${#} > 0)); do
             case "${1}" in
-                "-t" | "--type" )
+                "-t" | "--type")
                     type="${2}"
-                    shift; shift
+                    shift
+                    shift
                     ;;
-                "-m" | "--mode" )
+                "-m" | "--mode")
                     mode="${2}"
-                    shift; shift
+                    shift
+                    shift
                     ;;
-                "--" )
+                "--")
                     files=("${@:2}")
                     break
+                    ;;
             esac
         done
 
         if [[ "${type}" == "tar" ]]; then
-            function __f() { tar -cv -f "_new.tar" -- "${@}" ; }
+            function __f() { tar -cv -f "_new.tar" -- "${@}"; }
         elif [[ "${mode}" == "multi" ]]; then
             case "${type}" in
-                "bzip2" )
-                    function __f() { tar "--${type}" -cv -f "_new.tar.bz2" -- "${@}" ; } ;;
-                "gzip" )
-                    function __f() { tar "--${type}" -cv -f "_new.tar.gz" -- "${@}" ; } ;;
-                "xz" )
-                    function __f() { tar "--${type}" -cv -f "_new.tar.${type}" -- "${@}" ; } ;;
-                "zstd" )
-                    function __f() { tar "--${type}" -cv -f "_new.tar.zst" -- "${@}" ; } ;;
-                "7z" )
-                    function __f() { 7z a "_new.7z" -- "${@}" ; } ;;
-                "zip" )
-                    function __f() { zip -r "_new.zip" -- "${@}" ; } ;;
+                "bzip2")
+                    function __f() { tar "--${type}" -cv -f "_new.tar.bz2" -- "${@}"; }
+                    ;;
+                "gzip")
+                    function __f() { tar "--${type}" -cv -f "_new.tar.gz" -- "${@}"; }
+                    ;;
+                "xz")
+                    function __f() { tar "--${type}" -cv -f "_new.tar.${type}" -- "${@}"; }
+                    ;;
+                "zstd")
+                    function __f() { tar "--${type}" -cv -f "_new.tar.zst" -- "${@}"; }
+                    ;;
+                "7z")
+                    function __f() { 7z a "_new.7z" -- "${@}"; }
+                    ;;
+                "zip")
+                    function __f() { zip -r "_new.zip" -- "${@}"; }
+                    ;;
             esac
         else
             case "${type}" in
-                "bzip2" | "gzip" | "xz" | "zstd" )
-                    function __f() { "${type}" --keep "${@}" ; } ;;
-                "7z" )
+                "bzip2" | "gzip" | "xz" | "zstd")
+                    function __f() { "${type}" --keep "${@}"; }
+                    ;;
+                "7z")
                     function __f() {
                         for f in "${@}"; do
                             7z a "${f}.7z" -- "${f}"
                         done
-                    } ;;
-                "zip" )
+                    }
+                    ;;
+                "zip")
                     function __f() {
                         for f in "${@}"; do
                             zip -r "${f}.zip" -- "${f}"
                         done
-                    } ;;
+                    }
+                    ;;
             esac
         fi
 
@@ -207,13 +222,13 @@ function __archive() {
     }
 
     case "${1}" in
-        "list" )
+        "list")
             __list "${@:2}"
             ;;
-        "unmake" )
+        "unmake")
             __unmake "${@:2}"
             ;;
-        "make" )
+        "make")
             __make "${@:2}"
             ;;
     esac
@@ -222,10 +237,10 @@ function __archive() {
 }
 
 function __pass() {
-    local pass_dir="password-store"  # intentionally without leading dot
+    local pass_dir="password-store" # intentionally without leading dot
     local target
     target=$(
-        echo "${2}" | sed "s/^.*\.${pass_dir}\/\(.*\).gpg$/\1/" \
+        echo "${2}" | sed "s/^.*\.${pass_dir}\/\(.*\).gpg$/\1/"
     )
 
     local pw_time=7
@@ -245,26 +260,65 @@ function __pass() {
     fi
 }
 
+function __spectrogram() {
+    local suffix="png" outputs=()
+    for f in "${@}"; do
+        output="${f}.${suffix}"
+        sox "${f}" -n spectrogram -o "${output}"
+        outputs+=("${output}")
+    done
+    spawn_proc imv "${outputs[@]}"
+}
+
+function __run() {
+    case "$1" in
+        "py")
+            tmux split "poetry run python ${2}"
+            ;;
+        "js" | "ts") ;;
+        *) ;;
+    esac
+}
+
+function __venv() {
+    case "$1" in
+        "py")
+            if poetry env info 1>/dev/null 2>1; then
+                poetry run nvim "${@}"
+            fi
+            ;;
+        *)
+            echo default
+            ;;
+    esac
+}
+
 function main() {
     case "${1}" in
-        "nvim" )
+        "nvim")
             __nvim "${@:2}"
             ;;
-        "preview" )
+        "preview")
             __preview "${@:2}"
             ;;
-        "mpv" | "imv" | "zathura" | "pdfarranger" | "xournalpp" | "lyx" | "libreoffice" | "sqlitebrowser" )
+        "mpv" | "imv" | "zathura" | "pdfarranger" | "xournalpp" | "lyx" | "libreoffice" | "sqlitebrowser")
             spawn_proc "${1}" "${@:2}"
             ;;
-        "archive" )
+        "archive")
             __archive "${@:2}"
             ;;
-        "pass" )
+        "pass")
             __pass "${@:2}"
+            ;;
+        "spectrogram")
+            __spectrogram "${@:2}"
+            ;;
+        "run")
+            __run "${@:2}"
             ;;
     esac
 
-    unset -f __nvim __preview __tree __archive __pass
+    unset -f __nvim __preview __tree __archive __pass __spectrogram __run
 }
 main "${@}"
 unset -f main
