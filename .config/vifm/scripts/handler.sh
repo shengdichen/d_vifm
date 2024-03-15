@@ -283,7 +283,7 @@ function __run() {
 function __venv() {
     case "$1" in
         "py")
-            if poetry env info 1>/dev/null 2>1; then
+            if poetry env info 1>/dev/null 2>&1; then
                 poetry run nvim "${@}"
             fi
             ;;
