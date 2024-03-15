@@ -48,13 +48,13 @@ __play_new() {
 
     if [ "${_record}" ]; then
         __find_files "${@}" | xargs -d "\n" -- \
-            mpv \
+            nohup mpv \
             --save-position-on-quit \
             --resume-playback \
             --
     else
         __find_files "${@}" | xargs -d "\n" -- \
-            mpv \
+            nohup mpv \
             --no-save-position-on-quit \
             --no-resume-playback \
             --
@@ -80,10 +80,10 @@ __main() {
 
     case "${_mode}" in
         "adhoc")
-            __play_new -- "${@}"
+            __play_new -- "${@}" >/dev/null 2>&1 &
             ;;
         "record")
-            __play_new --record -- "${@}"
+            __play_new --record -- "${@}" >/dev/null 2>&1 &
             ;;
         "throw")
             __play_socket -- "${@}"
