@@ -72,7 +72,7 @@ filextype
 \ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
 \/^.*\.mp3$/,/^.*\.m4[ab]$/,
 \/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
-    \ handler.sh "mpv" %f,
+    \ mpv.sh -- %f,
 
 fileviewer
 \ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
@@ -88,7 +88,7 @@ filextype
 \/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
 \/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,
 \/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
-    \ handler.sh "mpv" %f,
+    \ mpv.sh -- %f,
 
 fileviewer
 \ /^.*\.mkv$/,
@@ -245,8 +245,6 @@ filetype /^.*\/$/
     \ handler.sh "nvim" "open" %f,
     \ {diff}
     \ handler.sh "nvim" "diff" %f,
-filextype /^.*\/$/
-    \ handler.sh "mpv" %f,
 fileviewer /^.*\/$/
     \ handler.sh "preview" "dir" %f,
 " }}}
@@ -261,6 +259,12 @@ filetype /^.*$/
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
     \ tmux.sh "file" "diff" "%f",
+    \ {mpv}
+    \ mpv.sh -- %f,
+    \ {mpv/record}
+    \ mpv.sh --mode record -- %f,
+    \ {mpv/throw}
+    \ mpv.sh --mode throw -- %f:p,
 " }}}
 
 filetype /^.*\.tmux$/
