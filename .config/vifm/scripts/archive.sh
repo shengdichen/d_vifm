@@ -1,12 +1,8 @@
 #!/usr/bin/env dash
 
-__fzf() {
-    fzf --reverse --height=37%
-}
+SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-__nvim_ro() {
-    nvim -R -c "set nomodifiable"
-}
+. "${SCRIPT_PATH}/general.sh"
 
 __preview() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -179,7 +175,7 @@ __make() {
 case "${1}" in
     "view")
         shift
-        __preview "${@}" | __nvim_ro
+        __preview "${@}" | __nvim --mode ro
         ;;
     "preview")
         shift
