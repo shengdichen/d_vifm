@@ -12,6 +12,20 @@ __tmp_file() {
     echo "${HOME}/.local/share/vifm/tmp_$(date --iso-8601=seconds)"
 }
 
+__array_append() {
+    local _arr="${1}"
+    shift
+    if [ "${1}" = "--" ]; then shift; fi
+    for _e in "${@}"; do
+        if [ ! "${_arr}" ]; then
+            _arr="${_e}"
+        else
+            _arr="${_arr}\n${_e}"
+        fi
+    done
+    printf "%s" "${_arr}"
+}
+
 __nvim() {
     if [ "${1}" = "--mode" ]; then
         case "${2}" in
@@ -48,6 +62,13 @@ __nvim() {
                     nvim -R -c "set nomodifiable" "${@}"
                 else
                     nvim -R -c "set nomodifiable"
+                fi
+                ;;
+            "array")
+                shift && shift
+                if [ "${1}" = "--" ]; then shift; fi
+                if [ "${1}" ]; then
+                    echo "${1}" | xargs -o -d "\n" nvim -O --
                 fi
                 ;;
             "*")
