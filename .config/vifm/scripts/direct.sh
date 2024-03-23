@@ -10,7 +10,11 @@ for _file in "${@}"; do
             python "${_file}"
             ;;
         *"sh")
-            ./"${_file}"
+            if [ -x "${_file}" ]; then
+                ./"${_file}"
+            else
+                ${SHELL} "${_file}"
+            fi
             ;;
         *)
             printf "direct> unrecognized filetype [%s], skipping" "${_file}"
