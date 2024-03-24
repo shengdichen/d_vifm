@@ -8,6 +8,17 @@ __fzf() {
     fzf --reverse --height=37%
 }
 
+__select_opt() {
+    local _choice
+    if _choice="$(
+        for _opt in "${@}"; do printf "%s\n" "${_opt}"; done | __fzf
+    )"; then
+        printf "%s\n" "${_choice}" | cut -d " " -f 1
+    else
+        exit 1
+    fi
+}
+
 __tmp_file() {
     echo "${HOME}/.local/share/vifm/tmp_$(date --iso-8601=seconds)"
 }
