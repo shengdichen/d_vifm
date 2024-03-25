@@ -4,6 +4,27 @@ SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
 . "${SCRIPT_PATH}/general.sh"
 
+__check() {
+    if [ "${1}" = "--" ]; then shift; fi
+    for _p in "${@}"; do
+        case "${_p}" in
+            *".tar" | \
+                *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2" | \
+                *".bz" | *".bz2" | \
+                *".tar.gz" | *t[ga]z | *".tar.Z" | \
+                *".z" | *".gz" | \
+                *.tar.[xl]z | *.t[xl]z | \
+                *.[xl]z | *".lzma" | \
+                *".tar.zst" | \
+                *".zst" | \
+                *".7z" | *".iso" | \
+                *".zip" | *".apk" | *".apkg" | *[ejw]ar | \
+                *".rar") ;;
+            *) return 1 ;;
+        esac
+    done
+}
+
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
 
