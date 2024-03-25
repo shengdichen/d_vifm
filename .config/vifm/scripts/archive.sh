@@ -133,6 +133,55 @@ __unmake() {
     done
 }
 
+__handle() {
+    local _interactive=""
+    if [ "${1}" = "--interactive" ]; then
+        _interactive="${2}"
+        shift 2
+    fi
+    if [ "${1}" = "--" ]; then shift; fi
+    if ! __check -- "${@}"; then return 1; fi
+
+    local _choice
+    for _file in "${@}"; do
+        case "${_file}" in
+            *".tar" | \
+                *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2" | \
+                *".bz" | *".bz2" | \
+                *".tar.gz" | *t[ga]z | *".tar.Z" | \
+                *".z" | *".gz" | \
+                *.tar.[xl]z | *.t[xl]z | \
+                *.[xl]z | *".lzma" | \
+                *".tar.zst" | \
+                *".zst" | \
+                *".zip" | *".apk" | *".apkg" | *[ejw]ar)
+                _choice="nvim"
+                if [ "${_interactive}" ]; then
+                    _choice="$(__select_opt "nvim" "info" "unmake")"
+                fi
+                ;;
+            *".7z" | *".iso" | \
+                *".rar")
+                _choice="info"
+                if [ "${_interactive}" ]; then
+                    _choice="$(__select_opt "info" "unmake")"
+                fi
+                ;;
+        esac
+        case "${_choice}" in
+            "unmake")
+                __unmake -- "${_file}"
+                ;;
+            "nvim")
+                __nvim -- "${_file}"
+                ;;
+            "info")
+                __info -- "${_file}" | __nvim --mode ro
+                ;;
+        esac
+    done
+}
+
 __make() {
     if [ "${1}" = "--" ]; then shift; fi
 
@@ -209,7 +258,6 @@ case "${1}" in
         __make "${@}"
         ;;
     *)
-        printf "archive> huh? (what is [%s])\n" "${1}"
-        exit 3
+        __handle "${@}"
         ;;
 esac
