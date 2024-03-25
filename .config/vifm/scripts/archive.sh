@@ -4,11 +4,10 @@ SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
 . "${SCRIPT_PATH}/general.sh"
 
-__preview() {
+__info() {
     if [ "${1}" = "--" ]; then shift; fi
 
     for _file in "${@}"; do
-        printf "archive/view> [%s]\n" "${_file}"
         case "${_file}" in
             *".tar")
                 tar -tvf "${_file}"
@@ -52,10 +51,9 @@ __preview() {
                 unrar l "${1}" | tail -n +5 | head -n -1
                 ;;
             *)
-                exit 3
+                return 1
                 ;;
         esac
-        printf "\n\n"
     done
 }
 
@@ -107,7 +105,7 @@ __unmake() {
                 unrar x "${_file}"
                 ;;
             *)
-                exit 3
+                return 1
                 ;;
         esac
         printf "\n"
@@ -130,7 +128,7 @@ __make() {
     fi
 
     local _input
-    printf "archive> [c]ombine-into-one (default), [s]eparate-for-each? "
+    printf "archive/make> [c]ombine-into-one (default), [s]eparate-for-each? "
     read -r _input
     if [ "${_input}" != "s" ]; then
         case "${_format}" in
@@ -173,13 +171,13 @@ __make() {
 }
 
 case "${1}" in
-    "view")
+    "check")
         shift
-        __preview "${@}" | __nvim --mode ro
+        __check "${@}"
         ;;
-    "preview")
+    "info")
         shift
-        __preview "${@}"
+        __info "${@}"
         ;;
     "unmake")
         shift
@@ -190,6 +188,7 @@ case "${1}" in
         __make "${@}"
         ;;
     *)
+        printf "archive> huh? (what is [%s])\n" "${1}"
         exit 3
         ;;
 esac
