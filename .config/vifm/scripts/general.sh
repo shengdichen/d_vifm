@@ -94,3 +94,7 @@ __nvim() {
         fi
     fi
 }
+
+__nohup() {
+    nohup "${@}" >/dev/null 2>&1 &
+}
