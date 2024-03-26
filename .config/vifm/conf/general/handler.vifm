@@ -32,27 +32,6 @@ fileviewer /^.*$/
 
 " matched {{{
 " dev {{{
-" signature {{{
-filetype /^.*\.md5$/
-    \ {verify}
-    \ md5sum -c %f %S,
-
-filetype /^.*\.sha1$/
-    \ {verify}
-    \ sha1sum -c %f %S,
-
-filetype /^.*\.sha256$/
-    \ {verify}
-    \ sha256sum -c %f %S,
-
-filetype /^.*\.sha512$/
-    \ {verify}
-    \ sha512sum -c %f %S,
-
-filetype /^.*\.asc$/
-    \ {verify}
-    \ !!gpg --verify %f,
-
 filetype //^.*\/\.password-store\/.*gpg$//
     \ {pass: edit}
     \ handler.sh "pass" "edit" %f:p,
@@ -60,7 +39,6 @@ filetype //^.*\/\.password-store\/.*gpg$//
     \ handler.sh "pass" "show" %f:p,
     \ {pass: copy}
     \ handler.sh "pass" "copy" %f:p,
-" }}}
 
 " web {{{
 filetype /^.*\.html?$/
