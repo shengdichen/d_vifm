@@ -23,6 +23,13 @@
 "       3) files and dirs =: /^.*$/
 " }}}
 
+filetype /^.*$/
+    \ common.sh -- %f,
+    \ common.sh --interactive -- %f,
+    \ common.sh --generic -- %f,
+fileviewer /^.*$/
+    \ common.sh --preview -- %f,
+
 " matched {{{
 " document {{{
 " pdf-related {{{
