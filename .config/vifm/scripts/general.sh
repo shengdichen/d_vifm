@@ -19,6 +19,10 @@ __select_opt() {
     fi
 }
 
+__line_number() {
+    nl -b a -w 2 -n "rz" -s "  "
+}
+
 __tmp_file() {
     echo "${HOME}/.local/share/vifm/tmp_$(date --iso-8601=seconds)"
 }
