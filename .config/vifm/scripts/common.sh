@@ -65,11 +65,15 @@ __generic() {
     case "$(
         __select_opt \
             "info" \
+            "mpv" \
             "archive (make)" \
             "nvim"
     )" in
         "info")
             __info -- "${@}" | __nvim --mode ro
+            ;;
+        "mpv")
+            "${SCRIPT_PATH}/mpv.sh" --mode ask -- "${@}"
             ;;
         "archive")
             "${SCRIPT_PATH}/archive.sh" make -- "${@}"

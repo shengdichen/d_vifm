@@ -1,5 +1,9 @@
 #!/usr/bin/env dash
 
+SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
+
+. "${SCRIPT_PATH}/general.sh"
+
 SOCKET_DIR="${HOME}/.local/state/mpv"
 
 __fzf() {
@@ -82,6 +86,9 @@ __main() {
         case "${1}" in
             "--mode")
                 _mode="${2}"
+                if [ "${_mode}" = "ask" ]; then
+                    _mode="$(__select_opt "adhoc (default)" "record" "throw")"
+                fi
                 shift && shift
                 ;;
             "--")
