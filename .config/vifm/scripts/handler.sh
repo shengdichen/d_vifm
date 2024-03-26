@@ -1,31 +1,5 @@
 source "util.sh"
 
-function __archive() {
-    function __list() {
-        if [[ "${1}" == "man" ]]; then
-            function __f() { man -l "${1}" | tail -n +2; }
-            join_outputs -c "__f" \
-                --format "linenumber" -s "separator" \
-                -- "${@:2}"
-            unset -f __f
-        elif [[ "${1}" == "man-nvim" ]]; then
-            function __f() { man -l "${1}" | tail -n +2; }
-            join_outputs -c "__f" \
-                --format "off" -s "separator" \
-                --output "nvim" --output-nvim-extra "-c set filetype=man" \
-                -- "${@:2}"
-            unset -f __f
-        fi
-    }
-
-    case "${1}" in
-        "list")
-            __list "${@:2}"
-            ;;
-    esac
-    unset -f __list
-}
-
 function __pass() {
     local pass_dir="password-store" # intentionally without leading dot
     local target
@@ -62,9 +36,6 @@ function __spectrogram() {
 
 function main() {
     case "${1}" in
-        "archive")
-            __archive "${@:2}"
-            ;;
         "pass")
             __pass "${@:2}"
             ;;
@@ -73,7 +44,7 @@ function main() {
             ;;
     esac
 
-    unset -f __archive __pass __spectrogram
+    unset -f __pass __spectrogram
 }
 main "${@}"
 unset -f main

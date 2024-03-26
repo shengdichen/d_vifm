@@ -31,14 +31,6 @@ fileviewer /^.*$/
     \ common.sh --preview -- %f,
 
 " matched {{{
-" gzip {{{
-" man-page
-filetype {{/usr/share/**/*.gz}}
-    \ handler.sh "archive" "list" "man-nvim" %f,
-fileviewer {{/usr/share/**/*.gz}}
-    \ handler.sh "archive" "list" "man" %f,
-" }}}
-
 " dev {{{
 " signature {{{
 filetype /^.*\.md5$/

@@ -149,7 +149,7 @@ __handle() {
                 *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2" | \
                 *".bz" | *".bz2" | \
                 *".tar.gz" | *t[ga]z | *".tar.Z" | \
-                *".z" | *".gz" | \
+                *".z" | \
                 *.tar.[xl]z | *.t[xl]z | \
                 *.[xl]z | *".lzma" | \
                 *".tar.zst" | \
@@ -159,6 +159,39 @@ __handle() {
                 if [ "${_interactive}" ]; then
                     _choice="$(__select_opt "nvim" "info" "unmake")"
                 fi
+                ;;
+            *".gz")
+                local _path
+                _path="$(realpath "${_file}")"
+                case "${_path}" in
+                    "/usr/share/man/"*)
+                        _choice="nvim"
+                        if [ "${_interactive}" ]; then
+                            _choice="$(__select_opt "nvim (man)" "raw" "info" "unmake")"
+                        fi
+                        if [ "${_choice}" = "nvim" ]; then
+                            man -l -- "${_file}"
+                            continue
+                        fi
+                        ;;
+                    "/usr/share/info/"*)
+                        _choice="nvim"
+                        if [ "${_interactive}" ]; then
+                            _choice="$(__select_opt "nvim (info)" "raw" "info" "unmake")"
+                        fi
+                        if [ "${_choice}" = "nvim" ]; then
+                            info -f "${_file}" | __nvim --mode ro
+                            continue
+                        fi
+                        ;;
+                    *)
+                        _choice="nvim"
+                        if [ "${_interactive}" ]; then
+                            _choice="$(__select_opt "nvim" "info" "unmake")"
+                        fi
+                        ;;
+                esac
+
                 ;;
             *".7z" | *".iso" | \
                 *".rar")
@@ -172,7 +205,7 @@ __handle() {
             "unmake")
                 __unmake -- "${_file}"
                 ;;
-            "nvim")
+            "nvim" | "raw")
                 __nvim -- "${_file}"
                 ;;
             "info")
