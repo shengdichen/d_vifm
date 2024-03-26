@@ -22,7 +22,7 @@ __info() {
 
         if [ ! -d "${_p}" ]; then
             printf "// "
-            file -b -i -- "${_p}"
+            file --brief --mime -- "${_p}"
             stat "${_p}" | __line_number
 
             if [ ! "${_preview}" ]; then
@@ -43,11 +43,17 @@ __info() {
                 printf ">>>>>>>>>>\n"
             fi
         else
-            if [ -n "$(find "${_p}" -mindepth 1)" ]; then
-                tree -a -l -L 1 --filelimit 197 "${_p}" | __line_number
-            else
-                printf "// %s\n" "${_p}"
-                printf "## EMPTY DIR ##\n"
+            printf "// "
+            file --brief -- "${_p}"
+            stat "${_p}" | __line_number
+
+            if [ ! "${_preview}" ]; then
+                if [ -n "$(find "${_p}" -mindepth 1)" ]; then
+                    tree -a -l -L 1 --filelimit 197 "${_p}" | __line_number
+                else
+                    printf "// %s\n" "${_p}"
+                    printf "## EMPTY DIR ##\n"
+                fi
             fi
         fi
     done
