@@ -30,16 +30,6 @@ filetype /^.*$/
 fileviewer /^.*$/
     \ common.sh --preview -- %f,
 
-" matched {{{
-filetype //^.*\/\.password-store\/.*gpg$//
-    \ {pass: edit}
-    \ handler.sh "pass" "edit" %f:p,
-    \ {pass: show}
-    \ handler.sh "pass" "show" %f:p,
-    \ {pass: copy}
-    \ handler.sh "pass" "copy" %f:p,
-" }}}
-
 " generic {{{
 " notably used for bulk-renaming
 set vicmd=vi

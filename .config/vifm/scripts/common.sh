@@ -95,7 +95,7 @@ __foreach() {
     local _to_nvim _files_to_nvim=""
     for _p in "${@}"; do
         _to_nvim="yes"
-        for _script in "media" "image" "direct" "pdf" "misc" "archive" "encrypt"; do
+        for _script in "media" "image" "direct" "pdf" "misc" "archive" "encrypt" "pass"; do
             if "${SCRIPT_PATH}/${_script}.sh" --interactive "${_interactive}" -- "${_p}"; then
                 _to_nvim=""
                 break

@@ -93,21 +93,6 @@ command! spectrogram
     \ handler.sh "spectrogram" %f
 
 " pass {{{
-command! passInternalPath
-    \ :let $PATH_PASS = system('echo %a | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/"')
-
-command! passView
-    \ :passInternalPath %f:p
-    \ | !pass $PATH_PASS | nvim -R
-
-command! passEdit
-    \ :passInternalPath %f:p
-    \ | !!pass edit $PATH_PASS 2>/dev/null
-
-command! passCopy
-    \ :passInternalPath %f:p
-    \ | !pass -c $PATH_PASS 1>/dev/null
-
 command! passNewPath
     \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
 
