@@ -8,6 +8,9 @@ __info() {
     if [ "${1}" = "--" ]; then shift; fi
 
     case "${1}" in
+        *".htm" | *".html")
+            w3m -T text/html -dump "${1}"
+            ;;
         *".torrent")
             transmission-show -D -T -- "${1}"
             ;;
@@ -64,6 +67,29 @@ __handle() {
             ;;
         *".db" | *".db3" | *".sqlite" | *".sqlite3")
             __nohup sqlitebrowser "${1}"
+            ;;
+        *".htm" | *".html")
+            _choice="nvim"
+            if [ "${_interactive}" ]; then
+                _choice="$(__select_opt "nvim" "w3m" "w3m/nvim" "firefox-dev" "chromium")"
+            fi
+            case "${_choice}" in
+                "nvim")
+                    __nvim -- "${1}"
+                    ;;
+                "w3m")
+                    w3m -T text/html "${1}"
+                    ;;
+                "w3m/nvim")
+                    w3m -T text/html -dump "${1}" | __nvim --mode ro
+                    ;;
+                "firefox-dev")
+                    __nohup firefox-developer-edition --private-window -- "${1}"
+                    ;;
+                "chromium")
+                    __nohup chromium --incognito --new-window -- "${1}"
+                    ;;
+            esac
             ;;
         *".torrent")
             _choice="nvim"

@@ -40,25 +40,6 @@ filetype //^.*\/\.password-store\/.*gpg$//
     \ {pass: copy}
     \ handler.sh "pass" "copy" %f:p,
 
-" web {{{
-filetype /^.*\.html?$/
-    \ {edit}
-    \ nvim %f,
-    \ {view}
-    \ w3m -T text/html -dump %f | nvim -R,
-
-filextype /^.*\.html?$/
-    \ {fd}
-    \ firefox-developer-edition --private-window %f 1>/dev/null 2>&1 &,
-    \ {ff}
-    \ firefox --private-window %f 1>/dev/null 2>&1 &,
-    \ {chromium}
-    \ chromium --incognito --new-window %f 1>/dev/null 2>&1 &,
-
-fileviewer /^.*\.html?$/
-    \ w3m -T text/html -dump %f | nl -b a -w 2 -n 'rz' -s '  ',
-" }}}
-
 filetype /^.*\.o$/
     \ nm %f | nvim -R,
 fileviewer /^.*\.o$/
