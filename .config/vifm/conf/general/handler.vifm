@@ -31,7 +31,6 @@ fileviewer /^.*$/
     \ common.sh --preview -- %f,
 
 " matched {{{
-" dev {{{
 filetype //^.*\/\.password-store\/.*gpg$//
     \ {pass: edit}
     \ handler.sh "pass" "edit" %f:p,
@@ -39,12 +38,6 @@ filetype //^.*\/\.password-store\/.*gpg$//
     \ handler.sh "pass" "show" %f:p,
     \ {pass: copy}
     \ handler.sh "pass" "copy" %f:p,
-
-filetype /^.*\.o$/
-    \ nm %f | nvim -R,
-fileviewer /^.*\.o$/
-    \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
-" }}}
 " }}}
 
 " generic {{{

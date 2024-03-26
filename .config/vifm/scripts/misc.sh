@@ -14,6 +14,9 @@ __info() {
         *".torrent")
             transmission-show -D -T -- "${1}"
             ;;
+        *".o" | *".out")
+            nm -- "${1}"
+            ;;
         *) return 1 ;;
     esac
 }
@@ -102,6 +105,20 @@ __handle() {
                     ;;
                 "nvim")
                     transmission-show "${1}" | __nvim --mode ro
+                    ;;
+            esac
+            ;;
+        *".o" | *".out")
+            _choice="nm"
+            if [ "${_interactive}" ]; then
+                _choice="$(__select_opt "nm" "nvim")"
+            fi
+            case "${_choice}" in
+                "nm")
+                    nm -- "${1}" | __nvim --mode ro
+                    ;;
+                "nvim")
+                    __nvim -- "${1}"
                     ;;
             esac
             ;;
