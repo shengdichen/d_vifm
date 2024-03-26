@@ -31,153 +31,15 @@ fileviewer /^.*$/
     \ common.sh --preview -- %f,
 
 " matched {{{
-" document {{{
-" pdf-related {{{
-filextype /^.*\.pdf$/
-    \ {zathura}
-    \ handler.sh "zathura" %f,
-    \ {pdfarranger}
-    \ handler.sh "pdfarranger" %f,
-    \ {xournal++}
-    \ handler.sh "xournalpp" %f,
-
-filetype /^.*\.pdf$/
-    \ {as text}
-    \ pdftotext -nopgbrk %f - | cat -n | less,
-
-fileviewer /^.*\.pdf$/
-    \ pdftotext -nopgbrk %f - | cat -n,
-
-filextype /^.*\.ps$/,/^.*\.eps$/,/^.*\.ps\.gz$/,/^.*\.djvu$/
-    \ {zathura}
-    \ handler.sh "zathura" %f,
-" }}}
-
-filextype /^.*\.xopp$/
-    \ handler.sh "xournalpp" %f,
-
-filextype /^.*\.lyx$/
-    \ {lyx_wayland}
-    \ handler.sh "lyx" %f,
-    \ {lyx}
-    \ WAYLAND_DISPLAY='' handler.sh "lyx" %f,
-
-" "office"-related {{{
-filextype /^.*\.od[tp]$/,/^.*\.docx?$/,/^.*\.xlsx?$/,/^.*\.pptx?$/
-    \ handler.sh "libreoffice" %f,
-
-fileviewer /^.*\.doc$/
-    \ catdoc %f,
-fileviewer /^.*\.docx$/
-    \ docx2txt.pl %f -
-" }}}
-" }}}
-
-" media {{{
-" aud {{{
-filextype
-\ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
-\/^.*\.mp3$/,/^.*\.m4[ab]$/,
-\/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
-    \ mpv.sh -- %f,
-
-fileviewer
-\ /^.*\.flac$/,/^.*\.wav$/,/^.*\.ape$/,
-\/^.*\.mp3$/,/^.*\.m4[ab]$/,
-\/^.*\.wma$/,/^.*\.ac3$/,/^.*\.og[agx]$/,/^.*\.spx$/,/^.*\.opus$/
-    \ handler.sh "preview" "ffmpeg" %f,
-" }}}
-
-" vid {{{
-filextype
-\ /^.*\.mkv$/,
-\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,
-\/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
-\/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,
-\/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
-    \ mpv.sh -- %f,
-
-fileviewer
-\ /^.*\.mkv$/,
-\/^.*\.avi$/,/^.*\.mp4$/,/^.*\.webm$/,/^.*\.ts$/,/^.*\.m[4o]v$/,
-\/^.*\.mpe?g$/,/^.*\.vob$/,/^.*\.fl[icv]$/,
-\/^.*\.wmv$/,/^.*\.dat$/,/^.*\.3gp$/,/^.*\.ogv$/,/^.*\.m2v$/,/^.*\.mts$/,
-\/^.*\.r[am]$/,/^.*\.qt$/,/^.*\.divx$/,/^.*\.as[fx]$/
-    \ handler.sh "preview" "ffmpeg" %f,
-" }}}
-
-" pic {{{
-filextype
-\ /^.*\.png$/,/^.*\.svg$/,
-\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
-    \ {imv}
-    \ handler.sh "imv" %f,
-
-fileviewer
-\ /^.*\.png$/,/^.*\.svg$/,
-\/^.*\.jpe?g$/,/^.*\.bmp$/,/^.*\.webp$/,/^.*\.gif$/,/^.*\.xpm$/
-\/^.*\.heifs?$/,/^.*\.heics?$/,/^.*\.avc[is]$/,/^.*\.avif$/
-    \ handler.sh "preview" "image" %f,
-" }}}
-
-filetype /^.*\.torrent$/
-    \ {info: transmission}
-    \ transmission-show %f | nvim -R,
-fileviewer /^.*\.torrent$/
-    \ transmission-show -D -T %f,
-" }}}
-
-" archive {{{
-fileviewer /^.*\.tar$/
-    \ archive.sh preview -- %f,
-
-fileviewer /^.*\.tar\.bz2?$/,/^.*\.tbz2?$/
-    \ archive.sh preview -- %f,
-fileviewer /^.*\.bz2?$/
-    \ archive.sh preview -- %f,
-
 " gzip {{{
 " man-page
 filetype {{/usr/share/**/*.gz}}
     \ handler.sh "archive" "list" "man-nvim" %f,
 fileviewer {{/usr/share/**/*.gz}}
     \ handler.sh "archive" "list" "man" %f,
-
-fileviewer /^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/
-    \ archive.sh preview -- %f,
-fileviewer /^.*\.g?z$/
-    \ archive.sh preview -- %f,
-" }}}
-
-fileviewer /^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/
-    \ archive.sh preview -- %f,
-fileviewer /^.*\.[xl]z$/,/^.*\.lzma$/
-    \ archive.sh preview -- %f,
-
-fileviewer /^.*\.tar\.zst$/
-    \ archive.sh preview -- %f,
-fileviewer /^.*\.zst$/
-    \ archive.sh preview -- %f,
-
-filetype /^.*\.7z$/,/^.*\.iso$/
-    \ archive.sh view -- %f,
-fileviewer /^.*\.7z$/,/^.*\.iso$/
-    \ archive.sh preview -- %f,
-
-fileviewer /^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/
-    \ archive.sh preview -- %f,
-
-filetype /^.*\.rar$/
-    \ archive.sh view -- %f,
-fileviewer /^.*\.rar$/
-    \ archive.sh preview -- %f,
 " }}}
 
 " dev {{{
-filextype /^.*\.db3?$/,/^.*\.sqlite3?$/
-    \ handler.sh "sqlitebrowser" %f,
-
 " signature {{{
 filetype /^.*\.md5$/
     \ {verify}
@@ -232,22 +94,6 @@ filetype /^.*\.o$/
 fileviewer /^.*\.o$/
     \ nm %f | nl -b a -w 2 -n 'rz' -s '  ',
 " }}}
-
-filetype /^.*[^\/]$/
-    \ {nvim}
-    \ handler.sh "nvim" "open" %f,
-    \ {diff}
-    \ handler.sh "nvim" "diff" %f,
-fileviewer /^.*[^\/]$/
-    \ handler.sh "preview" "file" %f,
-
-filetype /^.*\/$/
-    \ {nvim}
-    \ handler.sh "nvim" "open" %f,
-    \ {diff}
-    \ handler.sh "nvim" "diff" %f,
-fileviewer /^.*\/$/
-    \ handler.sh "preview" "dir" %f,
 " }}}
 
 " generic {{{
@@ -260,36 +106,6 @@ filetype /^.*$/
     \ tmux.sh "file" "open" "%f",
     \ {diff.tmux}
     \ tmux.sh "file" "diff" "%f",
-    \ {mpv}
-    \ mpv.sh -- %f,
-    \ {mpv/record}
-    \ mpv.sh --mode record -- %f,
-    \ {mpv/throw}
-    \ mpv.sh --mode throw -- %f:p,
-" }}}
-
-filetype /^.*\.tmux$/,/^.*\.py$/,/^.*\.sh$/
-    \ {direct}
-    \ direct.sh -- %f,
-
-" archive {{{
-filetype
-\ /^.*\.tar$/,
-\/^.*\.tar\.bz2?$/,/^.*\.tbz2?$/,
-\/^.*\.bz2?$/,
-\/^.*\.tar\.gz$/,/^.*\.t[ga]z$/,/^.*\.tar\.Z$/,
-\/^.*\.g?z$/,
-\/^.*\.tar\.[xl]z$/,/^.*\.t[xl]z$/,
-\/^.*\.[xl]z$/,/^.*\.lzma$/,
-\/^.*\.tar\.zst$/,
-\/^.*\.zst$/,
-\/^.*\.7z$/,/^.*\.iso$/
-\/^.*\.zip$/,/^.*\.apkg?$/,/^.*\.[ejw]ar$/,
-\/^.*\.rar$/,
-    \ archive.sh unmake -- %f,
-
-filetype /^.*$/
-    \ archive.sh make -- %f,
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
