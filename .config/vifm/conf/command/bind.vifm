@@ -30,11 +30,6 @@ mnoremap K 4k
 nnoremap ff
     \ :!fzf.sh
     \ <cr>
-nnoremap fa
-    \ :findFzf
-    \ <cr>
-nnoremap ft
-    \ :findFzf -type<space>
 nnoremap fd
     \ :execute 'cd' fnameescape(term("${VIFM}/scripts/fzf.sh dir"))
     \ <cr>

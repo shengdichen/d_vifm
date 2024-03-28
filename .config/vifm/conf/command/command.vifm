@@ -1,7 +1,6 @@
 command! resource
     \ :source "$HOME/.config/vifm/vifmrc"
 
-" search {{{
 set grepprg=
     \"
     \ag
@@ -9,44 +8,6 @@ set grepprg=
         \ --hidden
         \ %i %a %s
     \"
-
-" NOTE:
-"   1. MUST set |noquickview| before launching fzf
-command! fzfSetup
-    \ :set noquickview
-
-command! cleanup
-    \ :unlet $VIFM_TMP_RES | :only
-
-command! agFzf
-    \ :fzfSetup
-    \ | :agToFzfToMatch | :matchToNvim
-    \ | :cleanup
-
-" ag -> fzf -> "<file>:<line_n>:<match>"
-command! agToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --hidden . | fzf 2>/dev/tty')
-
-" "<file>:<line_n>:<match>" -> nvim
-command! matchToNvim
-    \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
-    \ | :execute $VIFM_TMP_RES
-
-command! findFzf
-    \ :fzfSetup
-    \ | :findToFzfToMatch %a | :matchToNavigation
-    \ | :cleanup
-
-" find -> fzf -> <path>
-command! findToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
-
-" <path> -> vifm
-command! matchToNavigation
-    \ :if $VIFM_TMP_RES != ''
-    \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
-    \ | :endif
-" }}}
 
 " file-system {{{
 command! mkd
