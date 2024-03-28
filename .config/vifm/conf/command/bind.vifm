@@ -28,7 +28,7 @@ mnoremap K 4k
 
 " fzf {{{
 nnoremap ff
-    \ :agFzf
+    \ :!fzf.sh
     \ <cr>
 nnoremap fa
     \ :findFzf
@@ -36,10 +36,10 @@ nnoremap fa
 nnoremap ft
     \ :findFzf -type<space>
 nnoremap fd
-    \ :findFzf -type d
+    \ :execute 'cd' fnameescape(term("${VIFM}/scripts/fzf.sh dir"))
     \ <cr>
 nnoremap fg
-    \ :findFzf -type f
+    \ :execute 'goto' fnameescape(term("${VIFM}/scripts/fzf.sh file"))
     \ <cr>
 " }}}
 
