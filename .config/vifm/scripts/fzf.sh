@@ -9,10 +9,20 @@ __fzf() {
 }
 
 __to_line() {
+    # a separator unlikely found in filenames
+    local _separator=":::"
     local _res _line _file
-    if _res="$(ag --line-numbers --noheading --hidden . | __fzf)"; then
-        _file="$(printf "%s" "${_res}" | cut -d ":" -f 1)"
-        _line="$(printf "%s" "${_res}" | cut -d ":" -f 2)"
+    if _res="$(
+        rg \
+            --hidden \
+            --color never --no-heading --with-filename --line-number \
+            --field-match-separator "${_separator}" \
+            ".*" -- . |
+            cut -c 3- | # hide leading "./"
+            __fzf
+    )"; then
+        _file="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$1}")"
+        _line="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$2}")"
         nvim +"${_line}" -- "${_file}"
     fi
 }
