@@ -97,11 +97,7 @@ command! passNewPath
     \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
 
 command! passNew
-    \ :passNewPath
-    \ | !
-    \   pass generate $PATH_PASS 1>/dev/null 2>&1
-    \   &&
-    \   pass edit $PATH_PASS 2>/dev/null
+    \ :!pass.sh new
 
 command! passNewMfa
     \ :passNewPath

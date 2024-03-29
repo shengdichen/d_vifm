@@ -25,14 +25,26 @@ __handle_otp() {
 }
 
 __handle_common() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
-    fi
-    if [ "${1}" = "--" ]; then shift; fi
+    local _interactive="" _choice="copy"
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--interactive")
+                _interactive="${2}"
+                shift 2
+                ;;
+            "--mode")
+                _choice="${2}"
+                shift 2
+                ;;
+            "--")
+                shift && break
+                ;;
+            *)
+                exit 3
+                ;;
+        esac
+    done
 
-    local _choice="copy"
     if [ "${_interactive}" ]; then
         _choice="$(__select_opt "copy" "edit" "view")"
     fi
@@ -51,6 +63,23 @@ __handle_common() {
             pass show "${1}" | __nvim --mode ro
             ;;
     esac
+}
+
+__handle_new() {
+    local _path
+    _path="$(realpath .)"
+    case "${_path}" in
+        *"/.${PASS_DIR}/"*) ;;
+        *)
+            printf "pass/new> not in [pass]-dir, cd there first\n"
+            return 1
+            ;;
+    esac
+
+    local _target
+    _target="$(printf "%s\n" "${_path}" | sed "s/^.*\/\.${PASS_DIR}\/\(.*\)$/\1\/_new/")"
+    pass generate "${_target}" 1>/dev/null 2>&1
+    __handle_common --mode edit -- "${_target}"
 }
 
 __handle() {
@@ -80,6 +109,10 @@ __handle() {
 }
 
 case "${1}" in
+    "new")
+        shift
+        __handle_new "${@}"
+        ;;
     *)
         __handle "${@}"
         ;;
