@@ -1,7 +1,6 @@
 command! resource
     \ :source "$HOME/.config/vifm/vifmrc"
 
-" search {{{
 set grepprg=
     \"
     \ag
@@ -9,44 +8,6 @@ set grepprg=
         \ --hidden
         \ %i %a %s
     \"
-
-" NOTE:
-"   1. MUST set |noquickview| before launching fzf
-command! fzfSetup
-    \ :set noquickview
-
-command! cleanup
-    \ :unlet $VIFM_TMP_RES | :only
-
-command! agFzf
-    \ :fzfSetup
-    \ | :agToFzfToMatch | :matchToNvim
-    \ | :cleanup
-
-" ag -> fzf -> "<file>:<line_n>:<match>"
-command! agToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('ag --line-numbers --noheading --hidden . | fzf 2>/dev/tty')
-
-" "<file>:<line_n>:<match>" -> nvim
-command! matchToNvim
-    \ :let $VIFM_TMP_RES = system('echo $VIFM_TMP_RES | awk -F : "{cmd=\"!nvim +\"\$2\" -- \"\$1; print(cmd)}"')
-    \ | :execute $VIFM_TMP_RES
-
-command! findFzf
-    \ :fzfSetup
-    \ | :findToFzfToMatch %a | :matchToNavigation
-    \ | :cleanup
-
-" find -> fzf -> <path>
-command! findToFzfToMatch
-    \ :let $VIFM_TMP_RES = term('find -L %a | fzf 2>/dev/tty')
-
-" <path> -> vifm
-command! matchToNavigation
-    \ :if $VIFM_TMP_RES != ''
-    \ | :execute system('[ -f "$VIFM_TMP_RES" ] && echo goto || echo cd') fnameescape($VIFM_TMP_RES)
-    \ | :endif
-" }}}
 
 " file-system {{{
 command! mkd
@@ -79,49 +40,13 @@ command! diffDirRecur
     \ <(cd %F:h && find . -type f | sort)
 " }}}
 
-" execute {{{
-command! ex
-    \ !! $SHELL %f
-command! exx
-    \ !nohup $SHELL %f 1>/dev/null 2>&1 &
-" }}}
-
 command! tidal
     \ for i in {1..2}; do tidal-dl -l "%a"; done
 
 command! spectrogram
     \ handler.sh "spectrogram" %f
 
-" pass {{{
-command! passInternalPath
-    \ :let $PATH_PASS = system('echo %a | sed "s/^.*\.password-store\/\(.*\).gpg$/\1/"')
-
-command! passView
-    \ :passInternalPath %f:p
-    \ | !pass $PATH_PASS | nvim -R
-
-command! passEdit
-    \ :passInternalPath %f:p
-    \ | !!pass edit $PATH_PASS 2>/dev/null
-
-command! passCopy
-    \ :passInternalPath %f:p
-    \ | !pass -c $PATH_PASS 1>/dev/null
-
-command! passNewPath
-    \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
-
 command! passNew
-    \ :passNewPath
-    \ | !
-    \   pass generate $PATH_PASS 1>/dev/null 2>&1
-    \   &&
-    \   pass edit $PATH_PASS 2>/dev/null
-
-command! passNewMfa
-    \ :passNewPath
-    \ | !
-    \   zbarimg -q --raw %f | pass otp insert "${PATH_PASS}.mfa"
-" }}}
+    \ :!pass.sh new -- %f
 
 " vim: filetype=vifm foldmethod=marker
