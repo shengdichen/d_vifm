@@ -92,17 +92,7 @@ command! tidal
 command! spectrogram
     \ handler.sh "spectrogram" %f
 
-" pass {{{
-command! passNewPath
-    \ :let $PATH_PASS = system('echo %f:p:h | sed "s/^.*\.password-store\/\(.*\)$/\1\/_new/"')
-
 command! passNew
-    \ :!pass.sh new
-
-command! passNewMfa
-    \ :passNewPath
-    \ | !
-    \   zbarimg -q --raw %f | pass otp insert "${PATH_PASS}.mfa"
-" }}}
+    \ :!pass.sh new -- %f
 
 " vim: filetype=vifm foldmethod=marker

@@ -75,9 +75,19 @@ __handle_new() {
             return 1
             ;;
     esac
+    if [ "${1}" = "--" ]; then shift; fi
 
     local _target
     _target="$(printf "%s\n" "${_path}" | sed "s/^.*\/\.${PASS_DIR}\/\(.*\)$/\1\/_new/")"
+    if [ "${#}" -gt 0 ]; then
+        if "${SCRIPT_PATH}/image.sh" check -- "${1}"; then
+            _choice="$(__select_opt "mfa" "common")"
+            if [ "${_choice}" = "mfa" ]; then
+                zbarimg -q --raw "${1}" | pass otp insert "${_target}.mfa"
+                return
+            fi
+        fi
+    fi
     pass generate "${_target}" 1>/dev/null 2>&1
     __handle_common --mode edit -- "${_target}"
 }
