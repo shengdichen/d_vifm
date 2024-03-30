@@ -1,11 +1,13 @@
+#!/usr/bin/env dash
+
 next_pane_is_zsh() {
     local cmd_next_pane
     cmd_next_pane=$(tmux display-message -p -t ":.+1" -F "#{pane_current_command}")
-    [[ "${cmd_next_pane}" == "zsh" ]]
+    [ "${cmd_next_pane}" = "zsh" ]
 }
 
 respawn_if_dead() {
-    if (($(tmux display-message -p -t "${1}" -F "#{pane_dead}") == "1")); then
+    if [ "$(tmux display-message -p -t "${1}" -F "#{pane_dead}")" -eq 1 ]; then
         tmux respawn-pane
     fi
 }
@@ -23,9 +25,9 @@ is_poetry_env() {
 }
 
 create_split() {
-    if ((${#} == 0)); then
+    if [ ${#} -eq 0 ]; then
         tmux split-window -v
-    elif ((${#} == 1)); then
+    elif [ ${#} -eq 1 ]; then
         if is_poetry_env "${1}"; then
             tmux split-window "poetry run ${SHELL}"
         else
@@ -56,9 +58,9 @@ split_file() {
     fi
 
     local flag
-    if [[ "${1}" == "open" ]]; then
+    if [ "${1}" = "open" ]; then
         flag="O"
-    elif [[ "${1}" == "diff" ]]; then
+    elif [ "${1}" = "diff" ]; then
         flag="d"
     fi
 
@@ -69,23 +71,19 @@ split_file() {
     create_split ":.${idx_target}" "${cmd}"
 }
 
-main() {
-    case "${1}" in
-        "shell")
-            split_shell "${2}"
-            ;;
-        "vifm")
-            split_vifm
-            ;;
-        "file")
-            split_file "${@:2}"
-            ;;
-        *)
-            echo "Huh, what about tmux?"
-            ;;
-    esac
-
-    unset -f next_pane_is_zsh cd_next_pane is_poetry_env create_split split_shell split_vifm split_file
-}
-main "${@}"
-unset -f main
+case "${1}" in
+    "shell")
+        shift
+        split_shell "${1}"
+        ;;
+    "vifm")
+        split_vifm
+        ;;
+    "file")
+        shift
+        split_file "${@}"
+        ;;
+    *)
+        echo "Huh, what about tmux?"
+        ;;
+esac
