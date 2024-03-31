@@ -8,6 +8,12 @@ colorscheme def
 set shortmess="LMp"
 
 " panes {{{
+" NOTE:
+"   1. run vifm-command
+"       a. one or both pane(s) =: winrun
+"       b. both panes =: windo
+"   2. run window-command =: wincmd
+
 " leave preview / view pane
 1wincmd z
 " make both panes equally sized
@@ -37,8 +43,6 @@ set sortnumbers
 "   1. +dir: directories before files
 "   2. +name: case-sensitive by raw name
 set sort="+dir,+name"
-
-set sortorder="ascending"
 " }}}
 
 " NOTE:
@@ -83,19 +87,6 @@ set relativenumber
 "   4. append |..|: display ellipsis instead of truncating longer filenames
 " apply this setting to all panes with |windo|
 windo set viewcolumns=-100%{name}..
-
-" winrun and windo {{{
-" execute command for pane(s), which is determined by type argument:
-" :winrun <target_panes> <command_to_run>
-"   ^ - top-left pane
-"   $ - bottom-right pane
-"   % - all panes
-"   . - current pane
-"   , - other pane
-
-" to execute command for each pane
-" :windo <command_to_run>
-" }}}
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
