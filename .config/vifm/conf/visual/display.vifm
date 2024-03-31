@@ -7,58 +7,26 @@ colorscheme def
 " p     use tilde shortening in view titles
 set shortmess="LMp"
 
-" what each pane does {{{
-" first things first, reset pane display by exiting all currently active
-" display modes
+" panes {{{
+" leave preview / view pane
 1wincmd z
-
-" resize both panes to equal sizes with the command:
-"   [range]wincmd {key_to_press}
-" which is equivalent to typing the pane manipulation keybinding:
-"   Ctrl-W <key_to_press>
+" make both panes equally sized
 1wincmd =
 
-" [OPTIONAL] switch to the top OR left pane
-"       1wincmd t
-
-" default 1: vertical split {{{
-" reset pane display by disabling TREE-mode {{{
-" the normal way would be to attempt to switch TREE-mode off for both panes
-"       windo tree
-"       windo tree!
-" since, unfortunately, running |tree!| will always toggle between ON and OFF
-" for just the current pane. However, running |tree| on a multi-level directory
-" could be very expensive, thus will use a clever way to break away from
-" TREE-mode as documented in the manual by backing off one level of directory
-" and then restoring the working directory for both panes
-windo cd ..
-windo cd -
-" }}}
-
-" make sure that the currently active pane is put on top
+" switch to the top OR left pane
+1wincmd t
+" enforce up/down layout (not left/right)
 1wincmd K
 
-" split vertically
-split
+" use the other pane for previewing, but hide it by default
+set quickview
+only
 
 set millerview
 " preview only directories (preview files in VIEW-mode instead)
 set milleroptions=
 \lsize:11,csize:17,rsize:10,
 \rpreview:directory
-
-" use the other pane for previewing, but hide it by default
-set quickview
-only
-" }}}
-
-" default 2: horizontal split {{{
-" to enable tree view by default, uncomment the next two lines
-"       1wincmd H
-"       vsplit
-"       windo tree
-"       set quickview
-" }}}
 " }}}
 
 " sort {{{
