@@ -1,5 +1,3 @@
-source "util.sh"
-
 function __spectrogram() {
     local suffix="png" outputs=()
     for f in "${@}"; do
