@@ -3,18 +3,14 @@ nnoremap rr
     \ <cr>
 
 " navigation {{{
-" unmap {{{
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
-
 nnoremap <pageup> <nop>
 nnoremap <pagedown> <nop>
-
 nnoremap <home> <nop>
 nnoremap <end> <nop>
-" }}}
 
 nnoremap J 4j
 nnoremap K 4k
@@ -26,7 +22,6 @@ mnoremap J 4j
 mnoremap K 4k
 " }}}
 
-" fzf {{{
 nnoremap ff
     \ :!fzf.sh
     \ <cr>
@@ -36,7 +31,6 @@ nnoremap fd
 nnoremap fg
     \ :execute 'goto' fnameescape(term("${VIFM}/scripts/fzf.sh file"))
     \ <cr>
-" }}}
 
 nnoremap af
     \ :tch<space>
@@ -46,7 +40,8 @@ nnoremap an
     \ :!wget<space>
 
 nnoremap <cr>
-    \ :!tmux.sh "file" "open" "%d" "%f"<cr>
+    \ :!tmux.sh file open "%d" "%f"
+    \ <cr>
 
 nnoremap H
     \ :write
@@ -55,7 +50,8 @@ nnoremap H
     \ <cr>
 
 nnoremap s
-    \ :!tmux.sh "shell" "%d"<cr>
+    \ :!tmux.sh shell "%d"
+    \ <cr>
 nnoremap S
     \ :shell!<cr>
 
