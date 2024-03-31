@@ -47,8 +47,9 @@ set milleroptions=
 \lsize:11,csize:17,rsize:10,
 \rpreview:directory
 
-" use the other pane for previewing
+" use the other pane for previewing, but hide it by default
 set quickview
+only
 " }}}
 
 " default 2: horizontal split {{{
