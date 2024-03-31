@@ -40,12 +40,6 @@ command! diffDirRecur
     \ <(cd %F:h && find . -type f | sort)
 " }}}
 
-command! tidal
-    \ for i in {1..2}; do tidal-dl -l "%a"; done
-
-command! spectrogram
-    \ handler.sh "spectrogram" %f
-
 command! passNew
     \ :!pass.sh new -- %f
 
