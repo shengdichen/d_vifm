@@ -66,11 +66,8 @@ set confirm=permdelete
 " do not include |../| as first entry unless at root (/)
 set dotdirs=rootparent
 
-" NOTE:
-"   1. exclude |s|: disable horizontal side borders on both left and right
-"   sides of the main viewing area
-"   2. exclude |p|: disable further vertical AND horizontal padding in VIEW_Mode
-set tuioptions="s"
+" remove all paddings
+set tuioptions=""
 
 " non-LS-view {{{
 " number of lines kept visible when scrolling

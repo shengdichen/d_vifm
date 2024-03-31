@@ -61,7 +61,7 @@ set laststatus
 "   %L: total number of items(s) in current view
 "   %d: formatted date of modification
 set statusline=
-\" [%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d "
+\"[%A | %u:%g] ~%s/%E %T %= #(%l/%L) @ %d"
 " }}}
 
 " vim: filetype=vifm foldmethod=marker
