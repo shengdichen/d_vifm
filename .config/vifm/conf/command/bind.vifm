@@ -49,19 +49,20 @@ nnoremap <cr>
     \ :!tmux.sh "file" "open" "%d" "%f"<cr>
 
 nnoremap H
-    \ :write
-    \ |
-    \ :!tmux.sh "vifm"
+    \ :write |
+    \ :!tmux.sh vifm
     \ <cr>
 
 nnoremap s
     \ :!tmux.sh "shell" "%d"<cr>
 nnoremap S
-    \ :shell!<cr>
+    \ :shell!
+    \ <cr>
 
 " tab {{{
 nnoremap <c-t>
-    \ :tabnew || tabname<space>
+    \ :tabnew |
+    \ :tabname<space>
 nnoremap <c-y>
     \ :tabname<space>
 
@@ -75,15 +76,15 @@ nnoremap <c-p>
 " preview
 nnoremap w
     \ :split |
-    \ :view! |
+    \ :view!
     \ <cr>
 
 " ls
 nnoremap W
     \ :split |
     \ :if &quickview |
-    \ view |
-    \ endif
+    \ :view |
+    \ :endif
     \ <cr>
 
 " disable full-screen previewing (open in handler instead)
