@@ -2,6 +2,13 @@ nnoremap rr
     \ :resource
     \ <cr>
 
+" :!<cursor-is-here> -- %f
+cnoremap :FF
+    \ !<space>--<space>%f<left><left><left><left><left><left>
+" :!<cursor-is-here> -- %f %F
+cnoremap :Ff
+    \ !<space>--<space>%f<space>%F<left><left><left><left><left><left><left><left><left>
+
 " navigation {{{
 nnoremap <up> <nop>
 nnoremap <down> <nop>
