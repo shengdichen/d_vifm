@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 __fzf() {
     fzf --reverse --height=73% 2>/dev/tty

@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 SOCKET_DIR="${HOME}/.local/state/mpv"
 

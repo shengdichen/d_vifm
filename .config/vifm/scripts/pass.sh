@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 PASS_DIR="password-store" # intentionally without leading dot
 CLIPBOARD_TIME=7          # in second(s)
