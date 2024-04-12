@@ -24,7 +24,7 @@
 " }}}
 
 filetype /^.*$/
-    \ main.sh -- %f,
+    \ main -- %f,
     \ main.sh --interactive -- %f,
     \ main.sh --generic -- %f,
 fileviewer /^.*$/
