@@ -2,18 +2,37 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 __fzf() {
     fzf --reverse --height=73% 2>/dev/tty
 }
 
 __to_line() {
+    local _vifm=""
+    if [ "${1}" = "vifm" ]; then
+        _vifm="yes"
+    fi
+
+    # a separator unlikely found in filenames
+    local _separator=":::"
     local _res _line _file
-    if _res="$(ag --line-numbers --noheading --hidden . | __fzf)"; then
-        _file="$(printf "%s" "${_res}" | cut -d ":" -f 1)"
-        _line="$(printf "%s" "${_res}" | cut -d ":" -f 2)"
-        nvim +"${_line}" -- "${_file}"
+    if _res="$(
+        rg \
+            --hidden \
+            --color never --no-heading --with-filename --line-number \
+            --field-match-separator "${_separator}" \
+            ".*" -- . |
+            cut -c 3- | # hide leading "./"
+            __fzf
+    )"; then
+        _file="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$1}")"
+        _line="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$2}")"
+        if [ "${_vifm}" ]; then
+            printf "%s\n" "${_file}" # vifm-plugin canNOT handle linenumber
+        else
+            nvim +"${_line}" -- "${_file}"
+        fi
     fi
 }
 
@@ -45,6 +64,10 @@ case "${1}" in
     "file")
         shift
         __to_path file
+        ;;
+    "vifm")
+        shift
+        __to_line vifm
         ;;
     *)
         __to_line

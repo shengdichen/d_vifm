@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 SOCKET_DIR="${HOME}/.local/state/mpv"
 
@@ -47,6 +47,7 @@ __play_socket() {
     local _counter=0
     __find_files "${@}" |
         while IFS="" read -r _file; do
+            _file="$(realpath "${_file}")"
             if [ "${_mode}" = "replace" ] && [ "${_counter}" -eq 0 ]; then
                 _counter="$((_counter + 1))"
                 __to_socket "loadfile \"${_file}\" replace" "${_socket}"

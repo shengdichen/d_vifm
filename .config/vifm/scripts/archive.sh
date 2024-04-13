@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 
-. "${SCRIPT_PATH}/general.sh"
+. "${SCRIPT_PATH}/util.sh"
 
 __check() {
     if [ "${1}" = "--" ]; then shift; fi

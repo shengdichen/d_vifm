@@ -1,0 +1,9 @@
+nnoremap ff
+    \ :execute 'goto' fnameescape(term("${VIFM}/scripts/fzf.sh vifm"))
+    \ <cr>
+
+nnoremap <cr>
+    \ :quit!
+    \ <cr>
+
+" vim: filetype=vifm

@@ -24,11 +24,11 @@
 " }}}
 
 filetype /^.*$/
-    \ common.sh -- %f,
-    \ common.sh --interactive -- %f,
-    \ common.sh --generic -- %f,
+    \ main.sh -- %f,
+    \ main.sh --interactive -- %f,
+    \ main.sh --generic -- %f,
 fileviewer /^.*$/
-    \ common.sh --preview -- %f,
+    \ main.sh --preview -- %f,
 
 " generic {{{
 " notably used for bulk-renaming
