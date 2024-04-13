@@ -47,7 +47,7 @@ nnoremap an
     \ :!wget<space>
 
 nnoremap <cr>
-    \ :!tmux.sh file open "%d" "%f"
+    \ :!tmux.sh file open "%f"
     \ <cr>
 
 nnoremap H

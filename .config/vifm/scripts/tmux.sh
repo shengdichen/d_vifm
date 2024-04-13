@@ -20,19 +20,11 @@ cd_next_pane() {
     tmux select-pane -Z -t ":.+1"
 }
 
-is_poetry_env() {
-    (cd "${1}" && poetry env info >/dev/null 2>&1)
-}
-
 create_split() {
     if [ ${#} -eq 0 ]; then
         tmux split-window -v
     elif [ ${#} -eq 1 ]; then
-        if is_poetry_env "${1}"; then
-            tmux split-window "poetry run ${SHELL}"
-        else
-            tmux split-window
-        fi
+        tmux split-window -v "${1}"
     else
         tmux split-window -v -t "${1}" "${2}"
     fi
@@ -43,7 +35,7 @@ split_shell() {
         cd_next_pane "${1}"
         respawn_if_dead ":."
     else
-        create_split "${1}"
+        create_split
     fi
 }
 
@@ -64,11 +56,7 @@ split_file() {
         flag="d"
     fi
 
-    local cmd="nvim -${flag} ${3}"
-    if is_poetry_env "${2}"; then
-        cmd="poetry run ${cmd}"
-    fi
-    create_split ":.${idx_target}" "${cmd}"
+    create_split ":.${idx_target}" "nvim -${flag} ${2}"
 }
 
 case "${1}" in
