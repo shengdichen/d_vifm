@@ -51,8 +51,8 @@ highlight Device
 " the inactive pane {{{
 " cursor-line
 highlight OtherLine
-    \ cterm=none ctermfg=white ctermbg=black
-    \ gui=none guifg=#97879f guibg=#000000
+    \ cterm=none ctermfg=black ctermbg=white
+    \ gui=none guifg=#000000 guibg=#97879f
 
 " generic files
 highlight OtherWin
