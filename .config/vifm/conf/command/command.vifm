@@ -9,36 +9,10 @@ set grepprg=
         \ %i %a %s
     \"
 
-" file-system {{{
 command! mkd
     \ :mkdir "%a"
 command! tch
     \ :touch "%a"
-command! linkSoft
-    \ cp -al %f ../%a
-
-command! size
-    \ nvim <(du -d0 -h -c %f)
-
-command! list
-    \ nvim <(ls -a -C1 %a | tail -n +3)
-
-command! findF
-    \ nvim -R <(find %f -maxdepth %a -type f)
-command! findD
-    \ nvim -R <(find %f -maxdepth %a -type d)
-
-command! diffFile
-    \ nvim -d %f %F
-command! diffDirFlat
-    \ nvim -d
-    \ <(ls -a -C1 %f:h | tail -n +3 | sort)
-    \ <(ls -a -C1 %F:h | tail -n +3 | sort)
-command! diffDirRecur
-    \ nvim -d
-    \ <(find %f:h -type f | sort)
-    \ <(cd %F:h && find . -type f | sort)
-" }}}
 
 command! passNew
     \ :!pass.sh new -- %f
