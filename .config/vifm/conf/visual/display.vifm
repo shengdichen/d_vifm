@@ -7,57 +7,32 @@ colorscheme def
 " p     use tilde shortening in view titles
 set shortmess="LMp"
 
-" what each pane does {{{
-" first things first, reset pane display by exiting all currently active
-" display modes
-1wincmd z
+" panes {{{
+" NOTE:
+"   1. run vifm-command
+"       a. one or both pane(s) =: winrun
+"       b. both panes =: windo
+"   2. run window-command =: wincmd
 
-" resize both panes to equal sizes with the command:
-"   [range]wincmd {key_to_press}
-" which is equivalent to typing the pane manipulation keybinding:
-"   Ctrl-W <key_to_press>
+" leave preview / view pane
+1wincmd z
+" make both panes equally sized
 1wincmd =
 
-" [OPTIONAL] switch to the top OR left pane
-"       1wincmd t
-
-" default 1: vertical split {{{
-" reset pane display by disabling TREE-mode {{{
-" the normal way would be to attempt to switch TREE-mode off for both panes
-"       windo tree
-"       windo tree!
-" since, unfortunately, running |tree!| will always toggle between ON and OFF
-" for just the current pane. However, running |tree| on a multi-level directory
-" could be very expensive, thus will use a clever way to break away from
-" TREE-mode as documented in the manual by backing off one level of directory
-" and then restoring the working directory for both panes
-windo cd ..
-windo cd -
-" }}}
-
-" make sure that the currently active pane is put on top
+" switch to the top OR left pane
+1wincmd t
+" enforce up/down layout (not left/right)
 1wincmd K
 
-" split vertically
-split
+" use the other pane for previewing, but hide it by default
+set quickview
+only
 
 set millerview
 " preview only directories (preview files in VIEW-mode instead)
 set milleroptions=
 \lsize:11,csize:17,rsize:10,
 \rpreview:directory
-
-" use the other pane for previewing
-set quickview
-" }}}
-
-" default 2: horizontal split {{{
-" to enable tree view by default, uncomment the next two lines
-"       1wincmd H
-"       vsplit
-"       windo tree
-"       set quickview
-" }}}
 " }}}
 
 " sort {{{
@@ -68,8 +43,6 @@ set sortnumbers
 "   1. +dir: directories before files
 "   2. +name: case-sensitive by raw name
 set sort="+dir,+name"
-
-set sortorder="ascending"
 " }}}
 
 " NOTE:
@@ -93,11 +66,8 @@ set confirm=permdelete
 " do not include |../| as first entry unless at root (/)
 set dotdirs=rootparent
 
-" NOTE:
-"   1. exclude |s|: disable horizontal side borders on both left and right
-"   sides of the main viewing area
-"   2. exclude |p|: disable further vertical AND horizontal padding in VIEW_Mode
-set tuioptions="s"
+" remove all paddings
+set tuioptions=""
 
 " non-LS-view {{{
 " number of lines kept visible when scrolling
@@ -114,19 +84,6 @@ set relativenumber
 "   4. append |..|: display ellipsis instead of truncating longer filenames
 " apply this setting to all panes with |windo|
 windo set viewcolumns=-100%{name}..
-
-" winrun and windo {{{
-" execute command for pane(s), which is determined by type argument:
-" :winrun <target_panes> <command_to_run>
-"   ^ - top-left pane
-"   $ - bottom-right pane
-"   % - all panes
-"   . - current pane
-"   , - other pane
-
-" to execute command for each pane
-" :windo <command_to_run>
-" }}}
 " }}}
 
 " vim: filetype=vifm foldmethod=marker

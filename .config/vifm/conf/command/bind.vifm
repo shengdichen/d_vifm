@@ -51,20 +51,21 @@ nnoremap <cr>
     \ <cr>
 
 nnoremap H
-    \ :write
-    \ |
-    \ :!tmux.sh "vifm"
+    \ :write |
+    \ :!tmux.sh vifm
     \ <cr>
 
 nnoremap s
     \ :!tmux.sh shell "%d"
     \ <cr>
 nnoremap S
-    \ :shell!<cr>
+    \ :shell!
+    \ <cr>
 
 " tab {{{
 nnoremap <c-t>
-    \ :tabnew || tabname<space>
+    \ :tabnew |
+    \ :tabname<space>
 nnoremap <c-y>
     \ :tabname<space>
 
@@ -74,17 +75,22 @@ nnoremap <c-p>
     \ gT
 " }}}
 
-" preview {{{
-" toggle previewing
+" other pane {{{
+" preview
 nnoremap w
-    \ :if &quickview == 0 |
-    \ execute "split | view!" |
-    \ else |
-    \ execute "view | only" |
-    \ endif
+    \ :split |
+    \ :view!
     \ <cr>
 
-" disable full-screen previewing: open in dedicated handler instead
+" ls
+nnoremap W
+    \ :split |
+    \ :if &quickview |
+    \ :view |
+    \ :endif
+    \ <cr>
+
+" disable full-screen previewing (open in handler instead)
 nnoremap e <nop>
 " }}}
 
