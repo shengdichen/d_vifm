@@ -1,10 +1,10 @@
-source $VIFM/conf/general/general.vifm
+source $VIFM/conf/command/command.vifm
+source $VIFM/conf/command/bind.vifm
+source $VIFM/conf/command/handler.vifm
 
 source $VIFM/conf/visual/display.vifm
 source $VIFM/conf/visual/line.vifm
 
-source $VIFM/conf/command/command.vifm
-source $VIFM/conf/command/bind.vifm
-source $VIFM/conf/command/handler.vifm
+source $VIFM/conf/misc/general.vifm
 
 " vim: filetype=vifm
