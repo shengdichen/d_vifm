@@ -30,16 +30,8 @@ filetype /^.*$/
 fileviewer /^.*$/
     \ main.sh --preview -- %f,
 
-" generic {{{
 " notably used for bulk-renaming
 set vicmd=vi
 set vixcmd=nvim
-
-filetype /^.*$/
-    \ {nvim.tmux}
-    \ tmux.sh "file" "open" "%f",
-    \ {diff.tmux}
-    \ tmux.sh "file" "diff" "%f",
-" }}}
 
 " vim: filetype=vifm foldmethod=marker
