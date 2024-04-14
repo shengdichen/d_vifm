@@ -84,6 +84,9 @@ char *const calc_paths_flat(FileQueue const *const fq) {
   return paths;
 }
 
+int FLAG_RUN_DEFAULT = 0;
+int FLAG_RUN_ASYNC = 1;
+
 void run_exec_paths(char const *const exec, FileQueue const *const fq) {
   char *const paths = calc_paths_flat(fq);
   size_t const len = strlen(exec) + strlen(paths) + 1;
@@ -102,7 +105,8 @@ void run_exec_paths(char const *const exec, FileQueue const *const fq) {
 }
 
 void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
-                          int const argc, char const *const *argv) {
+                          int const argc, char const *const *argv,
+                          int const flags_run) {
   int const len = argc + fq->count + 2;
   char const **args = malloc(len * sizeof(const char **));
   if (!args) {
@@ -124,7 +128,8 @@ void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
   if (pid == 0) {
     execvp(exec, (char *const *)args);
   } else {
-    waitpid(pid, &wstatus, WNOHANG);
+    int const flag_waitpid = (flags_run & FLAG_RUN_ASYNC) ? WNOHANG : 0;
+    waitpid(pid, &wstatus, flag_waitpid);
   }
 
   free(args);
@@ -172,6 +177,9 @@ void print_filequeue(FileQueue const *const fq) {
 }
 
 void nvim_filequeue(FileQueue const *const fq) {
-  if (fq->count)
-    run_exec_paths("nvim -O --", fq);
+  if (fq->count) {
+    char const *const argv[] = {"-O", "--"};
+    run_exec_paths_nohup("nvim", fq, sizeof argv / sizeof argv[0], argv,
+                         FLAG_RUN_DEFAULT);
+  }
 }

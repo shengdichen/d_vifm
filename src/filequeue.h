@@ -8,6 +8,9 @@ typedef struct {
   int count;
 } FileQueue;
 
+extern int FLAG_RUN_DEFAULT;
+extern int FLAG_RUN_ASYNC;
+
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);
 
@@ -18,7 +21,8 @@ int const match_suffixes_filequeue(FileQueue const *const fq,
 
 void run_exec_paths(char const *const exec, FileQueue const *const fq);
 void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
-                          int const argc, char const *const *argv);
+                          int const argc, char const *const *argv,
+                          int const FLAG_RUN);
 void run_script_paths(char const *const script, FileQueue const *const fq);
 void run_script(char const *const script, char const *const arg);
 
