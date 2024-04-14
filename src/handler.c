@@ -36,7 +36,7 @@ static int const handle_image(FileQueue const *const fq) {
   };
   if (match_suffixes_filequeue(fq, suffixes,
                                sizeof suffixes / sizeof suffixes[0])) {
-    run_script_paths("image.sh --", fq);
+    run_exec_paths_nohup("imv --", fq);
     return 1;
   }
   return 0;
@@ -46,7 +46,7 @@ static int const handle_pdf(FileQueue const *const fq) {
   char const *const suffixes[] = {"pdf"};
   if (match_suffixes_filequeue(fq, suffixes,
                                sizeof suffixes / sizeof suffixes[0])) {
-    run_script_paths("pdf.sh --", fq);
+    run_exec_paths_nohup("zathura --", fq);
     return 1;
   }
   return 0;

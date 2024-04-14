@@ -99,6 +99,22 @@ void run_exec_paths(char const *const exec, FileQueue const *const fq) {
   free(paths);
 }
 
+void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq) {
+  char *const paths = calc_paths_flat(fq);
+  size_t const len = strlen(exec) + strlen(paths) + 25;
+  char *cmd = malloc(len);
+  if (!cmd) {
+    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
+            len);
+    exit(EXIT_FAILURE);
+  }
+  snprintf(cmd, len, "nohup %s%s >/dev/null 2>&1 &", exec, paths);
+
+  system(cmd);
+  free(cmd);
+  free(paths);
+}
+
 void run_script_paths(char const *const script, FileQueue const *const fq) {
   static char script_path[PATH_MAX] = "";
   snprintf(script_path, PATH_MAX - 1, "%s%s%s", getenv("HOME"),
