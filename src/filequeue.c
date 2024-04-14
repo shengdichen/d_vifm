@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 FileQueue init_filequeue(int argc, char const **argv) {
   // pop first arg
@@ -99,20 +101,33 @@ void run_exec_paths(char const *const exec, FileQueue const *const fq) {
   free(paths);
 }
 
-void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq) {
-  char *const paths = calc_paths_flat(fq);
-  size_t const len = strlen(exec) + strlen(paths) + 25;
-  char *cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
+void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
+                          int const argc, char const *const *argv) {
+  int const len = argc + fq->count + 2;
+  char const **args = malloc(len * sizeof(const char **));
+  if (!args) {
+    fprintf(stderr, "filequeue/run> failed malloc [length %d]; exiting\n", len);
     exit(EXIT_FAILURE);
   }
-  snprintf(cmd, len, "nohup %s%s >/dev/null 2>&1 &", exec, paths);
+  char const **p = args;
+  *p++ = exec;
+  for (int i = 0; i < argc; ++i) {
+    *p++ = argv[i];
+  }
+  for (int i = 0; i < fq->count; ++i) {
+    *p++ = fq->paths[i];
+  }
+  *p = NULL;
 
-  system(cmd);
-  free(cmd);
-  free(paths);
+  int wstatus;
+  pid_t const pid = fork();
+  if (pid == 0) {
+    execvp(exec, (char *const *)args);
+  } else {
+    waitpid(pid, &wstatus, WNOHANG);
+  }
+
+  free(args);
 }
 
 void run_script_paths(char const *const script, FileQueue const *const fq) {
