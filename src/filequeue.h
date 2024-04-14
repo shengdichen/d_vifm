@@ -10,6 +10,7 @@ typedef struct {
 
 extern int FLAG_RUN_DEFAULT;
 extern int FLAG_RUN_ASYNC;
+extern int FLAG_RUN_NOWAYLAND;
 
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);

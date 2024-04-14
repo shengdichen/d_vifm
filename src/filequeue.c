@@ -1,5 +1,4 @@
-#include "filequeue.h"
-#include "util.h"
+#define _GNU_SOURCE // execvpe
 
 #include <linux/limits.h>
 #include <stddef.h>
@@ -8,6 +7,9 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include "filequeue.h"
+#include "util.h"
 
 FileQueue init_filequeue(int argc, char const **argv) {
   // pop first arg
@@ -86,6 +88,7 @@ char *const calc_paths_flat(FileQueue const *const fq) {
 
 int FLAG_RUN_DEFAULT = 0;
 int FLAG_RUN_ASYNC = 1;
+int FLAG_RUN_NOWAYLAND = 2;
 
 void run_exec_paths(char const *const exec, FileQueue const *const fq) {
   char *const paths = calc_paths_flat(fq);
@@ -126,7 +129,12 @@ void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
   int wstatus;
   pid_t const pid = fork();
   if (pid == 0) {
-    execvp(exec, (char *const *)args);
+    if (flags_run & FLAG_RUN_NOWAYLAND) {
+      char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
+      execvpe(exec, (char *const *)args, (char *const *)envs);
+    } else {
+      execvp(exec, (char *const *)args);
+    }
   } else {
     int const flag_waitpid = (flags_run & FLAG_RUN_ASYNC) ? WNOHANG : 0;
     waitpid(pid, &wstatus, flag_waitpid);
