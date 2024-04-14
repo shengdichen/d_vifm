@@ -17,8 +17,7 @@ FileQueue init_filequeue_length(size_t const len);
 
 char *const calc_paths_flat(FileQueue const *const fq);
 int const match_suffixes_filequeue(FileQueue const *const fq,
-                                   char const *const *suffixes,
-                                   size_t const n_suffixes);
+                                   char const *const *suffixes);
 
 void run_exec_paths(char const *const exec, FileQueue const *const fq);
 void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,

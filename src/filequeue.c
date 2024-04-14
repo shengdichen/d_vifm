@@ -170,10 +170,9 @@ void run_script(char const *const script, char const *const arg) {
 }
 
 int const match_suffixes_filequeue(FileQueue const *const fq,
-                                   char const *const *suffixes,
-                                   size_t const n_suffixes) {
+                                   char const *const *const suffixes) {
   for (int i = 0; i < fq->count; ++i) {
-    if (!match_suffixes(fq->paths[i], suffixes, n_suffixes))
+    if (!match_suffixes(fq->paths[i], suffixes))
       return 0;
   }
   return 1;

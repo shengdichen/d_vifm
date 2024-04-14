@@ -19,10 +19,10 @@ int const match_suffix(char const *const str, char const *const suffix) {
   return !strncmp(str + len_str - len_suffix, suffix_pad, len_suffix);
 }
 
-int const match_suffixes(char const *const str, char const *const *suffixes,
-                         size_t const n_suffixes) {
-  for (int i = 0; i < n_suffixes; i++) {
-    if (match_suffix(str, suffixes[i]))
+int const match_suffixes(char const *const str,
+                         char const *const *const suffixes) {
+  for (char const *const *p = suffixes; *p; ++p) {
+    if (match_suffix(str, *p))
       return 1;
   }
   return 0;

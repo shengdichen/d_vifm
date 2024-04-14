@@ -20,9 +20,10 @@ static int const handle_media(FileQueue const *const fq) {
       "wmv",  "dat",  "3gp", "ogv",  "m2v", "mts",
 
       "ra",   "rm",   "qt",  "divx", "asf", "asx",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
+  if (match_suffixes_filequeue(fq, suffixes)) {
     run_script_paths("media.sh --", fq);
     return 1;
   }
@@ -33,9 +34,10 @@ static int const handle_image(FileQueue const *const fq) {
   char const *const suffixes[] = {
       "png",  "svg",   "jpg",  "jpeg",  "bmp",  "webp", "gif",  "xpm",
       "heif", "heifs", "heic", "heics", "avci", "avcs", "avif",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
+  if (match_suffixes_filequeue(fq, suffixes)) {
     run_exec_paths_nohup("imv", fq, 0, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
@@ -43,9 +45,8 @@ static int const handle_image(FileQueue const *const fq) {
 }
 
 static int const handle_pdf(FileQueue const *const fq) {
-  char const *const suffixes[] = {"pdf"};
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
+  char const *const suffixes[] = {"pdf", NULL};
+  if (match_suffixes_filequeue(fq, suffixes)) {
     run_exec_paths_nohup("zathura", fq, 0, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
@@ -69,9 +70,10 @@ static int const handle_archive(FileQueue const *const fq) {
       "zip",     "apk",    "apkg",   "ear",     "jar", "war",
 
       "rar",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
+  if (match_suffixes_filequeue(fq, suffixes)) {
     run_script_paths("archive.sh --", fq);
     return 1;
   }
@@ -101,9 +103,10 @@ static int const handle_misc(FileQueue const *const fq) {
       "htm",  "html", "torrent",
 
       "o",    "out",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
+  if (match_suffixes_filequeue(fq, suffixes)) {
     run_script_paths("misc.sh --", fq);
     return 1;
   }
