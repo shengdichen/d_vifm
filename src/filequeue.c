@@ -150,6 +150,25 @@ void execute_paths(char const *const target, FileQueue const *const fq,
   free(args);
 }
 
+void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
+  char *const paths = calc_paths_flat(fq);
+  size_t const len = strlen(exec) + strlen(paths) + 1;
+  char *const cmd = malloc(len);
+  if (!cmd) {
+    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
+            len);
+    exit(EXIT_FAILURE);
+  }
+  snprintf(cmd, len, "%s%s", exec, paths);
+  int FLAG_RUN_PATH_VIFM = 4;
+  char PATH_SCRIPT_VIFM[PATH_MAX];
+
+  // printf("exec> %s [cmd-length: %lu]\n", cmd, strlen(cmd));
+  system(cmd);
+  free(cmd);
+  free(paths);
+}
+
 void execute(char const *const target, int const argc, char const *const *argv,
              int const flags_run) {
   int const len = argc + 2;

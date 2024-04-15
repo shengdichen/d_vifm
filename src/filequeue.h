@@ -26,6 +26,7 @@ int const match_suffixes_filequeue(FileQueue const *const fq,
 
 void execute_paths(char const *const target, FileQueue const *const fq,
                    int const argc, char const *const *argv, int const FLAG_RUN);
+void execute_paths_shell(char const *const exec, FileQueue const *const fq);
 void execute(char const *const target, int const argc, char const *const *argv,
              int const flags_run);
 
