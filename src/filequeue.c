@@ -90,42 +90,16 @@ int FLAG_RUN_DEFAULT = 0;
 int FLAG_RUN_ASYNC = 1;
 int FLAG_RUN_NOWAYLAND = 2;
 
-void run_exec_paths(char const *const exec, FileQueue const *const fq) {
-  char *const paths = calc_paths_flat(fq);
-  size_t const len = strlen(exec) + strlen(paths) + 1;
-  char *const cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
-    exit(EXIT_FAILURE);
-  }
-  snprintf(cmd, len, "%s%s", exec, paths);
+int FLAG_RUN_PATH_VIFM = 4;
+char PATH_SCRIPT_VIFM[PATH_MAX];
 
-  // printf("exec> %s [cmd-length: %lu]\n", cmd, strlen(cmd));
-  system(cmd);
-  free(cmd);
-  free(paths);
+void _init_path_script_vifm() {
+  snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", getenv("HOME"),
+           "/.config/vifm/scripts/");
 }
 
-void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
-                          int const argc, char const *const *argv,
-                          int const flags_run) {
-  int const len = argc + fq->count + 2;
-  char const **args = malloc(len * sizeof(const char **));
-  if (!args) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %d]; exiting\n", len);
-    exit(EXIT_FAILURE);
-  }
-  char const **p = args;
-  *p++ = exec;
-  for (int i = 0; i < argc; ++i) {
-    *p++ = argv[i];
-  }
-  for (int i = 0; i < fq->count; ++i) {
-    *p++ = fq->paths[i];
-  }
-  *p = NULL;
-
+static void _run(char const *const exec, char const *const *const args,
+                 int const flags_run) {
   int wstatus;
   pid_t const pid = fork();
   if (pid == 0) {
@@ -139,34 +113,63 @@ void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq,
     int const flag_waitpid = (flags_run & FLAG_RUN_ASYNC) ? WNOHANG : 0;
     waitpid(pid, &wstatus, flag_waitpid);
   }
+}
 
+void run_exec_paths(char const *const exec, FileQueue const *const fq,
+                    int const argc, char const *const *argv,
+                    int const flags_run) {
+  int const len = argc + fq->count + 2;
+  char const **args = malloc(len * sizeof(const char **));
+  if (!args) {
+    fprintf(stderr, "filequeue/run> failed malloc [length %d]; exiting\n", len);
+    exit(EXIT_FAILURE);
+  }
+
+  char const **p = args;
+  if (flags_run & FLAG_RUN_PATH_VIFM) {
+    char cmd[PATH_MAX];
+    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, exec);
+    *p++ = cmd;
+  } else {
+    *p++ = exec;
+  }
+
+  for (int i = 0; i < argc; ++i) {
+    *p++ = argv[i];
+  }
+  for (int i = 0; i < fq->count; ++i) {
+    *p++ = fq->paths[i];
+  }
+  *p = NULL;
+
+  _run(exec, args, flags_run);
   free(args);
 }
 
-void run_script_paths(char const *const script, FileQueue const *const fq) {
-  static char script_path[PATH_MAX] = "";
-  snprintf(script_path, PATH_MAX - 1, "%s%s%s", getenv("HOME"),
-           "/.config/vifm/scripts/", script);
-
-  run_exec_paths(script_path, fq);
-}
-
-void run_script(char const *const script, char const *const arg) {
-  static char script_path[PATH_MAX] = "";
-  snprintf(script_path, PATH_MAX - 1, "%s%s%s", getenv("HOME"),
-           "/.config/vifm/scripts/", script);
-
-  size_t const len = strlen(script_path) + strlen(arg) + 2; // extra <space>
-  char *const cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
+void run_exec(char const *const exec, int const argc, char const *const *argv,
+              int const flags_run) {
+  int const len = argc + 2;
+  char const **args = malloc(len * sizeof(const char **));
+  if (!args) {
+    fprintf(stderr, "filequeue/run> failed malloc [length %d]; exiting\n", len);
     exit(EXIT_FAILURE);
   }
-  snprintf(cmd, len, "%s %s", script_path, arg); // behold extra <space>
 
-  system(cmd);
-  free(cmd);
+  char const **p = args;
+  if (flags_run & FLAG_RUN_PATH_VIFM) {
+    char cmd[PATH_MAX];
+    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, exec);
+    *p++ = cmd;
+  } else {
+    *p++ = exec;
+  }
+  for (int i = 0; i < argc; ++i) {
+    *p++ = argv[i];
+  }
+  *p = NULL;
+
+  _run(exec, args, flags_run);
+  free(args);
 }
 
 int const match_suffixes_filequeue(FileQueue const *const fq,
@@ -186,7 +189,7 @@ void print_filequeue(FileQueue const *const fq) {
 void nvim_filequeue(FileQueue const *const fq) {
   if (fq->count) {
     char const *const argv[] = {"-O", "--"};
-    run_exec_paths_nohup("nvim", fq, sizeof argv / sizeof argv[0], argv,
-                         FLAG_RUN_DEFAULT);
+    run_exec_paths("nvim", fq, sizeof argv / sizeof argv[0], argv,
+                   FLAG_RUN_DEFAULT);
   }
 }

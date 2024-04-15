@@ -1,11 +1,11 @@
-#include "handler.h"
-#include "filequeue.h"
-#include "util.h"
-
 #include <linux/limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "filequeue.h"
+#include "handler.h"
+#include "util.h"
 
 static int const handle_media(FileQueue const *const fq) {
   char const *const suffixes[] = {
@@ -24,7 +24,7 @@ static int const handle_media(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    run_script_paths("media.sh --", fq);
+    run_exec_paths("media.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -38,7 +38,7 @@ static int const handle_image(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    run_exec_paths_nohup("imv", fq, 0, NULL, FLAG_RUN_ASYNC);
+    run_exec_paths("imv", fq, 0, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
@@ -47,7 +47,7 @@ static int const handle_image(FileQueue const *const fq) {
 static int const handle_pdf(FileQueue const *const fq) {
   char const *const suffixes[] = {"pdf", NULL};
   if (match_suffixes_filequeue(fq, suffixes)) {
-    run_exec_paths_nohup("zathura", fq, 0, NULL, FLAG_RUN_ASYNC);
+    run_exec_paths("zathura", fq, 0, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
@@ -74,7 +74,7 @@ static int const handle_archive(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    run_script_paths("archive.sh --", fq);
+    run_exec_paths("archive.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -85,7 +85,9 @@ static int const handle_pass(FileQueue const *const fq) {
   realpath(fq->paths[0], path_abs);
   if (strstr(path_abs, "/.password-store/")) {
     if (match_suffix(path_abs, "gpg")) {
-      run_script("pass.sh --", path_abs);
+      char const *const argv[] = {"--", path_abs};
+      run_exec("pass.sh", sizeof argv / sizeof argv[0], argv,
+               FLAG_RUN_PATH_VIFM);
       return 1;
     }
   }
@@ -107,7 +109,7 @@ static int const handle_misc(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    run_script_paths("misc.sh --", fq);
+    run_exec_paths("misc.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -135,6 +137,7 @@ static void handle_each(FileQueue *const fq) {
 }
 
 void handle(int const argc, char const **argv) {
+  _init_path_script_vifm();
   FileQueue fq = init_filequeue(argc, argv);
 
   if (!handle_all(&fq))
