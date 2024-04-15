@@ -7,7 +7,7 @@
 
 char HOME[PATH_MAX];
 char PATH_SCRIPT_VIFM[PATH_MAX];
-void _init_util() {
+void _init_util(void) {
   snprintf(HOME, PATH_MAX - 1, "%s", getenv("HOME"));
   snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", HOME,
            "/.config/vifm/scripts/");

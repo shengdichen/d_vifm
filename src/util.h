@@ -6,7 +6,7 @@
 
 extern char HOME[PATH_MAX];
 extern char PATH_SCRIPT_VIFM[PATH_MAX];
-void _init_util();
+void _init_util(void);
 
 void *_malloc(char const *msg, size_t len, size_t size_one);
 

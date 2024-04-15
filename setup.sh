@@ -6,7 +6,8 @@ cd "${SCRIPT_PATH}" || exit 3
 __build() {
     local _out="./.config/vifm/scripts/main" _src="./src"
     if ! clang \
-        -O2 -Wall \
+        -Wall -pedantic \
+        -O2 \
         -o "${_out}" \
         -- "${_src}/filequeue.c" "${_src}/handler.c" "${_src}/util.c" "${_src}/main.c"; then
         printf "\n\nbuild> failed, exiting\n"
