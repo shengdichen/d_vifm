@@ -40,7 +40,7 @@ FileQueue init_filequeue(int argc, char const **argv) {
 
 FileQueue init_filequeue_length(size_t const len) {
   FileQueue fq = {
-      .paths = _malloc("filequeue/init", len, sizeof(const char **)),
+      .paths = _malloc("filequeue/init", len, sizeof(const char *)),
       .count = 0,
   };
   return fq;
@@ -146,7 +146,7 @@ static char const **_append_argv(char const **p,
 void execute_paths(char const *const target, FileQueue const *const fq,
                    char const *const *const argv, int const options) {
   size_t const len = ARGC_MAX + fq->count + 2;
-  char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
+  char const **args = _malloc("filequeue/execute", len, sizeof(const char *));
 
   char const **p = args;
   p = _append_target(p, target, options);
@@ -163,7 +163,7 @@ void execute_paths(char const *const target, FileQueue const *const fq,
 void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
   char *const paths = calc_paths_flat(fq);
   size_t const len = strlen(exec) + strlen(paths) + 1;
-  char *const cmd = _malloc("filequeue/execute", len, sizeof(const char *));
+  char *const cmd = _malloc("filequeue/execute", len, sizeof(const char));
   snprintf(cmd, len, "%s%s", exec, paths);
 
   system(cmd);
@@ -173,8 +173,8 @@ void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
 
 void execute(char const *const target, char const *const *const argv,
              int const options) {
-  int const len = ARGC_MAX + 2;
-  char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
+  size_t const len = ARGC_MAX + 2;
+  char const **args = _malloc("filequeue/execute", len, sizeof(const char *));
 
   char const **p = args;
   p = _append_target(p, target, options);
