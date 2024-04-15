@@ -102,6 +102,10 @@ static void _run(char const *const exec, char const *const *const args,
                  int const flags_run) {
   int wstatus;
   pid_t const pid = fork();
+  if (pid < 0) {
+    fprintf(stderr, "filequeue/run> failed fork; exiting\n");
+  }
+
   if (pid == 0) {
     if (flags_run & FLAG_RUN_NOWAYLAND) {
       char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
