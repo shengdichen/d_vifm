@@ -129,17 +129,34 @@ static char const **_append_target(char const **p, char const *const target,
   return p;
 }
 
+size_t _argc(char const *const *argv) {
+  if (!argv)
+    return 0;
+
+  size_t argc = 0;
+  while (*argv++)
+    argc++;
+  return argc;
+}
+
+static char const **_append_argv(char const **p,
+                                 char const *const *const argv) {
+  if (argv) {
+    for (int i = 0; argv[i]; ++i) {
+      *p++ = argv[i];
+    }
+  }
+  return p;
+}
+
 void execute_paths(char const *const target, FileQueue const *const fq,
-                   size_t const argc, char const *const *argv,
-                   int const options) {
-  size_t const len = argc + fq->count + 2;
+                   char const *const *argv, int const options) {
+  size_t const len = ARGC_MAX + fq->count + 2;
   char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
 
   char const **p = args;
   p = _append_target(p, target, options);
-  for (int i = 0; i < argc; ++i) {
-    *p++ = argv[i];
-  }
+  p = _append_argv(p, argv);
   for (int i = 0; i < fq->count; ++i) {
     *p++ = fq->paths[i];
   }
@@ -160,16 +177,14 @@ void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
   free(paths);
 }
 
-void execute(char const *const target, size_t const argc,
-             char const *const *argv, int const options) {
-  int const len = argc + 2;
+void execute(char const *const target, char const *const *argv,
+             int const options) {
+  int const len = ARGC_MAX + 2;
   char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
 
   char const **p = args;
   p = _append_target(p, target, options);
-  for (int i = 0; i < argc; ++i) {
-    *p++ = argv[i];
-  }
+  p = _append_argv(p, argv);
   *p = NULL;
 
   _execute(target, args, options);
@@ -192,8 +207,7 @@ void print_filequeue(FileQueue const *const fq) {
 
 void nvim_filequeue(FileQueue const *const fq) {
   if (fq->count) {
-    char const *const argv[] = {"-O", "--"};
-    execute_paths("nvim", fq, sizeof argv / sizeof argv[0], argv,
-                  FLAG_RUN_DEFAULT);
+    char const *const argv[] = {"-O", "--", NULL};
+    execute_paths("nvim", fq, argv, FLAG_RUN_DEFAULT);
   }
 }

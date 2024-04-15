@@ -24,7 +24,7 @@ static int const handle_media(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("mpv", fq, 0, NULL, FLAG_RUN_ASYNC);
+    execute_paths("mpv", fq, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
@@ -38,7 +38,7 @@ static int const handle_image(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("imv", fq, 0, NULL, FLAG_RUN_ASYNC);
+    execute_paths("imv", fq, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
@@ -47,7 +47,7 @@ static int const handle_image(FileQueue const *const fq) {
 static int const handle_pdf(FileQueue const *const fq) {
   char const *const suffixes[] = {"pdf", NULL};
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("zathura", fq, 0, NULL, FLAG_RUN_ASYNC);
+    execute_paths("zathura", fq, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
@@ -74,7 +74,7 @@ static int const handle_archive(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("archive.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
+    execute_paths("archive.sh", fq, NULL, FLAG_RUN_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -85,9 +85,8 @@ static int const handle_pass(FileQueue const *const fq) {
   realpath(fq->paths[0], path_abs);
   if (strstr(path_abs, "/.password-store/")) {
     if (match_suffix(path_abs, "gpg")) {
-      char const *const argv[] = {"--", path_abs};
-      execute("pass.sh", sizeof argv / sizeof argv[0], argv,
-              FLAG_RUN_PATH_VIFM);
+      char const *const argv[] = {"--", path_abs, NULL};
+      execute("pass.sh", argv, FLAG_RUN_PATH_VIFM);
       return 1;
     }
   }
@@ -109,7 +108,7 @@ static int const handle_misc(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("misc.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
+    execute_paths("misc.sh", fq, NULL, FLAG_RUN_PATH_VIFM);
     return 1;
   }
   return 0;
