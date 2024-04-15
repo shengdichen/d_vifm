@@ -98,8 +98,8 @@ void _init_path_script_vifm() {
            "/.config/vifm/scripts/");
 }
 
-static void _run(char const *const exec, char const *const *const args,
-                 int const flags_run) {
+static void _execute(char const *const exec, char const *const *const args,
+                     int const flags_run) {
   int wstatus;
   pid_t const pid = fork();
   if (pid < 0) {
@@ -119,9 +119,9 @@ static void _run(char const *const exec, char const *const *const args,
   }
 }
 
-void run_exec_paths(char const *const exec, FileQueue const *const fq,
-                    int const argc, char const *const *argv,
-                    int const flags_run) {
+void execute_paths(char const *const target, FileQueue const *const fq,
+                   int const argc, char const *const *argv,
+                   int const flags_run) {
   int const len = argc + fq->count + 2;
   char const **args = malloc(len * sizeof(const char **));
   if (!args) {
@@ -132,10 +132,10 @@ void run_exec_paths(char const *const exec, FileQueue const *const fq,
   char const **p = args;
   if (flags_run & FLAG_RUN_PATH_VIFM) {
     char cmd[PATH_MAX];
-    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, exec);
+    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, target);
     *p++ = cmd;
   } else {
-    *p++ = exec;
+    *p++ = target;
   }
 
   for (int i = 0; i < argc; ++i) {
@@ -146,12 +146,12 @@ void run_exec_paths(char const *const exec, FileQueue const *const fq,
   }
   *p = NULL;
 
-  _run(exec, args, flags_run);
+  _execute(target, args, flags_run);
   free(args);
 }
 
-void run_exec(char const *const exec, int const argc, char const *const *argv,
-              int const flags_run) {
+void execute(char const *const target, int const argc, char const *const *argv,
+             int const flags_run) {
   int const len = argc + 2;
   char const **args = malloc(len * sizeof(const char **));
   if (!args) {
@@ -162,17 +162,17 @@ void run_exec(char const *const exec, int const argc, char const *const *argv,
   char const **p = args;
   if (flags_run & FLAG_RUN_PATH_VIFM) {
     char cmd[PATH_MAX];
-    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, exec);
+    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, target);
     *p++ = cmd;
   } else {
-    *p++ = exec;
+    *p++ = target;
   }
   for (int i = 0; i < argc; ++i) {
     *p++ = argv[i];
   }
   *p = NULL;
 
-  _run(exec, args, flags_run);
+  _execute(target, args, flags_run);
   free(args);
 }
 
@@ -193,7 +193,7 @@ void print_filequeue(FileQueue const *const fq) {
 void nvim_filequeue(FileQueue const *const fq) {
   if (fq->count) {
     char const *const argv[] = {"-O", "--"};
-    run_exec_paths("nvim", fq, sizeof argv / sizeof argv[0], argv,
-                   FLAG_RUN_DEFAULT);
+    execute_paths("nvim", fq, sizeof argv / sizeof argv[0], argv,
+                  FLAG_RUN_DEFAULT);
   }
 }
