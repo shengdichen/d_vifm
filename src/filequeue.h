@@ -6,7 +6,7 @@
 
 typedef struct {
   char const **paths;
-  int count;
+  size_t count;
 } FileQueue;
 
 extern int FLAG_RUN_DEFAULT;
@@ -25,10 +25,11 @@ int const match_suffixes_filequeue(FileQueue const *const fq,
                                    char const *const *suffixes);
 
 void execute_paths(char const *const target, FileQueue const *const fq,
-                   int const argc, char const *const *argv, int const FLAG_RUN);
+                   size_t const argc, char const *const *argv,
+                   int const options);
 void execute_paths_shell(char const *const exec, FileQueue const *const fq);
-void execute(char const *const target, int const argc, char const *const *argv,
-             int const flags_run);
+void execute(char const *const target, size_t const argc,
+             char const *const *argv, int const options);
 
 void print_filequeue(FileQueue const *const fq);
 void nvim_filequeue(FileQueue const *const fq);

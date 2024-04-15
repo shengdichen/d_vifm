@@ -24,7 +24,7 @@ static int const handle_media(FileQueue const *const fq) {
       NULL,
   };
   if (match_suffixes_filequeue(fq, suffixes)) {
-    execute_paths("media.sh", fq, 0, NULL, FLAG_RUN_PATH_VIFM);
+    execute_paths("mpv", fq, 0, NULL, FLAG_RUN_ASYNC);
     return 1;
   }
   return 0;
