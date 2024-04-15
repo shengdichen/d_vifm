@@ -46,7 +46,7 @@ FileQueue init_filequeue_length(size_t const len) {
   return fq;
 }
 
-char *const calc_paths_flat(FileQueue const *const fq) {
+char *calc_paths_flat(FileQueue const *const fq) {
   size_t len = 1; // reservation for terminating zero
   for (int i = 0; i < fq->count; ++i) {
     len += 3; // 1 (leading) space & 2 surrounding (single-)quotes
@@ -57,7 +57,7 @@ char *const calc_paths_flat(FileQueue const *const fq) {
     }
   }
 
-  char *paths = _malloc("filequeue/paths-flat", len, sizeof(char));
+  char *const paths = _malloc("filequeue/paths-flat", len, sizeof(char));
   char *p = paths;
   char const *fpath = NULL;
   for (int i = 0; i < fq->count; ++i) {
@@ -150,7 +150,7 @@ static char const **_append_argv(char const **p,
 }
 
 void execute_paths(char const *const target, FileQueue const *const fq,
-                   char const *const *argv, int const options) {
+                   char const *const *const argv, int const options) {
   size_t const len = ARGC_MAX + fq->count + 2;
   char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
 
@@ -177,7 +177,7 @@ void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
   free(paths);
 }
 
-void execute(char const *const target, char const *const *argv,
+void execute(char const *const target, char const *const *const argv,
              int const options) {
   int const len = ARGC_MAX + 2;
   char const **args = _malloc("filequeue/execute", len, sizeof(const char **));
@@ -191,8 +191,8 @@ void execute(char const *const target, char const *const *argv,
   free(args);
 }
 
-int const match_suffixes_filequeue(FileQueue const *const fq,
-                                   char const *const *const suffixes) {
+int match_suffixes_filequeue(FileQueue const *const fq,
+                             char const *const *const suffixes) {
   for (int i = 0; i < fq->count; ++i) {
     if (!match_suffixes(fq->paths[i], suffixes))
       return 0;

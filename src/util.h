@@ -3,8 +3,7 @@
 
 #include <stddef.h>
 
-int const match_suffix(char const *const str, char const *const suffix);
-int const match_suffixes(char const *const str,
-                         char const *const *const suffixes);
+int match_suffix(char const *str, char const *suffix);
+int match_suffixes(char const *str, char const *const *suffixes);
 
 #endif // !UTIL_H

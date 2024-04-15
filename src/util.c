@@ -4,7 +4,7 @@
 
 static int const LEN_SUFFIX_MAX = 16;
 
-int const match_suffix(char const *const str, char const *const suffix) {
+int match_suffix(char const *const str, char const *const suffix) {
   if (!str || !suffix)
     return 0;
 
@@ -19,7 +19,7 @@ int const match_suffix(char const *const str, char const *const suffix) {
   return !strncmp(str + len_str - len_suffix, suffix_pad, len_suffix);
 }
 
-int const match_suffixes(char const *const str,
+int match_suffixes(char const *const str,
                          char const *const *const suffixes) {
   for (char const *const *p = suffixes; *p; ++p) {
     if (match_suffix(str, *p))

@@ -22,18 +22,16 @@ void _init_path_script_vifm();
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);
 
-char *const calc_paths_flat(FileQueue const *const fq);
-int const match_suffixes_filequeue(FileQueue const *const fq,
-                                   char const *const *suffixes);
+char *calc_paths_flat(FileQueue const *fq);
+int match_suffixes_filequeue(FileQueue const *fq, char const *const *suffixes);
 
 size_t _argc(char const *const *argv);
-void execute_paths(char const *const target, FileQueue const *const fq,
-                   char const *const *argv, int const options);
-void execute_paths_shell(char const *const exec, FileQueue const *const fq);
-void execute(char const *const target, char const *const *argv,
-             int const options);
+void execute_paths(char const *target, FileQueue const *fq,
+                   char const *const *argv, int options);
+void execute_paths_shell(char const *exec, FileQueue const *fq);
+void execute(char const *target, char const *const *argv, int options);
 
-void print_filequeue(FileQueue const *const fq);
-void nvim_filequeue(FileQueue const *const fq);
+void print_filequeue(FileQueue const *fq);
+void nvim_filequeue(FileQueue const *fq);
 
 #endif // !FILEQUEUE_H
