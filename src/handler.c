@@ -136,7 +136,7 @@ static void handle_each(FileQueue *const fq) {
 }
 
 void handle(int const argc, char const **argv) {
-  _init_path_script_vifm();
+  _init_util();
   FileQueue fq = init_filequeue(argc, argv);
 
   if (!handle_all(&fq))

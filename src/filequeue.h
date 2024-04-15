@@ -16,8 +16,6 @@ typedef struct {
 #define FLAG_RUN_NOWAYLAND 2
 
 #define FLAG_RUN_PATH_VIFM 4
-extern char PATH_SCRIPT_VIFM[PATH_MAX];
-void _init_path_script_vifm();
 
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);

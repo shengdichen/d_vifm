@@ -11,16 +11,6 @@
 #include "filequeue.h"
 #include "util.h"
 
-static void *_malloc(char const *const msg, size_t const len,
-                     size_t const size_one) {
-  void *p = malloc(len * size_one);
-  if (!p) {
-    fprintf(stderr, "%s> failed malloc [length %lu]; exiting\n", msg, len);
-    exit(EXIT_FAILURE);
-  }
-  return p;
-}
-
 FileQueue init_filequeue(int argc, char const **argv) {
   // pop first arg
   --argc;
@@ -82,12 +72,6 @@ char *calc_paths_flat(FileQueue const *const fq) {
 
   *p = '\0';
   return paths;
-}
-
-char PATH_SCRIPT_VIFM[PATH_MAX];
-void _init_path_script_vifm() {
-  snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", getenv("HOME"),
-           "/.config/vifm/scripts/");
 }
 
 static void _execute(char const *const exec, char const *const *const args,
