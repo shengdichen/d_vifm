@@ -84,13 +84,7 @@ char *calc_paths_flat(FileQueue const *const fq) {
   return paths;
 }
 
-int FLAG_RUN_DEFAULT = 0;
-int FLAG_RUN_ASYNC = 1;
-int FLAG_RUN_NOWAYLAND = 2;
-
-int FLAG_RUN_PATH_VIFM = 4;
 char PATH_SCRIPT_VIFM[PATH_MAX];
-
 void _init_path_script_vifm() {
   snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", getenv("HOME"),
            "/.config/vifm/scripts/");

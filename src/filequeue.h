@@ -9,15 +9,15 @@ typedef struct {
   size_t count;
 } FileQueue;
 
-extern int FLAG_RUN_DEFAULT;
-extern int FLAG_RUN_ASYNC;
-extern int FLAG_RUN_NOWAYLAND;
+#define ARGC_MAX 256
 
-extern int FLAG_RUN_PATH_VIFM;
+#define FLAG_RUN_DEFAULT 0
+#define FLAG_RUN_ASYNC 1
+#define FLAG_RUN_NOWAYLAND 2
+
+#define FLAG_RUN_PATH_VIFM 4
 extern char PATH_SCRIPT_VIFM[PATH_MAX];
 void _init_path_script_vifm();
-
-#define ARGC_MAX 256
 
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);
