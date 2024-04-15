@@ -16,7 +16,7 @@ void _init_util(void) {
 void *_malloc(char const *const msg, size_t const len, size_t const size_one) {
   void *p = malloc(len * size_one);
   if (!p) {
-    fprintf(stderr, "%s> failed malloc [length %lu]; exiting\n", msg, len);
+    fprintf(stderr, "%s> failed malloc [length %zu]; exiting\n", msg, len);
     exit(EXIT_FAILURE);
   }
   return p;
