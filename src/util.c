@@ -30,6 +30,13 @@ void *_malloc(char const *const msg, size_t const len, size_t const size_one) {
   return p;
 }
 
+void _print_file(FILE *const f) {
+  int c;
+  while ((c = fgetc(f)) != EOF) {
+    putchar(c);
+  }
+}
+
 int match_suffix(char const *const str, char const *const suffix) {
   if (!str || !suffix)
     return 0;
