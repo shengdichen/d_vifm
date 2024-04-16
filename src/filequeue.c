@@ -1,11 +1,16 @@
-#include "filequeue.h"
-#include "util.h"
+#define _GNU_SOURCE // execvpe
 
+#include <fcntl.h>
 #include <linux/limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include "filequeue.h"
+#include "util.h"
 
 FileQueue init_filequeue(int argc, char const **argv) {
   // pop first arg
@@ -26,18 +31,13 @@ FileQueue init_filequeue(int argc, char const **argv) {
 
 FileQueue init_filequeue_length(size_t const len) {
   FileQueue fq = {
-      .paths = malloc(len * sizeof(const char **)),
+      .paths = _malloc("filequeue/init", len, sizeof(const char *)),
       .count = 0,
   };
-  if (!fq.paths) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
-    exit(EXIT_FAILURE);
-  }
   return fq;
 }
 
-char *const calc_paths_flat(FileQueue const *const fq) {
+char *calc_paths_flat(FileQueue const *const fq) {
   size_t len = 1; // reservation for terminating zero
   for (int i = 0; i < fq->count; ++i) {
     len += 3; // 1 (leading) space & 2 surrounding (single-)quotes
@@ -47,15 +47,8 @@ char *const calc_paths_flat(FileQueue const *const fq) {
         len += 3; // 3 extra characters per single-quote (see below)
     }
   }
-  char *paths = malloc(len);
-  if (!paths) {
-    fprintf(stderr,
-            "filequeue/paths-flat> failed malloc [length %lu; files %d]; "
-            "exiting\n",
-            len, fq->count);
-    exit(EXIT_FAILURE);
-  }
 
+  char *const paths = _malloc("filequeue/paths-flat", len, sizeof(char));
   char *p = paths;
   char const *fpath = NULL;
   for (int i = 0; i < fq->count; ++i) {
@@ -82,70 +75,130 @@ char *const calc_paths_flat(FileQueue const *const fq) {
   return paths;
 }
 
-void run_exec_paths(char const *const exec, FileQueue const *const fq) {
+static void _ignore_output(void) {
+  int fd = open("/dev/null", O_WRONLY);
+  dup2(fd, STDOUT_FILENO);
+  dup2(fd, STDERR_FILENO);
+  close(fd);
+}
+
+static void _log_output(void) {
+  FILE *f_stdout = fopen(PATH_EXEC_STDOUT, "a");
+  FILE *f_stderr = fopen(PATH_EXEC_STDERR, "a");
+
+  dup2(fileno(f_stdout), STDOUT_FILENO);
+  dup2(fileno(f_stderr), STDERR_FILENO);
+
+  fclose(f_stdout);
+  fclose(f_stderr);
+}
+
+static void _execute(char const *const exec, char const *const *const args,
+                     int const options) {
+  int wstatus;
+  pid_t const pid = fork();
+  if (pid < 0) {
+    fprintf(stderr, "filequeue/run> failed fork; exiting\n");
+  }
+
+  if (pid == 0) {
+    if (options & EXEC_ASYNC) {
+      if (options & EXEC_LOG_OUTPUT)
+        _log_output();
+      else
+        _ignore_output();
+    }
+
+    if (options & EXEC_NOWAYLAND) {
+      char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
+      execvpe(exec, (char *const *)args, (char *const *)envs);
+    } else {
+      execvp(exec, (char *const *)args);
+    }
+  } else {
+    int const flag_waitpid = (options & EXEC_ASYNC) ? WNOHANG : 0;
+    waitpid(pid, &wstatus, flag_waitpid);
+  }
+}
+
+static char const **_append_target(char const **p, char const *const target,
+                                   int const options) {
+  if (options & EXEC_PATH_VIFM) {
+    char cmd[PATH_MAX];
+    snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, target);
+    *p++ = cmd;
+  } else {
+    *p++ = target;
+  }
+  return p;
+}
+
+size_t _argc(char const *const *argv) {
+  if (!argv)
+    return 0;
+
+  size_t argc = 0;
+  while (*argv++)
+    argc++;
+  return argc;
+}
+
+static char const **_append_argv(char const **p,
+                                 char const *const *const argv) {
+  if (argv) {
+    for (int i = 0; argv[i]; ++i) {
+      *p++ = argv[i];
+    }
+  }
+  return p;
+}
+
+void execute_paths(char const *const target, FileQueue const *const fq,
+                   char const *const *const argv, int const options) {
+  size_t const len = ARGC_MAX + fq->count + 2;
+  char const **args = _malloc("filequeue/execute", len, sizeof(const char *));
+
+  char const **p = args;
+  p = _append_target(p, target, options);
+  p = _append_argv(p, argv);
+  for (int i = 0; i < fq->count; ++i) {
+    *p++ = fq->paths[i];
+  }
+  *p = NULL;
+
+  _execute(target, args, options);
+  free(args);
+}
+
+void execute_paths_shell(char const *const exec, FileQueue const *const fq) {
   char *const paths = calc_paths_flat(fq);
   size_t const len = strlen(exec) + strlen(paths) + 1;
-  char *const cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
-    exit(EXIT_FAILURE);
-  }
+  char *const cmd = _malloc("filequeue/execute", len, sizeof(const char));
   snprintf(cmd, len, "%s%s", exec, paths);
 
-  // printf("exec> %s [cmd-length: %lu]\n", cmd, strlen(cmd));
   system(cmd);
   free(cmd);
   free(paths);
 }
 
-void run_exec_paths_nohup(char const *const exec, FileQueue const *const fq) {
-  char *const paths = calc_paths_flat(fq);
-  size_t const len = strlen(exec) + strlen(paths) + 25;
-  char *cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
-    exit(EXIT_FAILURE);
-  }
-  snprintf(cmd, len, "nohup %s%s >/dev/null 2>&1 &", exec, paths);
+void execute(char const *const target, char const *const *const argv,
+             int const options) {
+  size_t const len = ARGC_MAX + 2;
+  char const **args = _malloc("filequeue/execute", len, sizeof(const char *));
 
-  system(cmd);
-  free(cmd);
-  free(paths);
+  char const **p = args;
+  p = _append_target(p, target, options);
+  p = _append_argv(p, argv);
+  *p = NULL;
+
+  _execute(target, args, options);
+  free(args);
 }
 
-void run_script_paths(char const *const script, FileQueue const *const fq) {
-  static char script_path[PATH_MAX] = "";
-  snprintf(script_path, PATH_MAX - 1, "%s%s%s", getenv("HOME"),
-           "/.config/vifm/scripts/", script);
-
-  run_exec_paths(script_path, fq);
-}
-
-void run_script(char const *const script, char const *const arg) {
-  static char script_path[PATH_MAX] = "";
-  snprintf(script_path, PATH_MAX - 1, "%s%s%s", getenv("HOME"),
-           "/.config/vifm/scripts/", script);
-
-  size_t const len = strlen(script_path) + strlen(arg) + 2; // extra <space>
-  char *const cmd = malloc(len);
-  if (!cmd) {
-    fprintf(stderr, "filequeue/run> failed malloc [length %lu]; exiting\n",
-            len);
-    exit(EXIT_FAILURE);
-  }
-  snprintf(cmd, len, "%s %s", script_path, arg); // behold extra <space>
-
-  system(cmd);
-  free(cmd);
-}
-
-int const match_suffixes_filequeue(FileQueue const *const fq,
-                                   char const *const *suffixes,
-                                   size_t const n_suffixes) {
+int match_suffixes_filequeue(FileQueue const *const fq,
+                             char const *const *const suffixes) {
   for (int i = 0; i < fq->count; ++i) {
-    if (!match_suffixes(fq->paths[i], suffixes, n_suffixes))
+    if (!match_suffixes(fq->paths[i], suffixes))
       return 0;
   }
   return 1;
@@ -157,6 +210,8 @@ void print_filequeue(FileQueue const *const fq) {
 }
 
 void nvim_filequeue(FileQueue const *const fq) {
-  if (fq->count)
-    run_exec_paths("nvim -O --", fq);
+  if (fq->count) {
+    char const *const argv[] = {"-O", "--", NULL};
+    execute_paths("nvim", fq, argv, EXEC_DEFAULT);
+  }
 }

@@ -1,11 +1,11 @@
-#include "handler.h"
-#include "filequeue.h"
-#include "util.h"
-
 #include <linux/limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "filequeue.h"
+#include "handler.h"
+#include "util.h"
 
 static int const handle_media(FileQueue const *const fq) {
   char const *const suffixes[] = {
@@ -20,10 +20,11 @@ static int const handle_media(FileQueue const *const fq) {
       "wmv",  "dat",  "3gp", "ogv",  "m2v", "mts",
 
       "ra",   "rm",   "qt",  "divx", "asf", "asx",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
-    run_script_paths("media.sh --", fq);
+  if (match_suffixes_filequeue(fq, suffixes)) {
+    execute_paths("mpv", fq, NULL, EXEC_ASYNC);
     return 1;
   }
   return 0;
@@ -33,20 +34,20 @@ static int const handle_image(FileQueue const *const fq) {
   char const *const suffixes[] = {
       "png",  "svg",   "jpg",  "jpeg",  "bmp",  "webp", "gif",  "xpm",
       "heif", "heifs", "heic", "heics", "avci", "avcs", "avif",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
-    run_exec_paths_nohup("imv --", fq);
+  if (match_suffixes_filequeue(fq, suffixes)) {
+    execute_paths("imv", fq, NULL, EXEC_ASYNC);
     return 1;
   }
   return 0;
 }
 
 static int const handle_pdf(FileQueue const *const fq) {
-  char const *const suffixes[] = {"pdf"};
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
-    run_exec_paths_nohup("zathura --", fq);
+  char const *const suffixes[] = {"pdf", NULL};
+  if (match_suffixes_filequeue(fq, suffixes)) {
+    execute_paths("zathura", fq, NULL, EXEC_ASYNC);
     return 1;
   }
   return 0;
@@ -69,10 +70,11 @@ static int const handle_archive(FileQueue const *const fq) {
       "zip",     "apk",    "apkg",   "ear",     "jar", "war",
 
       "rar",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
-    run_script_paths("archive.sh --", fq);
+  if (match_suffixes_filequeue(fq, suffixes)) {
+    execute_paths("archive.sh", fq, NULL, EXEC_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -83,7 +85,8 @@ static int const handle_pass(FileQueue const *const fq) {
   realpath(fq->paths[0], path_abs);
   if (strstr(path_abs, "/.password-store/")) {
     if (match_suffix(path_abs, "gpg")) {
-      run_script("pass.sh --", path_abs);
+      char const *const argv[] = {"--", path_abs, NULL};
+      execute("pass.sh", argv, EXEC_PATH_VIFM);
       return 1;
     }
   }
@@ -101,10 +104,11 @@ static int const handle_misc(FileQueue const *const fq) {
       "htm",  "html", "torrent",
 
       "o",    "out",
+
+      NULL,
   };
-  if (match_suffixes_filequeue(fq, suffixes,
-                               sizeof suffixes / sizeof suffixes[0])) {
-    run_script_paths("misc.sh --", fq);
+  if (match_suffixes_filequeue(fq, suffixes)) {
+    execute_paths("misc.sh", fq, NULL, EXEC_PATH_VIFM);
     return 1;
   }
   return 0;
@@ -132,6 +136,7 @@ static void handle_each(FileQueue *const fq) {
 }
 
 void handle(int const argc, char const **argv) {
+  _init_util();
   FileQueue fq = init_filequeue(argc, argv);
 
   if (!handle_all(&fq))

@@ -1,10 +1,36 @@
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-static int const LEN_SUFFIX_MAX = 16;
+#include "util.h"
 
-int const match_suffix(char const *const str, char const *const suffix) {
+char HOME[PATH_MAX];
+char PATH_SCRIPT_VIFM[PATH_MAX];
+char PATH_EXEC_STDOUT[PATH_MAX];
+char PATH_EXEC_STDERR[PATH_MAX];
+void _init_util(void) {
+  snprintf(HOME, PATH_MAX - 1, "%s", getenv("HOME"));
+  snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", HOME,
+           "/.config/vifm/scripts/");
+
+  char path_state[] = "/.local/state/vifm/";
+  snprintf(PATH_EXEC_STDOUT, PATH_MAX - 1, "%s%s%s", HOME, path_state,
+           "stdout");
+  snprintf(PATH_EXEC_STDERR, PATH_MAX - 1, "%s%s%s", HOME, path_state,
+           "stderr");
+}
+
+void *_malloc(char const *const msg, size_t const len, size_t const size_one) {
+  void *p = malloc(len * size_one);
+  if (!p) {
+    fprintf(stderr, "%s> failed malloc [length %zu]; exiting\n", msg, len);
+    exit(EXIT_FAILURE);
+  }
+  return p;
+}
+
+int match_suffix(char const *const str, char const *const suffix) {
   if (!str || !suffix)
     return 0;
 
@@ -19,10 +45,9 @@ int const match_suffix(char const *const str, char const *const suffix) {
   return !strncmp(str + len_str - len_suffix, suffix_pad, len_suffix);
 }
 
-int const match_suffixes(char const *const str, char const *const *suffixes,
-                         size_t const n_suffixes) {
-  for (int i = 0; i < n_suffixes; i++) {
-    if (match_suffix(str, suffixes[i]))
+int match_suffixes(char const *const str, char const *const *const suffixes) {
+  for (char const *const *p = suffixes; *p; ++p) {
+    if (match_suffix(str, *p))
       return 1;
   }
   return 0;
