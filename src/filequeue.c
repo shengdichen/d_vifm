@@ -74,6 +74,16 @@ char *calc_paths_flat(FileQueue const *const fq) {
   return paths;
 }
 
+static void _ignore_output(void) {
+  int pipes[2];
+  if (!pipe(pipes)) {
+    close(pipes[0]);
+    dup2(pipes[1], STDOUT_FILENO);
+    dup2(pipes[1], STDERR_FILENO);
+    close(pipes[1]);
+  }
+}
+
 static void _execute(char const *const exec, char const *const *const args,
                      int const options) {
   int wstatus;
@@ -83,6 +93,9 @@ static void _execute(char const *const exec, char const *const *const args,
   }
 
   if (pid == 0) {
+    if (options & FLAG_RUN_ASYNC)
+      _ignore_output();
+
     if (options & FLAG_RUN_NOWAYLAND) {
       char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
       execvpe(exec, (char *const *)args, (char *const *)envs);
