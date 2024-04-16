@@ -16,6 +16,7 @@ typedef struct {
 #define FLAG_RUN_NOWAYLAND 2
 
 #define FLAG_RUN_PATH_VIFM 4
+#define FLAG_RUN_LOG_OUTPUT 8
 
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);

@@ -7,10 +7,18 @@
 
 char HOME[PATH_MAX];
 char PATH_SCRIPT_VIFM[PATH_MAX];
+char PATH_EXEC_STDOUT[PATH_MAX];
+char PATH_EXEC_STDERR[PATH_MAX];
 void _init_util(void) {
   snprintf(HOME, PATH_MAX - 1, "%s", getenv("HOME"));
   snprintf(PATH_SCRIPT_VIFM, PATH_MAX - 1, "%s%s", HOME,
            "/.config/vifm/scripts/");
+
+  char path_state[] = "/.local/state/vifm/";
+  snprintf(PATH_EXEC_STDOUT, PATH_MAX - 1, "%s%s%s", HOME, path_state,
+           "stdout");
+  snprintf(PATH_EXEC_STDERR, PATH_MAX - 1, "%s%s%s", HOME, path_state,
+           "stderr");
 }
 
 void *_malloc(char const *const msg, size_t const len, size_t const size_one) {

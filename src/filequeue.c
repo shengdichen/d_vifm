@@ -1,5 +1,6 @@
 #define _GNU_SOURCE // execvpe
 
+#include <fcntl.h>
 #include <linux/limits.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -75,13 +76,21 @@ char *calc_paths_flat(FileQueue const *const fq) {
 }
 
 static void _ignore_output(void) {
-  int pipes[2];
-  if (!pipe(pipes)) {
-    close(pipes[0]);
-    dup2(pipes[1], STDOUT_FILENO);
-    dup2(pipes[1], STDERR_FILENO);
-    close(pipes[1]);
-  }
+  int fd = open("/dev/null", O_WRONLY);
+  dup2(fd, STDOUT_FILENO);
+  dup2(fd, STDERR_FILENO);
+  close(fd);
+}
+
+static void _log_output(void) {
+  FILE *f_stdout = fopen(PATH_EXEC_STDOUT, "a");
+  FILE *f_stderr = fopen(PATH_EXEC_STDERR, "a");
+
+  dup2(fileno(f_stdout), STDOUT_FILENO);
+  dup2(fileno(f_stderr), STDERR_FILENO);
+
+  fclose(f_stdout);
+  fclose(f_stderr);
 }
 
 static void _execute(char const *const exec, char const *const *const args,
@@ -93,8 +102,12 @@ static void _execute(char const *const exec, char const *const *const args,
   }
 
   if (pid == 0) {
-    if (options & FLAG_RUN_ASYNC)
-      _ignore_output();
+    if (options & FLAG_RUN_ASYNC) {
+      if (options & FLAG_RUN_LOG_OUTPUT)
+        _log_output();
+      else
+        _ignore_output();
+    }
 
     if (options & FLAG_RUN_NOWAYLAND) {
       char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
