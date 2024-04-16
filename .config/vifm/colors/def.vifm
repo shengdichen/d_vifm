@@ -17,7 +17,7 @@ highlight Directory
 
 highlight Executable
     \ cterm=none ctermfg=green ctermbg=-1
-    \ gui=none guifg=#3fbf4f guibg=-1
+    \ gui=none guifg=#3fbf5f guibg=-1
 
 highlight Selected
     \ cterm=none ctermfg=black ctermbg=white
@@ -27,7 +27,7 @@ highlight Selected
 " cyan for symbolic links
 highlight Link
     \ cterm=none ctermfg=cyan ctermbg=-1
-    \ gui=none guifg=#7fd7e3 guibg=-1
+    \ gui=none guifg=#7fd7f3 guibg=-1
 " red for broken links
 highlight BrokenLink
     \ cterm=none ctermfg=red ctermbg=-1
@@ -51,8 +51,8 @@ highlight Device
 " the inactive pane {{{
 " cursor-line
 highlight OtherLine
-    \ cterm=none ctermfg=white ctermbg=black
-    \ gui=none guifg=#97879f guibg=#000000
+    \ cterm=none ctermfg=black ctermbg=white
+    \ gui=none guifg=#000000 guibg=#97879f
 
 " generic files
 highlight OtherWin

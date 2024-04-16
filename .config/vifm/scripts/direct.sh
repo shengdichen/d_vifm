@@ -14,6 +14,30 @@ __check() {
     done
 }
 
+__handle_python() {
+    __has_venv() {
+        poetry env info --quiet
+    }
+
+    __in_venv() {
+        __has_venv && (
+            printf "%s\n" "${PATH}" | grep --quiet "${HOME}/.cache/pypoetry/virtualenvs/"
+        )
+    }
+
+    if [ "${1}" = "--" ]; then shift; fi
+
+    if ! __has_venv; then
+        python -- "${1}"
+    else
+        if ! __in_venv; then
+            poetry run -- python -- "${1}"
+        else
+            python -- "${1}"
+        fi
+    fi
+}
+
 __handle() {
     local _interactive=""
     if [ "${1}" = "--interactive" ]; then
@@ -35,7 +59,7 @@ __handle() {
                         tmux source-file "${_file}"
                         ;;
                     *".py")
-                        python "${_file}"
+                        __handle_python -- "${_file}"
                         ;;
                     *".sh")
                         if [ -x "${_file}" ]; then
