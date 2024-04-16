@@ -102,28 +102,28 @@ static void _execute(char const *const exec, char const *const *const args,
   }
 
   if (pid == 0) {
-    if (options & FLAG_RUN_ASYNC) {
-      if (options & FLAG_RUN_LOG_OUTPUT)
+    if (options & EXEC_ASYNC) {
+      if (options & EXEC_LOG_OUTPUT)
         _log_output();
       else
         _ignore_output();
     }
 
-    if (options & FLAG_RUN_NOWAYLAND) {
+    if (options & EXEC_NOWAYLAND) {
       char const *const envs[] = {"WAYLAND_DISPLAY=", NULL};
       execvpe(exec, (char *const *)args, (char *const *)envs);
     } else {
       execvp(exec, (char *const *)args);
     }
   } else {
-    int const flag_waitpid = (options & FLAG_RUN_ASYNC) ? WNOHANG : 0;
+    int const flag_waitpid = (options & EXEC_ASYNC) ? WNOHANG : 0;
     waitpid(pid, &wstatus, flag_waitpid);
   }
 }
 
 static char const **_append_target(char const **p, char const *const target,
                                    int const options) {
-  if (options & FLAG_RUN_PATH_VIFM) {
+  if (options & EXEC_PATH_VIFM) {
     char cmd[PATH_MAX];
     snprintf(cmd, PATH_MAX - 1, "%s%s", PATH_SCRIPT_VIFM, target);
     *p++ = cmd;
@@ -212,6 +212,6 @@ void print_filequeue(FileQueue const *const fq) {
 void nvim_filequeue(FileQueue const *const fq) {
   if (fq->count) {
     char const *const argv[] = {"-O", "--", NULL};
-    execute_paths("nvim", fq, argv, FLAG_RUN_DEFAULT);
+    execute_paths("nvim", fq, argv, EXEC_DEFAULT);
   }
 }

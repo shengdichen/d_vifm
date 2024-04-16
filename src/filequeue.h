@@ -11,12 +11,12 @@ typedef struct {
 
 #define ARGC_MAX 256
 
-#define FLAG_RUN_DEFAULT 0
-#define FLAG_RUN_ASYNC 1
-#define FLAG_RUN_NOWAYLAND 2
+#define EXEC_DEFAULT 0
+#define EXEC_ASYNC 1
+#define EXEC_NOWAYLAND 2
 
-#define FLAG_RUN_PATH_VIFM 4
-#define FLAG_RUN_LOG_OUTPUT 8
+#define EXEC_PATH_VIFM 4
+#define EXEC_LOG_OUTPUT 8
 
 FileQueue init_filequeue(int argc, char const **argv);
 FileQueue init_filequeue_length(size_t const len);
