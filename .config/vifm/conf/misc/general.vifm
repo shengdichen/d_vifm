@@ -39,7 +39,7 @@ delmarks!
 
 mark h ~/
 mark m ~/mnt/
-mark x ~/xdg/
+mark x ~/xyz/
 mark d ~/dot/
 mark p ~/dot/dot/d_prv/
 
