@@ -17,12 +17,7 @@ __build() {
 
 __stow() {
     (
-        cd "../" && stow -R \
-            --target="${HOME}/" \
-            --ignore="\.git.*" \
-            --ignore="src" \
-            --ignore="setup.sh" \
-            "$(basename "${SCRIPT_PATH}")"
+        cd "../" && stow -R "$(basename "${SCRIPT_PATH}")"
     )
 }
 __build
