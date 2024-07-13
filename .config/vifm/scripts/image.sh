@@ -7,8 +7,8 @@ SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
 
-    for _p in "${@}"; do
-        case "${_p}" in
+    for _f in "${@}"; do
+        case "${_f}" in
             *".png" | *".svg" | \
                 *".jpg" | *".jpeg" | *".bmp" | *".webp" | *".gif" | *".xpm" | \
                 *".heif" | *".heifs" | *".heic" | *".heics" | avc[is] | *".avif") ;;
@@ -24,27 +24,39 @@ __info() {
 }
 
 __handle() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
-    fi
-    if [ "${1}" = "--" ]; then shift; fi
-    if ! __check -- "${@}"; then return 1; fi
+    local _check="" _interactive=""
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--check")
+                _check="yes"
+                shift
+                ;;
+            "--interactive")
+                _interactive="yes"
+                shift
+                ;;
+            "--")
+                shift && break
+                ;;
+        esac
+    done
 
-    local _choice="imv/multi"
-    if [ "${_interactive}" ]; then
-        if [ "${#}" -gt 1 ]; then
-            _choice="$(__select_opt "imv/multi" "imv/foreach")"
-        fi
+    if [ "${_check}" ] && ! __check -- "${@}"; then
+        return 1
     fi
-    case "${_choice}" in
+
+    if [ ! "${_interactive}" ] || [ ${#} -eq 1 ]; then
+        __nohup imv -- "${@}"
+        return
+    fi
+
+    case "$(__select_opt "imv/multi" "imv/foreach")" in
         "imv/multi")
             __nohup imv -- "${@}"
             ;;
         "imv/foreach")
-            for _p in "${@}"; do
-                __nohup imv -- "${@}"
+            for _f in "${@}"; do
+                __nohup imv -- "${_f}"
             done
             ;;
     esac
