@@ -44,7 +44,7 @@ __nvim() {
     if [ "${1}" = "--mode" ]; then
         case "${2}" in
             "diff")
-                shift && shift
+                shift 2
                 if [ "${#}" -gt 0 ]; then
                     nvim -d "${@}"
                 else
@@ -52,7 +52,7 @@ __nvim() {
                 fi
                 ;;
             "tmp")
-                shift && shift
+                shift 2
                 if [ "${1}" = "--" ]; then shift; fi
                 nvim \
                     -R \
@@ -71,7 +71,7 @@ __nvim() {
                 fi
                 ;;
             "ro")
-                shift && shift
+                shift 2
                 if [ "${#}" -gt 0 ]; then
                     nvim -R -c "set nomodifiable" "${@}"
                 else
@@ -79,7 +79,7 @@ __nvim() {
                 fi
                 ;;
             "array")
-                shift && shift
+                shift 2
                 if [ "${1}" = "--" ]; then shift; fi
                 if [ "${1}" ]; then
                     echo "${1}" | xargs -o -d "\n" nvim -O --
@@ -90,11 +90,7 @@ __nvim() {
                 ;;
         esac
     else
-        if [ "${#}" -gt 0 ]; then
-            nvim -O "${@}"
-        else
-            nvim -O
-        fi
+        nvim -O "${@}"
     fi
 }
 
