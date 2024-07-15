@@ -22,7 +22,7 @@ __info() {
 
         if [ ! -d "${_p}" ]; then
             printf "// "
-            file --brief --mime -- "${_p}"
+            file --brief --mime --dereference -- "${_p}"
             stat "${_p}" | __line_number
 
             if [ ! "${_preview}" ]; then
