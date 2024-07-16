@@ -19,7 +19,7 @@ __to_line() {
     local _res _line _file
     if _res="$(
         rg \
-            --hidden \
+            --hidden --follow \
             --color never --no-heading --with-filename --line-number \
             --field-match-separator "${_separator}" \
             ".*" -- . |
