@@ -1,8 +1,2 @@
-.config/vifm/vifm-help.txt
-.config/vifm/colors/Default.vifm
-.config/vifm/scripts/README
-
-.config/vifm/vifminfo.json*
-
 # (handler) executable
 .config/vifm/scripts/main
