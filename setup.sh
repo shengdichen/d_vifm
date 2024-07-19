@@ -23,5 +23,5 @@ __stow() {
         cd "../" && stow -R "$(basename "${SCRIPT_PATH}")"
     )
 }
-__build
+# __build
 __stow
