@@ -218,59 +218,154 @@ __handle() {
 __make() {
     if [ "${1}" = "--" ]; then shift; fi
 
+    local _has_multi=""
+    if [ ${#} -gt 1 ]; then
+        _has_multi="yes"
+    fi
+
+    __make_tar() {
+        local _mode="c"
+        if [ "${_has_multi}" ]; then
+            printf "archive/make> [c]ombine-into-one (multi), [s]eparate-for-each? "
+            read -r _mode
+        fi
+        if [ "${_mode}" != "s" ]; then # multi
+            tar -cv -f "_new.tar" -- "${@}"
+        else
+            for _f in "${@}"; do
+                tar -cv -f "${_f}.tar" -- "${_f}"
+            done
+        fi
+    }
+
+    __make_zip_like() {
+        local _format="${1}"
+        shift
+
+        local _mode="c"
+        if [ "${_has_multi}" ]; then
+            printf "archive/make> [c]ombine-into-one (multi), [s]eparate-for-each? "
+            read -r _mode
+        fi
+
+        if [ "${_mode}" != "s" ]; then # multi
+            case "${_format}" in
+                "7z")
+                    7z a "_new.7z" -- "${@}"
+                    ;;
+                "zip")
+                    zip -r "_new.zip" -- "${@}"
+                    ;;
+            esac
+        else
+            case "${_format}" in
+                "7z")
+                    for _target in "${@}"; do
+                        7z a "${_target}.7z" -- "${_target}"
+                    done
+                    ;;
+                "zip")
+                    for _target in "${@}"; do
+                        zip -r "${_target}.zip" -- "${_target}"
+                    done
+                    ;;
+            esac
+        fi
+    }
+
+    __make_unix() {
+        local _format="${1}"
+        shift
+
+        local _mode
+        if [ ! "${_has_multi}" ]; then
+            case "$(__select_opt "tar+${_format}" "${_format}")" in
+                "tar+"*)
+                    _mode="singletar"
+                    ;;
+                *)
+                    _mode="single"
+                    ;;
+            esac
+        else
+            case "$(
+                __select_opt \
+                    "multi/tar+${_format}" \
+                    "foreach/tar+${_format}" \
+                    "foreach/${_format}"
+            )" in
+                "multi/"*)
+                    _mode="multi"
+                    ;;
+                "foreach/tar+"*)
+                    _mode="singletar"
+                    ;;
+                *)
+                    _mode="single"
+                    ;;
+            esac
+        fi
+
+        case "${_mode}" in
+            "multi")
+                case "${_format}" in
+                    "bzip2")
+                        tar "--${_format}" -cv -f "_new.tar.bz2" -- "${@}"
+                        ;;
+                    "gzip")
+                        tar "--${_format}" -cv -f "_new.tar.gz" -- "${@}"
+                        ;;
+                    "xz")
+                        tar "--${_format}" -cv -f "_new.tar.xz" -- "${@}"
+                        ;;
+                    "zstd")
+                        tar "--${_format}" -cv -f "_new.tar.zst" -- "${@}"
+                        ;;
+                esac
+                ;;
+            "singletar")
+                case "${_format}" in
+                    "bzip2")
+                        for _f in "${@}"; do
+                            tar "--${_format}" -cv -f "${_f}.tar.bz2" -- "${_f}"
+                        done
+                        ;;
+                    "gzip")
+                        for _f in "${@}"; do
+                            tar "--${_format}" -cv -f "${_f}.tar.gz" -- "${_f}"
+                        done
+                        ;;
+                    "xz")
+                        for _f in "${@}"; do
+                            tar "--${_format}" -cv -f "${_f}.tar.xz" -- "${_f}"
+                        done
+                        ;;
+                    "zstd")
+                        for _f in "${@}"; do
+                            tar "--${_format}" -cv -f "${_f}.tar.zst" -- "${_f}"
+                        done
+                        ;;
+                esac
+                ;;
+            "single")
+                "${_format}" --keep -- "${@}"
+                ;;
+        esac
+    }
+
     local _format
-    _format="$(
-        for _format in "tar" "bzip2" "gzip" "xz" "zstd" "7z" "zip"; do
-            printf "%s\n" "${_format}"
-        done | __fzf
-    )"
-
-    if [ "${_format}" = "tar" ]; then
-        tar -cv -f "_new.tar" -- "${@}"
-        return
-    fi
-
-    local _input
-    printf "archive/make> [c]ombine-into-one (default), [s]eparate-for-each? "
-    read -r _input
-    if [ "${_input}" != "s" ]; then
-        case "${_format}" in
-            "bzip2")
-                tar "--${_format}" -cv -f "_new.tar.bz2" -- "${@}"
-                ;;
-            "gzip")
-                tar "--${_format}" -cv -f "_new.tar.gz" -- "${@}"
-                ;;
-            "xz")
-                tar "--${_format}" -cv -f "_new.tar.${_format}" -- "${@}"
-                ;;
-            "zstd")
-                tar "--${_format}" -cv -f "_new.tar.zst" -- "${@}"
-                ;;
-            "7z")
-                7z a "_new.7z" -- "${@}"
-                ;;
-            "zip")
-                zip -r "_new.zip" -- "${@}"
-                ;;
-        esac
-    else
-        case "${_format}" in
-            "bzip2" | "gzip" | "xz" | "zstd")
-                "${_format}" --keep "${@}"
-                ;;
-            "7z")
-                for _target in "${@}"; do
-                    7z a "${_target}.7z" -- "${_target}"
-                done
-                ;;
-            "zip")
-                for _target in "${@}"; do
-                    zip -r "${_target}.zip" -- "${_target}"
-                done
-                ;;
-        esac
-    fi
+    _format="$(__select_opt "tar" "bzip2" "gzip" "xz" "zstd" "zip" "7z")"
+    case "${_format}" in
+        "tar")
+            __make_tar "${@}"
+            ;;
+        "zip" | "7z")
+            __make_zip_like "${_format}" "${@}"
+            ;;
+        "bzip2" | "gzip" | "xz" | "zstd")
+            __make_unix "${_format}" "${@}"
+            ;;
+    esac
 }
 
 case "${1}" in
