@@ -48,9 +48,7 @@ __diff() {
 }
 
 __main() {
-    local _choice
-    _choice="$(__select_opt "link/hard" "size" "diff")"
-    case "${_choice}" in
+    case "$(__select_opt "link/hard" "size" "diff")" in
         "link/hard")
             shift
             __link_hard "${@}"
