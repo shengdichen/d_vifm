@@ -9,6 +9,22 @@ __spectrogram() {
 
     local _suffix="png" _out _outs=()
     for _target in "${@}"; do
+        case "${_target}" in
+            *".flac") ;;
+            *".m4a")
+                local _target_new="${_target%.m4a}.flac"
+                ffmpeg \
+                    -i "${_target}" \
+                    -codec:a flac \
+                    "${_target_new}"
+                _target="${_target_new}"
+                ;;
+            *)
+                printf "spectrogram> unrecognized filetype, skipping... [%s]\n" "${_target}"
+                continue
+                ;;
+        esac
+
         _out="${_target}.${_suffix}"
         sox "${_target}" -n spectrogram -o "${_out}"
         _outs+=("${_out}")
