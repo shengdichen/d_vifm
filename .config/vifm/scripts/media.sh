@@ -1,8 +1,9 @@
-#!/usr/bin/env dash
+#!/usr/bin/env bash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
+LOCAL_SCRIPT="${HOME}/.local/script"
+LOCAL_LIB="${HOME}/.local/lib"
 
-. "${SCRIPT_PATH}/util.sh"
+. "${LOCAL_LIB}/util.sh"
 
 __check_aud() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -45,40 +46,40 @@ __check() {
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
 
-    if ! __check -- "${1}"; then return 1; fi
-    ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
+    if __check -- "${1}"; then
+        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
+    fi
 }
 
 __handle() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift && shift
-    fi
     if [ "${1}" = "--" ]; then shift; fi
-    if ! __check -- "${@}"; then return 1; fi
 
-    local _choice="mpv"
-    if [ "${_interactive}" ]; then
-        if [ "${#}" -gt 1 ]; then
-            _choice="$(
-                __select_opt "mpv" "mpv/record" "mpv/throw"
-            )"
-        else
-            _choice="$(
-                __select_opt "mpv" "mpv/record" "mpv/throw"
-            )"
+    local _targets=()
+    for _target in "${@}"; do
+        if [ ! -d "${_target}" ]; then
+            if __check -- "${_target}"; then
+                _targets+=("${_target}")
+            fi
+            continue
         fi
-    fi
-    case "${_choice}" in
-        "mpv")
-            "${SCRIPT_PATH}/mpv.sh" -- "${@}"
+
+        while read -r _f; do
+            if __check -- "${_f}"; then
+                _targets+=("${_f}")
+            fi
+        done < <(find "${_target}" -mindepth 1 -type f | sort -n)
+    done
+
+    local _mpv="${LOCAL_SCRIPT}/mpv.sh"
+    case "$(__fzf_opts "auto" "record" "socket")" in
+        "auto")
+            "${_mpv}" -- "${_targets[@]}"
             ;;
-        "mpv/record")
-            "${SCRIPT_PATH}/mpv.sh" --mode record -- "${@}"
+        "record")
+            "${_mpv}" record -- "${_targets[@]}"
             ;;
-        "mpv/throw")
-            "${SCRIPT_PATH}/mpv.sh" --mode throw -- "${@}"
+        "socket")
+            "${_mpv}" socket -- "${_targets[@]}"
             ;;
     esac
 }
