@@ -1,8 +1,6 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
-
-. "${SCRIPT_PATH}/util.sh"
+. "${HOME}/.local/lib/util.sh"
 
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -78,140 +76,243 @@ __info() {
     done
 }
 
-__unmake() {
-    if [ "${1}" = "--" ]; then shift; fi
+__handle() {
+    local _mime _need_recalc_mime
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--mime")
+                _mime="${2}"
+                shift 2
+                ;;
+            "--")
+                shift && break
+                ;;
+        esac
+    done
+    if [ ! "${_mime}" ]; then
+        _need_recalc_mime="yes"
+    fi
 
     for _file in "${@}"; do
-        printf "archive/unmake> [%s]\n" "${_file}"
-        case "${_file}" in
-            *".tar")
-                tar -xvf "${_file}"
+        if [ "${_need_recalc_mime}" ]; then
+            _mime="$(file --brief --mime-type --dereference -- "${_file}")"
+        fi
+        printf "archive> %s [type: %s]\n" "${_file}" "${_mime}"
+
+        case "${_mime}" in
+            "application/x-tar")
+                case "$(__fzf_opts "nvim" "unmake" "peak" "nvim/ro")" in
+                    "nvim")
+                        __nvim -- "${_file}"
+                        ;;
+                    "unmake")
+                        tar -xvf "${_file}"
+                        ;;
+                    "peak")
+                        tar -tvf "${_file}" | __nvim --mode ro
+                        ;;
+                    "nvim/ro")
+                        __nvim --mode ro -- "${_file}"
+                        ;;
+                esac
                 ;;
 
-            *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2")
-                tar --bzip2 -xvf "${_file}"
-                ;;
-            *".bz" | *".bz2")
-                bzip2 --keep -d "${_file}"
+            "application/x-bzip2")
+                case "${_file}" in
+                    *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2")
+                        case "$(__fzf_opts "nvim" "unmake" "peak" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                tar --bzip2 -xvf "${_file}"
+                                ;;
+                            "peak")
+                                tar --bzip2 -tvf "${_file}" | __nvim --mode ro
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                    *) # *".bz" | *".bz2")
+                        case "$(__fzf_opts "nvim" "unmake" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                bzip2 --keep -d "${_file}"
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                esac
                 ;;
 
-            *".tar.gz" | *.t[ga]z | *".tar.Z")
-                tar --gzip -xvf "${_file}"
-                ;;
-            *".z" | *".gz")
-                gzip --keep -d "${_file}"
+            "application/gzip")
+                case "${_file}" in
+                    *".tar.gz" | *.t[ga]z | *".tar.Z")
+                        case "$(__fzf_opts "nvim" "unmake" "peak" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                tar --gzip -xvf "${_file}"
+                                ;;
+                            "peak")
+                                tar --gzip -tvf "${_file}" | __nvim --mode ro
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                    *) # *".z" | *".gz")
+                        local _opt
+                        case "$(realpath "${_file}")" in
+                            "/usr/share/man/"*)
+                                _opt="$(__fzf_opts "nvim/man" "nvim/ro")"
+                                ;;
+                            "/usr/share/info/"*)
+                                _opt="$(__fzf_opts "nvim/info" "nvim/ro")"
+                                ;;
+                            *)
+                                _opt="$(__fzf_opts "nvim" "unmake" "nvim/ro" "nvim/man" "nvim/info")"
+                                ;;
+                        esac
+
+                        case "${_opt}" in
+                            "nvim/man")
+                                man -l -- "${_file}"
+                                ;;
+                            "nvim/info")
+                                info -f "${_file}" | __nvim --mode ro
+                                ;;
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                gzip --keep -d "${_file}"
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                esac
                 ;;
 
-            *.tar.[xl]z | *.t[xl]z)
-                tar --xz -xvf "${_file}"
-                ;;
-            *.[xl]z | *".lzma")
-                xz --keep -d "${_file}"
+            "application/x-xz")
+                case "${_file}" in
+                    *.tar.[xl]z | *.t[xl]z)
+                        case "$(__fzf_opts "nvim" "unmake" "peak" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                tar --xz -xvf "${_file}"
+                                ;;
+                            "peak")
+                                tar --xz -tvf "${_file}" | __nvim --mode ro
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                    *) # *.[xl]z | *".lzma")
+                        case "$(__fzf_opts "nvim" "unmake" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                xz --keep -d "${_file}"
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                esac
                 ;;
 
-            *".tar.zst")
-                tar --zstd -xvf "${_file}"
-                ;;
-            *".zst")
-                zstd --keep -d "${_file}"
+            "application/zstd")
+                case "${_file}" in
+                    *".tar.zst")
+                        case "$(__fzf_opts "nvim" "unmake" "peak" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                tar --zstd -xvf "${_file}"
+                                ;;
+                            "peak")
+                                tar --zstd -tvf "${_file}" | __nvim --mode ro
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                    *) # *".zst")
+                        case "$(__fzf_opts "nvim" "unmake" "nvim/ro")" in
+                            "nvim")
+                                __nvim -- "${_file}"
+                                ;;
+                            "unmake")
+                                zstd --keep -d "${_file}"
+                                ;;
+                            "nvim/ro")
+                                __nvim --mode ro -- "${_file}"
+                                ;;
+                        esac
+                        ;;
+                esac
                 ;;
 
-            *".7z" | *".iso")
-                7z x "${_file}"
+            "application/zip" | "application/java-archive")
+                # *".zip" | *".apk" | *".apkg" | *[ejw]ar)
+                case "$(__fzf_opts "nvim" "peak" "unmake" "nvim/ro")" in
+                    "nvim")
+                        __nvim -- "${_file}"
+                        ;;
+                    "peak")
+                        unzip -l "${1}" | __nvim --mode ro
+                        ;;
+                    "unmake")
+                        unzip "${_file}"
+                        ;;
+                    "nvim/ro")
+                        __nvim --mode ro -- "${_file}"
+                        ;;
+                esac
                 ;;
-            *".zip" | *".apk" | *".apkg" | *[ejw]ar)
-                unzip "${_file}"
+
+            "application/x-7z-compressed" | "application/x-iso9660-image") # *".7z" | *".iso")
+                case "$(__fzf_opts "peak" "unmake")" in
+                    "peak")
+                        7z l "${_file}" | __nvim --mode ro
+                        ;;
+                    "unmake")
+                        7z x "${_file}"
+                        ;;
+                esac
                 ;;
-            *".rar")
-                unrar x "${_file}"
-                ;;
-            *)
-                return 1
+
+            "application/x-rar") # *".rar")
+                case "$(__fzf_opts "peak" "unmake")" in
+                    "peak")
+                        unrar l "${1}" | __nvim --mode ro
+                        ;;
+                    "unmake")
+                        unrar x "${_file}"
+                        ;;
+                esac
                 ;;
         esac
         printf "\n"
-    done
-}
-
-__handle() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
-    fi
-    if [ "${1}" = "--" ]; then shift; fi
-    if ! __check -- "${@}"; then return 1; fi
-
-    local _choice
-    for _file in "${@}"; do
-        case "${_file}" in
-            *".tar" | \
-                *".tbz" | *".tbz2" | *".tar.bz" | *".tar.bz2" | \
-                *".bz" | *".bz2" | \
-                *".tar.gz" | *t[ga]z | *".tar.Z" | \
-                *".z" | \
-                *.tar.[xl]z | *.t[xl]z | \
-                *.[xl]z | *".lzma" | \
-                *".tar.zst" | \
-                *".zst" | \
-                *".zip" | *".apk" | *".apkg" | *[ejw]ar)
-                _choice="nvim"
-                if [ "${_interactive}" ]; then
-                    _choice="$(__select_opt "nvim" "info" "unmake")"
-                fi
-                ;;
-            *".gz")
-                local _path
-                _path="$(realpath "${_file}")"
-                case "${_path}" in
-                    "/usr/share/man/"*)
-                        _choice="nvim"
-                        if [ "${_interactive}" ]; then
-                            _choice="$(__select_opt "nvim (man)" "raw" "info" "unmake")"
-                        fi
-                        if [ "${_choice}" = "nvim" ]; then
-                            man -l -- "${_file}"
-                            continue
-                        fi
-                        ;;
-                    "/usr/share/info/"*)
-                        _choice="nvim"
-                        if [ "${_interactive}" ]; then
-                            _choice="$(__select_opt "nvim (info)" "raw" "info" "unmake")"
-                        fi
-                        if [ "${_choice}" = "nvim" ]; then
-                            info -f "${_file}" | __nvim --mode ro
-                            continue
-                        fi
-                        ;;
-                    *)
-                        _choice="nvim"
-                        if [ "${_interactive}" ]; then
-                            _choice="$(__select_opt "nvim" "info" "unmake")"
-                        fi
-                        ;;
-                esac
-
-                ;;
-            *".7z" | *".iso" | \
-                *".rar")
-                _choice="info"
-                if [ "${_interactive}" ]; then
-                    _choice="$(__select_opt "info" "unmake")"
-                fi
-                ;;
-        esac
-        case "${_choice}" in
-            "unmake")
-                __unmake -- "${_file}"
-                ;;
-            "nvim" | "raw")
-                __nvim -- "${_file}"
-                ;;
-            "info")
-                __info -- "${_file}" | __nvim --mode ro
-                ;;
-        esac
     done
 }
 
@@ -279,7 +380,7 @@ __make() {
 
         local _mode
         if [ ! "${_has_multi}" ]; then
-            case "$(__select_opt "tar+${_format}" "${_format}")" in
+            case "$(__fzf_opts "tar+${_format}" "${_format}")" in
                 "tar+"*)
                     _mode="singletar"
                     ;;
@@ -289,7 +390,7 @@ __make() {
             esac
         else
             case "$(
-                __select_opt \
+                __fzf_opts \
                     "multi/tar+${_format}" \
                     "foreach/tar+${_format}" \
                     "foreach/${_format}"
@@ -354,7 +455,7 @@ __make() {
     }
 
     local _format
-    _format="$(__select_opt "tar" "bzip2" "gzip" "xz" "zstd" "zip" "7z")"
+    _format="$(__fzf_opts "tar" "bzip2" "gzip" "xz" "zstd" "zip" "7z")"
     case "${_format}" in
         "tar")
             __make_tar "${@}"
@@ -376,10 +477,6 @@ case "${1}" in
     "info")
         shift
         __info "${@}"
-        ;;
-    "unmake")
-        shift
-        __unmake "${@}"
         ;;
     "make")
         shift
