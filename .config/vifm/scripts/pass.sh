@@ -131,9 +131,7 @@ __handle() {
 }
 
 __make_new() {
-    local _path
-    _path="$(realpath .)"
-    case "${_path}" in
+    case "${PWD}" in
         *"/.${PASS_DIR}/"*) ;;
         *)
             printf "pass/new> not in [pass]-dir, cd there first\n"
@@ -142,19 +140,76 @@ __make_new() {
     esac
     if [ "${1}" = "--" ]; then shift; fi
 
-    local _target
-    _target="$(printf "%s\n" "${_path}" | sed "s/^.*\/\.${PASS_DIR}\/\(.*\)$/\1\/_new/")"
-    if [ "${#}" -gt 0 ]; then
-        if "${SCRIPT_PATH}/image.sh" check -- "${1}"; then
-            _choice="$(__select_opt "mfa" "common")"
-            if [ "${_choice}" = "mfa" ]; then
-                zbarimg -q --raw "${1}" | pass otp insert "${_target}.${EXTENSION_MFA}"
-                return
-            fi
+    local _base
+    _base="$(printf "%s\n" "${PWD}" | sed "s/^.*\/\.${PASS_DIR}\/\(.*\)$/\1/")"
+
+    local _default="_new"
+    __get_name() {
+        local _name
+        read -r _name
+        printf "%s" "${_name:-${_default}}"
+    }
+
+    __common() {
+        printf "pass/new> name (default: %s) " "${_default}"
+        local _target
+        _target="${_base}/$(__get_name)"
+
+        printf "pass/new> password source [%s]\n" "${_target}"
+        case "$(__fzf_opts "auto" "manual")" in
+            "auto")
+                pass generate "${_target}" 1>/dev/null 2>&1
+                ;;
+            "manual")
+                pass insert "${_target}" 1>/dev/null 2>&1
+                ;;
+        esac
+
+        __handle_common --mode edit -- "${_target}"
+    }
+
+    __otp() {
+        # REF:
+        #   https://github.com/tadfisher/pass-otp
+
+        printf "pass/new-otp> source \n"
+        local _mode
+        if [ "${#}" -eq 0 ]; then
+            _mode="$(__fzf_opts "input (otpauth://totp/<...>)" "image/paste" "cam")"
+        else
+            _mode="$(__fzf_opts "image/file" "input (otpauth://totp/<...>)" "cam")"
         fi
-    fi
-    pass generate "${_target}" 1>/dev/null 2>&1
-    __handle_common --mode edit -- "${_target}"
+
+        if [ "${_mode}" = "image/file" ]; then
+            zbarimg -q --raw "${1}" | pass otp insert "${_base}/${1%.*}"
+            return
+        fi
+
+        printf "pass/new-otp> name (default: %s) " "${_default}"
+        local _target
+        _target="${_base}/$(__get_name).${EXTENSION_MFA}"
+        case "${_mode}" in
+            "image/paste")
+                wl-paste | zbarimg -q --raw - | pass otp insert "${_target}"
+                ;;
+            "input")
+                pass otp insert -e "${_target}"
+                ;;
+            "cam")
+                zbarcam -q --raw | pass otp insert "${_target}"
+                ;;
+        esac
+    }
+
+    printf "pass/new> type\n"
+    case "$(__fzf_opts "common" "otp (mfa)")" in
+        "common")
+            __common
+            ;;
+        "otp")
+            __otp "${@}"
+            ;;
+    esac
 }
 
 case "${1}" in
