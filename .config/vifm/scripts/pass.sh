@@ -1,54 +1,48 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
-
-. "${SCRIPT_PATH}/util.sh"
+. "${HOME}/.local/lib/util.sh"
 
 PASS_DIR="password-store" # intentionally without leading dot
 CLIPBOARD_TIME=7          # in second(s)
+EXTENSION_MFA="mfa"
 
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
 
     for _p in "${@}"; do
-        case "${_p}" in
+        case "$(realpath "${_p}")" in
             *"/.${PASS_DIR}/"*".gpg") ;;
             *) return 1 ;;
         esac
     done
 }
 
-__handle_otp() {
-    if [ "${1}" = "--" ]; then shift; fi
-    PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
-        pass otp code -c "${1}" >/dev/null
+__path_to_pass() {
+    sed "s/^.*\/\.${PASS_DIR}\/\(.*\)\.gpg$/\1/"
+}
+
+__select_pass() {
+    find -L "${HOME}/.${PASS_DIR}/" -type f | grep "\.gpg$" | __fzf | __path_to_pass
 }
 
 __handle_common() {
-    local _interactive="" _choice="copy"
+    local _mode
     while [ "${#}" -gt 0 ]; do
         case "${1}" in
-            "--interactive")
-                _interactive="${2}"
-                shift 2
-                ;;
             "--mode")
-                _choice="${2}"
+                _mode="${2}"
                 shift 2
                 ;;
             "--")
                 shift && break
                 ;;
-            *)
-                exit 3
-                ;;
         esac
     done
 
-    if [ "${_interactive}" ]; then
-        _choice="$(__select_opt "copy" "edit" "view")"
+    if [ ! "${_mode}" ]; then
+        _mode="$(__fzf_opts "copy" "edit" "view")"
     fi
-    case "${_choice}" in
+    case "${_mode}" in
         "copy")
             PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
                 pass -c "${1}" >/dev/null
@@ -56,7 +50,7 @@ __handle_common() {
         "edit")
             pass edit "${1}" 2>/dev/null
             if [ "${?}" -eq 1 ]; then
-                return 0 # pass returns 1 if no changes made
+                true # pass returns 1 if no changes made
             fi
             ;;
         "view")
@@ -65,28 +59,73 @@ __handle_common() {
     esac
 }
 
-__handle() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
+__handle_otp() {
+    local _mode
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--mode")
+                _mode="${2}"
+                shift 2
+                ;;
+            "--")
+                shift && break
+                ;;
+        esac
+    done
+    if [ ! "${_mode}" ]; then
+        _mode="$(__fzf_opts "copy" "view" "edit")"
     fi
-    if [ "${1}" = "--" ]; then shift; fi
 
-    local _path
-    _path="$(realpath "${1}")"
-    if ! __check -- "${_path}"; then return 1; fi
+    case "${_mode}" in
+        "copy")
+            PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
+                pass otp code -c "${1}" >/dev/null
+            ;;
+        "view")
+            printf "pass/otp> %s [%s] " \
+                "$(PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
+                    pass otp code "${1}")" \
+                "${1}"
+            read -r _
+            ;;
+        "edit")
+            __handle_common --mode edit -- "${1}"
+            ;;
+    esac
+}
 
-    local _target
-    _target=$(
-        printf "%s" "${_path}" | sed "s/^.*\.${PASS_DIR}\/\(.*\)\.gpg$/\1/"
-    )
-    case "${_target}" in
-        *".mfa")
-            __handle_otp -- "${_target}"
+__handle() {
+    local _check=""
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--check")
+                _check="yes"
+                shift
+                ;;
+            "--")
+                shift && break
+                ;;
+        esac
+    done
+
+    local _pass
+    if [ "${#}" -eq 0 ]; then
+        _pass="$(__select_pass)"
+    else
+        local _path
+        _path="$(realpath "${1}")"
+        if [ "${_check}" ]; then
+            if ! __check -- "${_path}"; then return 1; fi
+        fi
+        _pass="$(printf "%s" "${_path}" | __path_to_pass)"
+    fi
+
+    case "${_pass}" in
+        *".${EXTENSION_MFA}")
+            __handle_otp -- "${_pass}"
             ;;
         *)
-            __handle_common --interactive "${_interactive}" -- "${_target}"
+            __handle_common -- "${_pass}"
             ;;
     esac
 }
@@ -109,7 +148,7 @@ __make_new() {
         if "${SCRIPT_PATH}/image.sh" check -- "${1}"; then
             _choice="$(__select_opt "mfa" "common")"
             if [ "${_choice}" = "mfa" ]; then
-                zbarimg -q --raw "${1}" | pass otp insert "${_target}.mfa"
+                zbarimg -q --raw "${1}" | pass otp insert "${_target}.${EXTENSION_MFA}"
                 return
             fi
         fi
@@ -119,6 +158,10 @@ __make_new() {
 }
 
 case "${1}" in
+    "check")
+        shift
+        __check "${@}"
+        ;;
     "new")
         shift
         __make_new "${@}"
