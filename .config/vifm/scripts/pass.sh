@@ -72,21 +72,32 @@ __handle_otp() {
                 ;;
         esac
     done
+
+    if __yes_or_no -- "pass/otp> sync time first?"; then
+        "${HOME}/.local/script/time.sh"
+    fi
+
     if [ ! "${_mode}" ]; then
         _mode="$(__fzf_opts "copy" "view" "edit")"
     fi
 
+    __copy() {
+        PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
+            pass otp code -c "${1}" >/dev/null
+    }
+
     case "${_mode}" in
         "copy")
-            PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
-                pass otp code -c "${1}" >/dev/null
+            __copy "${1}"
             ;;
         "view")
-            printf "pass/otp> %s [%s] " \
-                "$(PASSWORD_STORE_CLIP_TIME="${CLIPBOARD_TIME}" \
-                    pass otp code "${1}")" \
-                "${1}"
-            read -r _
+            while true; do
+                printf "pass/otp> %s [%s]\n" "$(pass otp code "${1}")" "${1}"
+                __copy "${1}"
+
+                sleep 3
+                printf "\n"
+            done
             ;;
         "edit")
             __handle_common --mode edit -- "${1}"
