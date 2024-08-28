@@ -42,7 +42,6 @@ windo filter
 " show dotfiles
 set dotfiles
 " }}}
-" }}}
 
 " status-line {{{
 " enable status-line
