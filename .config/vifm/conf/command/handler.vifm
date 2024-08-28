@@ -27,6 +27,14 @@ filetype /^.*$/
     \ main.sh -- %f,
     \ main.sh --interactive -- %f,
 
+filetype /^.*$/
+    \ {mpv}
+    \ media.sh -- %f,
+
+filetype /^.*$/
+    \ {archive}
+    \ archive.sh make -- %f,
+
 fileviewer /^.*$/
     \ info.sh info -- %f,
 
