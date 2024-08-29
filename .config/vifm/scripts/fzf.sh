@@ -1,39 +1,49 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
-
-. "${SCRIPT_PATH}/util.sh"
-
-__fzf() {
-    fzf --reverse --height=73% 2>/dev/tty
-}
+. "${HOME}/.local/lib/util.sh"
 
 __to_line() {
     local _vifm=""
     if [ "${1}" = "vifm" ]; then
         _vifm="yes"
+        shift
     fi
+    if [ "${1}" = "--" ]; then shift; fi
 
     # a separator unlikely found in filenames
     local _separator=":::"
-    local _res _line _file
-    if _res="$(
+
+    __rg() {
+        if [ "${#}" -eq 0 ]; then
+            rg \
+                --hidden --follow --glob "!.git/*" \
+                --color never --no-heading --with-filename --line-number \
+                --field-match-separator "${_separator}" \
+                ".*" -- .
+            return
+        fi
         rg \
-            --hidden --follow \
+            --hidden --follow --glob "!.git/*" \
             --color never --no-heading --with-filename --line-number \
             --field-match-separator "${_separator}" \
-            ".*" -- . |
-            cut -c 3- | # hide leading "./"
-            __fzf
-    )"; then
-        _file="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$1}")"
-        _line="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$2}")"
-        if [ "${_vifm}" ]; then
-            printf "%s\n" "${_file}" # vifm-plugin canNOT handle linenumber
-        else
-            nvim +"${_line}" -- "${_file}"
-        fi
+            ".*" -- "${@}"
+    }
+
+    local _res
+    if ! _res="$(__rg "${@}" | cut -c "3-" | __fzf --height 97)"; then # cut: hide leading "./"
+        return
     fi
+
+    local _file
+    _file="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$1}")"
+    if [ "${_vifm}" ]; then
+        printf "%s" "${_file}" # vifm-plugin canNOT handle linenumber
+        return
+    fi
+
+    local _line
+    _line="$(printf "%s" "${_res}" | awk -F "${_separator}" "{print \$2}")"
+    nvim "+${_line}" -- "${_file}"
 }
 
 __to_path() {
@@ -50,9 +60,9 @@ __to_path() {
     esac
 
     if [ ! "${_type}" ]; then
-        find . -printf "%P\n" | __fzf
+        find -L . -printf "%P\n" | __fzf
     else
-        find . -type "${_type}" -printf "%P\n" | __fzf
+        find -L . -type "${_type}" -printf "%P\n" | __fzf
     fi
 }
 
@@ -67,9 +77,9 @@ case "${1}" in
         ;;
     "vifm")
         shift
-        __to_line vifm
+        __to_line vifm "${@}"
         ;;
     *)
-        __to_line
+        __to_line "${@}"
         ;;
 esac
