@@ -49,6 +49,9 @@ nnoremap an
 nnoremap <cr>
     \ :!tmux.sh file open "%f"
     \ <cr>
+nnoremap L
+    \ :!tmux.sh file open "%f:p:h"
+    \ <cr>
 
 nnoremap H
     \ :write |

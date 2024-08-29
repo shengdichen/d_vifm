@@ -135,7 +135,7 @@ static void handle_each(FileQueue *const fq) {
   free(fq_nvim.paths);
 }
 
-void handle(int const argc, char const **argv) {
+void handle(int const argc, char const **const argv) {
   _init_util();
   FileQueue fq = init_filequeue(argc, argv);
 

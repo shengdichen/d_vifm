@@ -10,13 +10,12 @@ __fzf() {
 
 __select_opt() {
     local _choice
-    if _choice="$(
+    if ! _choice="$(
         for _opt in "${@}"; do printf "%s\n" "${_opt}"; done | __fzf
     )"; then
-        printf "%s\n" "${_choice}" | cut -d " " -f 1
-    else
-        exit 1
+        _choice="${1}"
     fi
+    printf "%s\n" "${_choice}" | cut -d " " -f "1"
 }
 
 __line_number() {
