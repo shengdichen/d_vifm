@@ -10,7 +10,7 @@ set grepprg=
     \"
 
 command! mkd
-    \ :mkdir "%a"
+    \ :mkdir! "%a"
 command! tch
     \ :touch "%a"
 command! nv
