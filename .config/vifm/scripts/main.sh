@@ -5,6 +5,7 @@ SCRIPT_PATH="${HOME}/.config/vifm/scripts"
 
 LOCAL_SCRIPT="${HOME}/.local/script"
 . "${HOME}/.local/lib/util.sh"
+. "${HOME}/.local/lib/filter.sh"
 
 __handle() {
     local _interactive=""
@@ -18,7 +19,7 @@ __handle() {
 
     local _mime=""
     for _f in "${@}"; do
-        if "${SCRIPT_PATH}/media.sh" check "${_f}"; then
+        if __check_media --mode name -- "${_f}"; then
             _mpvs+=("${_f}")
             continue
         fi
@@ -152,17 +153,17 @@ __handle() {
 
     if ! [ ${#_mpvs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+            "${LOCAL_SCRIPT}/mpv.sh" --no-filter -- "${_mpvs[@]}"
         else
             case "$(__fzf_opts "auto" "record" "socket")" in
                 "auto")
-                    "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" --no-filter -- "${_mpvs[@]}"
                     ;;
                 "record")
-                    "${LOCAL_SCRIPT}/mpv.sh" record -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" record --no-filter -- "${_mpvs[@]}"
                     ;;
                 "socket")
-                    "${LOCAL_SCRIPT}/mpv.sh" socket -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" socket --no-filter -- "${_mpvs[@]}"
                     ;;
             esac
         fi
