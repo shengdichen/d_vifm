@@ -1,5 +1,5 @@
 nnoremap ff
-    \ :execute 'goto' fnameescape(term("${VIFM}/scripts/fzf.sh vifm"))
+    \ :execute 'goto' fnameescape(term("${HOME}/.local/script/locate.sh vifm"))
     \ <cr>
 
 nnoremap <cr>
