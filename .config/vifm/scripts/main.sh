@@ -1,146 +1,193 @@
-#!/usr/bin/env dash
+#!/usr/bin/env bash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
+# SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
+SCRIPT_PATH="${HOME}/.config/vifm/scripts"
 
-. "${SCRIPT_PATH}/util.sh"
+LOCAL_SCRIPT="${HOME}/.local/script"
+. "${HOME}/.local/lib/util.sh"
 
-__info() {
-    local _preview=""
-    if [ "${1}" = "preview" ]; then
-        shift
-        _preview="yes"
-    fi
-    if [ "${1}" = "--" ]; then shift; fi
-
-    local _counter=0 _info
-    for _p in "${@}"; do
-        if [ "${_counter}" -eq 0 ]; then
-            _counter="$((_counter + 1))"
-        else
-            printf "\n----------\n\n"
-        fi
-
-        if [ ! -d "${_p}" ]; then
-            printf "// "
-            file --brief --mime -- "${_p}"
-            stat "${_p}" | __line_number
-
-            if [ ! "${_preview}" ]; then
-                printf "<<<<<<<<<<\n"
-
-                _info=""
-                for _script in "media" "image" "misc" "archive"; do
-                    if _info="$("${SCRIPT_PATH}/${_script}.sh" info -- "${_p}")"; then
-                        break
-                    fi
-                done
-                if [ "${_info}" ]; then
-                    printf "%s" "${_info}" | __line_number
-                else
-                    printf "## NO EXTRA INFO ##\n"
-                fi
-
-                printf ">>>>>>>>>>\n"
-            fi
-        else
-            printf "// "
-            file --brief -- "${_p}"
-            stat "${_p}" | __line_number
-
-            if [ ! "${_preview}" ]; then
-                if [ -n "$(find "${_p}" -mindepth 1)" ]; then
-                    tree -a -l -L 1 --filelimit 197 "${_p}" | __line_number
-                else
-                    printf "// %s\n" "${_p}"
-                    printf "## EMPTY DIR ##\n"
-                fi
-            fi
-        fi
-    done
-}
-
-__generic() {
-    if [ "${1}" = "--" ]; then shift; fi
-
-    case "$(
-        __select_opt \
-            "info" \
-            "mpv" \
-            "archive (make)" \
-            "nvim"
-    )" in
-        "info")
-            __info -- "${@}" | __nvim --mode ro
-            ;;
-        "mpv")
-            "${SCRIPT_PATH}/mpv.sh" --mode ask -- "${@}"
-            ;;
-        "archive")
-            "${SCRIPT_PATH}/archive.sh" make -- "${@}"
-            ;;
-        "nvim")
-            __nvim -- "${@}"
-            ;;
-    esac
-}
-
-__foreach() {
+__handle() {
     local _interactive=""
     if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
+        _interactive="yes"
+        shift
     fi
     if [ "${1}" = "--" ]; then shift; fi
 
-    local _to_nvim _files_to_nvim=""
-    for _p in "${@}"; do
-        _to_nvim="yes"
-        for _script in "media" "image" "direct" "pdf" "misc" "archive" "encrypt" "pass"; do
-            if "${SCRIPT_PATH}/${_script}.sh" --interactive "${_interactive}" -- "${_p}"; then
-                _to_nvim=""
-                break
-            fi
-        done
+    local _nvims=() _mpvs=() _imvs=() _pdfs=() _others=()
 
-        if [ "${_to_nvim}" ]; then
-            _files_to_nvim="$(__array_append "${_files_to_nvim}" "${_p}")"
+    local _mime=""
+    for _f in "${@}"; do
+        if "${SCRIPT_PATH}/media.sh" check "${_f}"; then
+            _mpvs+=("${_f}")
+            continue
         fi
-    done
-    __nvim --mode array -- "${_files_to_nvim}"
-}
+        if "${SCRIPT_PATH}/image.sh" check "${_f}"; then
+            _imvs+=("${_f}")
+            continue
+        fi
+        if "${SCRIPT_PATH}/pass.sh" check -- "${_f}"; then
+            "${SCRIPT_PATH}/pass.sh" -- "${_f}"
+            continue
+        fi
 
-__multi() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
+        case "${_f}" in
+            *".xopp")
+                __nohup xournalpp "${_f}"
+                continue
+                ;;
+            *".lyx")
+                __nohup lyx "${_f}"
+                continue
+                ;;
+
+            *".sh" | *".zsh" | *".bash")
+                if ! [ "${_interactive}" ]; then
+                    _nvims+=("${_f}")
+                    continue
+                fi
+                case "$(__fzf_opts "execute (shell)" "nvim")" in
+                    "nvim")
+                        _nvims+=("${_f}")
+                        ;;
+                    "execute")
+                        "${SCRIPT_PATH}/dev.sh" shell -- "${_f}"
+                        ;;
+                esac
+                continue
+                ;;
+            *".py")
+                if ! [ "${_interactive}" ]; then
+                    _nvims+=("${_f}")
+                    continue
+                fi
+                case "$(__fzf_opts "nvim" "execute (python)")" in
+                    "nvim")
+                        _nvims+=("${_f}")
+                        ;;
+                    "execute")
+                        "${SCRIPT_PATH}/dev.sh" python -- "${_f}"
+                        ;;
+                esac
+                continue
+                ;;
+            *".tmux")
+                if ! [ "${_interactive}" ]; then
+                    _nvims+=("${_f}")
+                    continue
+                fi
+                case "$(__fzf_opts "nvim" "execute (tmux)")" in
+                    "nvim")
+                        _nvims+=("${_f}")
+                        ;;
+                    "execute")
+                        "${SCRIPT_PATH}/dev.sh" tmux -- "${_f}"
+                        ;;
+                esac
+                continue
+                ;;
+        esac
+
+        # NOTE:
+        #   use as last resort only since the mime-check is slow
+        _mime="$(file --brief --mime-type --dereference -- "${_f}")"
+        case "${_mime}" in
+            "text/"* | \
+                "inode/x-empty" | \
+                "application/javascript" | \
+                "application/json" | \
+                "application/x-subrip" | \
+                "application/x-wine-extension-ini")
+                _nvims+=("${_f}")
+                ;;
+
+            "audio/"* | "video/"*)
+                _mpvs+=("${_f}")
+                ;;
+            "image/"*)
+                _imvs+=("${_f}")
+                ;;
+            "application/pdf")
+                _pdfs+=("${_f}")
+                ;;
+
+            "application/x-tar" | \
+                \
+                "application/x-bzip2" | \
+                "application/gzip" | \
+                "application/x-xz" | \
+                "application/zstd" | \
+                \
+                "application/zip" | \
+                "application/vnd.android.package-archive" | \
+                "application/java-archive" | \
+                \
+                "application/x-7z-compressed" | \
+                "application/x-iso9660-image" | \
+                \
+                "application/x-rar")
+                "${SCRIPT_PATH}/archive.sh" --mime "${_mime}" -- "${_f}"
+                ;;
+
+            "application/x-bittorrent")
+                transmission-show "${_f}" | __nvim --mode ro
+                ;;
+
+            "application/x-pie-executable" | \
+                "application/octet-stream" | \
+                "application/x-qemu-disk")
+                printf "run> skipping '%s' [%s] " "${_f}" "${_mime}"
+                read -r _
+                printf "\n"
+                continue
+                ;;
+            *)
+                _others+=("${_f}")
+                ;;
+        esac
+    done
+
+    if ! [ ${#_mpvs[@]} -eq 0 ]; then
+        if ! [ "${_interactive}" ]; then
+            "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+        else
+            case "$(__fzf_opts "auto" "record" "socket")" in
+                "auto")
+                    "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+                    ;;
+                "record")
+                    "${LOCAL_SCRIPT}/mpv.sh" record -- "${_mpvs[@]}"
+                    ;;
+                "socket")
+                    "${LOCAL_SCRIPT}/mpv.sh" socket -- "${_mpvs[@]}"
+                    ;;
+            esac
+        fi
     fi
-    if [ "${1}" = "--" ]; then shift; fi
 
-    for _script in "media" "image" "direct" "pdf"; do
-        if
-            "${SCRIPT_PATH}/${_script}.sh" --interactive "${_interactive}" -- "${@}"
-        then
-            return
+    if ! [ ${#_imvs[@]} -eq 0 ]; then
+        if ! [ "${_interactive}" ]; then
+            "${SCRIPT_PATH}/image.sh" -- "${_imvs[@]}"
+        else
+            "${SCRIPT_PATH}/image.sh" --interactive -- "${_imvs[@]}"
         fi
+    fi
+
+    if ! [ ${#_pdfs[@]} -eq 0 ]; then
+        if ! [ "${_interactive}" ]; then
+            "${SCRIPT_PATH}/pdf.sh" -- "${_pdfs[@]}"
+        else
+            "${SCRIPT_PATH}/pdf.sh" --interactive -- "${_pdfs[@]}"
+        fi
+    fi
+
+    for _f in "${_others[@]}"; do
+        __nohup xdg-open "${_f}"
     done
-    __foreach --interactive "${_interactive}" -- "${@}"
+
+    if ! [ ${#_nvims[@]} -eq 0 ]; then
+        __nvim -- "${_nvims[@]}"
+    fi
 }
 
-case "${1}" in
-    "--preview")
-        shift
-        __info preview "${@}"
-        ;;
-    "--generic")
-        shift
-        __generic "${@}"
-        ;;
-    "--interactive")
-        shift
-        __multi --interactive "yes" "${@}"
-        ;;
-    *)
-        __multi "${@}"
-        ;;
-esac
+__handle "${@}"

@@ -7,8 +7,8 @@ SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
 
-    for _p in "${@}"; do
-        case "${_p}" in
+    for _f in "${@}"; do
+        case "${_f}" in
             *".pdf") ;;
             *) return 1 ;;
         esac
@@ -16,50 +16,65 @@ __check() {
 }
 
 __handle() {
-    local _interactive=""
-    if [ "${1}" = "--interactive" ]; then
-        _interactive="${2}"
-        shift 2
+    local _check="" _interactive=""
+    while [ "${#}" -gt 0 ]; do
+        case "${1}" in
+            "--check")
+                _check="yes"
+                shift
+                ;;
+            "--interactive")
+                _interactive="yes"
+                shift
+                ;;
+            "--")
+                shift && break
+                ;;
+        esac
+    done
+
+    if [ "${_check}" ] && ! __check -- "${@}"; then
+        return 1
     fi
-    if [ "${1}" = "--" ]; then shift; fi
-    if ! __check -- "${@}"; then return 1; fi
 
     local _choice="zathura"
     if [ "${_interactive}" ]; then
         if [ "${#}" -gt 1 ]; then
             _choice="$(
-                __select_opt "pdfarranger/multi" "pdfarranger/foreach" "xournal++" "pdftotext" "zathura"
+                __select_opt "zathura" "xournal++" "pdfarranger/multi" "pdfarranger/foreach" "pdftotext"
             )"
         else
             _choice="$(
-                __select_opt "pdfarranger" "xournal++" "pdftotext" "zathura"
+                __select_opt "zathura" "xournal++" "pdfarranger" "pdftotext"
             )"
         fi
     fi
 
     case "${_choice}" in
+        "zathura")
+            for _f in "${@}"; do
+                __nohup zathura -- "${_f}"
+            done
+            ;;
+        "xournal++")
+            for _f in "${@}"; do
+                __nohup xournalpp -- "${_f}"
+            done
+            ;;
         "pdfarranger/multi")
             __nohup pdfarranger -- "${@}"
             ;;
         "pdfarranger/foreach" | "pdfarranger")
-            for _p in "${@}"; do
-                __nohup pdfarranger -- "${_p}"
-            done
-            ;;
-        "xournal++")
-            for _p in "${@}"; do
-                __nohup xournalpp -- "${_p}"
+            for _f in "${@}"; do
+                __nohup pdfarranger -- "${_f}"
             done
             ;;
         "pdftotext")
-            for _p in "${@}"; do
-                printf "// [%s]\n" "${_p}"
-                pdftotext -nopgbrk "${_p}" -
+            for _f in "${@}"; do
+                printf "// [%s]\n" "${_f}"
+                pdftotext -nopgbrk "${_f}" -
                 printf "\n\n"
             done | __nvim --mode ro
-            ;;
-        "zathura")
-            __nohup zathura -- "${@}"
             ;;
     esac
 }

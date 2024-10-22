@@ -16,9 +16,12 @@ __build() {
 }
 
 __stow() {
+    local _config_vifm="${HOME}/.config/vifm"
+    mkdir -p "${_config_vifm}"
+
     (
         cd "../" && stow -R "$(basename "${SCRIPT_PATH}")"
     )
 }
-__build
+# __build
 __stow

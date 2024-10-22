@@ -24,11 +24,19 @@
 " }}}
 
 filetype /^.*$/
-    \ main -- %f,
+    \ main.sh -- %f,
     \ main.sh --interactive -- %f,
-    \ main.sh --generic -- %f,
+
+filetype /^.*$/
+    \ {mpv}
+    \ media.sh -- %f,
+
+filetype /^.*$/
+    \ {archive}
+    \ archive.sh make -- %f,
+
 fileviewer /^.*$/
-    \ main.sh --preview -- %f,
+    \ info.sh info -- %f,
 
 " notably used for bulk-renaming
 set vicmd=vi
