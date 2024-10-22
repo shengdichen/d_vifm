@@ -97,7 +97,10 @@ __handle() {
                 "application/javascript" | \
                 "application/json" | \
                 "application/x-subrip" | \
-                "application/x-wine-extension-ini")
+                "application/x-wine-extension-ini" | \
+                "application/x-ndjson" | \
+                "application/x-pem-file" | \
+                "message/rfc822")
                 _nvims+=("${_f}")
                 ;;
 
