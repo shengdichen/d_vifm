@@ -1,8 +1,8 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="${HOME}/.config/vifm/scripts"
+. "${HOME}/.local/lib/util.sh"
 
-. "${SCRIPT_PATH}/util.sh"
+SCRIPT_PATH="${HOME}/.config/vifm/scripts"
 
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -64,12 +64,13 @@ __preview() {
             file --brief --dereference -- "${_f}"
             stat "${_f}" | __line_number
 
-            if [ -n "$(find "${_f}" -mindepth 1)" ]; then
+            printf "<<<<<<<<<<\n"
+            if [ -n "$(find -L "${_f}" -mindepth 1)" ]; then
                 tree -a -l -L 1 --filelimit 197 "${_f}" | __line_number
             else
-                printf "// %s\n" "${_f}"
                 printf "## EMPTY DIR ##\n"
             fi
+            printf "<<<<<<<<<<\n"
         fi
     done
 }
@@ -81,6 +82,6 @@ case "${1}" in
         ;;
     "info")
         shift
-        __preview "${@}"
+        __info "${@}"
         ;;
 esac
