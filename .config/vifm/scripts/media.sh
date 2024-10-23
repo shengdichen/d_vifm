@@ -46,9 +46,10 @@ __check() {
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
 
-    if __check -- "${1}"; then
-        ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
+    if ! __check -- "${1}"; then
+        return 1
     fi
+    ffprobe -loglevel quiet -show_format -pretty "${1}" 2>&1
 }
 
 __handle() {
