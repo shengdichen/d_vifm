@@ -34,7 +34,7 @@ filetype /^.*$/
 
 filetype /^.*$/
     \ {archive}
-    \ archive.sh make -- %f,
+    \ "$HOME/.local/script/archive.sh" make -- %f,
 
 fileviewer /^.*$/
     \ info.sh info -- %f,

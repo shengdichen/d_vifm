@@ -44,8 +44,12 @@ __preview() {
             printf "<<<<<<<<<<\n"
 
             _info=""
-            for _script in "media" "image" "misc" "archive"; do
-                if _info="$("${SCRIPT_PATH}/${_script}.sh" info -- "${_f}")"; then
+            for _script in \
+                "${SCRIPT_PATH}/media.sh" \
+                "${SCRIPT_PATH}/image.sh" \
+                "${SCRIPT_PATH}/misc.sh" \
+                "${HOME}/.local/script/archive.sh"; do
+                if _info="$("${_script}" info -- "${_f}")"; then
                     break
                 fi
             done
@@ -77,6 +81,6 @@ case "${1}" in
         ;;
     "info")
         shift
-        __info "${@}"
+        __preview "${@}"
         ;;
 esac

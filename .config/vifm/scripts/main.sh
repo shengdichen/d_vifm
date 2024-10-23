@@ -130,7 +130,7 @@ __handle() {
                 "application/x-iso9660-image" | \
                 \
                 "application/x-rar")
-                "${SCRIPT_PATH}/archive.sh" --mime "${_mime}" -- "${_f}"
+                "${LOCAL_SCRIPT}/archive.sh" --mime "${_mime}" -- "${_f}"
                 ;;
 
             "application/x-bittorrent")
