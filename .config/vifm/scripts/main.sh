@@ -27,8 +27,8 @@ __handle() {
             _imvs+=("${_f}")
             continue
         fi
-        if "${SCRIPT_PATH}/pass.sh" check -- "${_f}"; then
-            "${SCRIPT_PATH}/pass.sh" -- "${_f}"
+        if "${LOCAL_SCRIPT}/pass.sh" check -- "${_f}"; then
+            "${LOCAL_SCRIPT}/pass.sh" -- "${_f}"
             continue
         fi
 
