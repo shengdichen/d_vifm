@@ -179,9 +179,9 @@ __handle() {
 
     if ! [ ${#_pdfs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${SCRIPT_PATH}/pdf.sh" -- "${_pdfs[@]}"
+            "${LOCAL_SCRIPT}/pdf.sh" -- "${_pdfs[@]}"
         else
-            "${SCRIPT_PATH}/pdf.sh" --interactive -- "${_pdfs[@]}"
+            "${LOCAL_SCRIPT}/pdf.sh" --interactive -- "${_pdfs[@]}"
         fi
     fi
 
