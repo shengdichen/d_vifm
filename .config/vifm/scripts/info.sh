@@ -3,6 +3,7 @@
 . "${HOME}/.local/lib/util.sh"
 
 SCRIPT_PATH="${HOME}/.config/vifm/scripts"
+LOCAL_SCRIPT="${HOME}/.local/script"
 
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -46,9 +47,9 @@ __preview() {
             _info=""
             for _script in \
                 "${SCRIPT_PATH}/media.sh" \
-                "${SCRIPT_PATH}/image.sh" \
+                "${LOCAL_SCRIPT}/image.sh" \
                 "${SCRIPT_PATH}/misc.sh" \
-                "${HOME}/.local/script/archive.sh"; do
+                "${LOCAL_SCRIPT}/archive.sh"; do
                 if _info="$("${_script}" info -- "${_f}")"; then
                     break
                 fi

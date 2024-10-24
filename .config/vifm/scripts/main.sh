@@ -23,7 +23,7 @@ __handle() {
             _mpvs+=("${_f}")
             continue
         fi
-        if "${SCRIPT_PATH}/image.sh" check "${_f}"; then
+        if "${LOCAL_SCRIPT}/image.sh" check "${_f}"; then
             _imvs+=("${_f}")
             continue
         fi
@@ -171,9 +171,9 @@ __handle() {
 
     if ! [ ${#_imvs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${SCRIPT_PATH}/image.sh" -- "${_imvs[@]}"
+            "${LOCAL_SCRIPT}/image.sh" -- "${_imvs[@]}"
         else
-            "${SCRIPT_PATH}/image.sh" --interactive -- "${_imvs[@]}"
+            "${LOCAL_SCRIPT}/image.sh" --interactive -- "${_imvs[@]}"
         fi
     fi
 
