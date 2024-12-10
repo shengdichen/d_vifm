@@ -28,6 +28,9 @@ highlight Selected
 highlight Link
     \ cterm=none ctermfg=cyan ctermbg=-1
     \ gui=none guifg=#7fd7f3 guibg=-1
+highlight HardLink
+    \ cterm=none ctermfg=blue ctermbg=-1
+    \ gui=none guifg=#1f97df guibg=-1
 " red for broken links
 highlight BrokenLink
     \ cterm=none ctermfg=red ctermbg=-1
