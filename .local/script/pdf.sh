@@ -1,8 +1,6 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
-
-. "${SCRIPT_PATH}/util.sh"
+. "${HOME}/.local/lib/util.sh"
 
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -41,11 +39,11 @@ __handle() {
     if [ "${_interactive}" ]; then
         if [ "${#}" -gt 1 ]; then
             _choice="$(
-                __select_opt "zathura" "xournal++" "pdfarranger/multi" "pdfarranger/foreach" "pdftotext"
+                __fzf_opts "zathura" "xournal++" "pdfarranger/multi" "pdfarranger/foreach" "pdftotext"
             )"
         else
             _choice="$(
-                __select_opt "zathura" "xournal++" "pdfarranger" "pdftotext"
+                __fzf_opts "zathura" "xournal++" "pdfarranger" "pdftotext"
             )"
         fi
     fi

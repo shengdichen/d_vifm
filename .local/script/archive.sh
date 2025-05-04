@@ -301,7 +301,7 @@ __handle() {
                 esac
                 ;;
 
-            "application/x-rar") # *".rar")
+            "application/x-rar" | "application/vnd.rar") # *".rar")
                 case "$(__fzf_opts "peak" "unmake")" in
                     "peak")
                         unrar l "${1}" | __nvim --mode ro

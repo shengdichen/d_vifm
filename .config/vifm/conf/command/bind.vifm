@@ -30,13 +30,13 @@ mnoremap K 4k
 " }}}
 
 nnoremap ff
-    \ :!fzf.sh
+    \ :!"${HOME}/.local/script/locate.sh"
     \ <cr>
 nnoremap fd
-    \ :execute 'cd' fnameescape(term("${VIFM}/scripts/fzf.sh dir"))
+    \ :execute 'cd' fnameescape(term("${HOME}/.local/script/locate.sh dir"))
     \ <cr>
 nnoremap fg
-    \ :execute 'goto' fnameescape(term("${VIFM}/scripts/fzf.sh file"))
+    \ :execute 'goto' fnameescape(term("${HOME}/.local/script/locate.sh file"))
     \ <cr>
 
 nnoremap af

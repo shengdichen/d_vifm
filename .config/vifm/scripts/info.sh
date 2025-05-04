@@ -1,8 +1,9 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="${HOME}/.config/vifm/scripts"
+. "${HOME}/.local/lib/util.sh"
 
-. "${SCRIPT_PATH}/util.sh"
+SCRIPT_PATH="${HOME}/.config/vifm/scripts"
+LOCAL_SCRIPT="${HOME}/.local/script"
 
 __info() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -44,8 +45,12 @@ __preview() {
             printf "<<<<<<<<<<\n"
 
             _info=""
-            for _script in "media" "image" "misc" "archive"; do
-                if _info="$("${SCRIPT_PATH}/${_script}.sh" info -- "${_f}")"; then
+            for _script in \
+                "${SCRIPT_PATH}/media.sh" \
+                "${LOCAL_SCRIPT}/image.sh" \
+                "${SCRIPT_PATH}/misc.sh" \
+                "${LOCAL_SCRIPT}/archive.sh"; do
+                if _info="$("${_script}" info -- "${_f}")"; then
                     break
                 fi
             done
@@ -60,12 +65,13 @@ __preview() {
             file --brief --dereference -- "${_f}"
             stat "${_f}" | __line_number
 
-            if [ -n "$(find "${_f}" -mindepth 1)" ]; then
+            printf "<<<<<<<<<<\n"
+            if [ -n "$(find -L "${_f}" -mindepth 1)" ]; then
                 tree -a -l -L 1 --filelimit 197 "${_f}" | __line_number
             else
-                printf "// %s\n" "${_f}"
                 printf "## EMPTY DIR ##\n"
             fi
+            printf "<<<<<<<<<<\n"
         fi
     done
 }

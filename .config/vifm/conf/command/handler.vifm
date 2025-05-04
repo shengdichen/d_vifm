@@ -27,13 +27,14 @@ filetype /^.*$/
     \ main.sh -- %f,
     \ main.sh --interactive -- %f,
 
+" "$HOME/.local/script/mpv.sh" --interactive -- %f,
 filetype /^.*$/
     \ {mpv}
-    \ media.sh -- %f,
+    \ "$HOME/.local/script/mpv.sh" -- %f,
 
 filetype /^.*$/
     \ {archive}
-    \ archive.sh make -- %f,
+    \ "$HOME/.local/script/archive.sh" make -- %f,
 
 fileviewer /^.*$/
     \ info.sh info -- %f,

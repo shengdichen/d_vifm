@@ -5,6 +5,7 @@ SCRIPT_PATH="${HOME}/.config/vifm/scripts"
 
 LOCAL_SCRIPT="${HOME}/.local/script"
 . "${HOME}/.local/lib/util.sh"
+. "${HOME}/.local/lib/filter.sh"
 
 __handle() {
     local _interactive=""
@@ -18,16 +19,16 @@ __handle() {
 
     local _mime=""
     for _f in "${@}"; do
-        if "${SCRIPT_PATH}/media.sh" check "${_f}"; then
+        if __check_media --mode name -- "${_f}"; then
             _mpvs+=("${_f}")
             continue
         fi
-        if "${SCRIPT_PATH}/image.sh" check "${_f}"; then
+        if "${LOCAL_SCRIPT}/image.sh" check "${_f}"; then
             _imvs+=("${_f}")
             continue
         fi
-        if "${SCRIPT_PATH}/pass.sh" check -- "${_f}"; then
-            "${SCRIPT_PATH}/pass.sh" -- "${_f}"
+        if "${LOCAL_SCRIPT}/pass.sh" check -- "${_f}"; then
+            "${LOCAL_SCRIPT}/pass.sh" -- "${_f}"
             continue
         fi
 
@@ -97,7 +98,10 @@ __handle() {
                 "application/javascript" | \
                 "application/json" | \
                 "application/x-subrip" | \
-                "application/x-wine-extension-ini")
+                "application/x-wine-extension-ini" | \
+                "application/x-ndjson" | \
+                "application/x-pem-file" | \
+                "message/rfc822")
                 _nvims+=("${_f}")
                 ;;
 
@@ -125,8 +129,9 @@ __handle() {
                 "application/x-7z-compressed" | \
                 "application/x-iso9660-image" | \
                 \
-                "application/x-rar")
-                "${SCRIPT_PATH}/archive.sh" --mime "${_mime}" -- "${_f}"
+                "application/x-rar" | \
+                "application/vnd.rar")
+                "${LOCAL_SCRIPT}/archive.sh" --mime "${_mime}" -- "${_f}"
                 ;;
 
             "application/x-bittorrent")
@@ -149,17 +154,17 @@ __handle() {
 
     if ! [ ${#_mpvs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+            "${LOCAL_SCRIPT}/mpv.sh" --no-filter -- "${_mpvs[@]}"
         else
             case "$(__fzf_opts "auto" "record" "socket")" in
                 "auto")
-                    "${LOCAL_SCRIPT}/mpv.sh" -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" --no-filter -- "${_mpvs[@]}"
                     ;;
                 "record")
-                    "${LOCAL_SCRIPT}/mpv.sh" record -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" record --no-filter -- "${_mpvs[@]}"
                     ;;
                 "socket")
-                    "${LOCAL_SCRIPT}/mpv.sh" socket -- "${_mpvs[@]}"
+                    "${LOCAL_SCRIPT}/mpv.sh" socket --no-filter -- "${_mpvs[@]}"
                     ;;
             esac
         fi
@@ -167,17 +172,17 @@ __handle() {
 
     if ! [ ${#_imvs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${SCRIPT_PATH}/image.sh" -- "${_imvs[@]}"
+            "${LOCAL_SCRIPT}/image.sh" -- "${_imvs[@]}"
         else
-            "${SCRIPT_PATH}/image.sh" --interactive -- "${_imvs[@]}"
+            "${LOCAL_SCRIPT}/image.sh" --interactive -- "${_imvs[@]}"
         fi
     fi
 
     if ! [ ${#_pdfs[@]} -eq 0 ]; then
         if ! [ "${_interactive}" ]; then
-            "${SCRIPT_PATH}/pdf.sh" -- "${_pdfs[@]}"
+            "${LOCAL_SCRIPT}/pdf.sh" -- "${_pdfs[@]}"
         else
-            "${SCRIPT_PATH}/pdf.sh" --interactive -- "${_pdfs[@]}"
+            "${LOCAL_SCRIPT}/pdf.sh" --interactive -- "${_pdfs[@]}"
         fi
     fi
 

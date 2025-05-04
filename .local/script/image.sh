@@ -1,8 +1,6 @@
 #!/usr/bin/env dash
 
-SCRIPT_PATH="$(realpath "$(dirname "${0}")")"
-
-. "${SCRIPT_PATH}/util.sh"
+. "${HOME}/.local/lib/util.sh"
 
 __check() {
     if [ "${1}" = "--" ]; then shift; fi
@@ -50,7 +48,7 @@ __handle() {
         return
     fi
 
-    case "$(__select_opt "imv/multi" "imv/foreach")" in
+    case "$(__fzf_opts "imv/multi" "imv/foreach")" in
         "imv/multi")
             __nohup imv -- "${@}"
             ;;
