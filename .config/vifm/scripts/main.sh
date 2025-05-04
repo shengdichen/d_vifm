@@ -129,7 +129,8 @@ __handle() {
                 "application/x-7z-compressed" | \
                 "application/x-iso9660-image" | \
                 \
-                "application/x-rar")
+                "application/x-rar" | \
+                "application/vnd.rar")
                 "${LOCAL_SCRIPT}/archive.sh" --mime "${_mime}" -- "${_f}"
                 ;;
 
