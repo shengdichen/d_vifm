@@ -18,9 +18,11 @@ __build() {
 __stow() {
     local _config_vifm="${HOME}/.config/vifm"
     mkdir -p "${_config_vifm}"
+    mkdir -p "${_config_vifm}/conf"
 
+    stow -R --target "${HOME}" "linux"
     (
-        cd "../" && stow -R "$(basename "${SCRIPT_PATH}")"
+        cd "./common" && stow -R --target "${_config_vifm}" "vifm"
     )
 }
 # __build
