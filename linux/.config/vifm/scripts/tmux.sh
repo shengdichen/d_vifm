@@ -3,7 +3,7 @@
 __next_pane_is_zsh() {
     local _cmd_next_pane
     _cmd_next_pane=$(tmux display-message -p -t ":.+1" -F "#{pane_current_command}")
-    [ "${_cmd_next_pane}" = "zsh" ]
+    [ "${_cmd_next_pane}" = "zsh" ] || [ "${_cmd_next_pane}" = "init" ]
 }
 
 __create_split() {
