@@ -5,6 +5,8 @@ function CopyConfig
 
     Copy-Item ".\common\vifm\*" $p -Recurse -Force
     Copy-Item ".\windows\vifm\*" $p -Recurse -Force
+
+    Copy-Item ".\windows\lf" "$env:LOCALAPPDATA\." -Recurse -Force
 }
 
 CopyConfig

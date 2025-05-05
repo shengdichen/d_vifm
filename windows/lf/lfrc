@@ -1,0 +1,8 @@
+source "~/AppData/Local/lf/conf/general.conf"
+
+source "~/AppData/Local/lf/conf/command.conf"
+source "~/AppData/Local/lf/conf/handle.conf"
+
+source "~/AppData/Local/lf/conf/visual.conf"
+
+# vim: filetype=conf

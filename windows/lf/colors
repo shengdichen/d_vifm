@@ -1,0 +1,21 @@
+# file types (with matching order)
+ln 0;36  # LINK
+or 0;31  # ORPHAN
+
+tw 0;37  # STICKY_OTHER_WRITABLE
+ow 0;37  # OTHER_WRITABLE
+st 0;37  # STICKY
+di 0;37  # DIR
+
+pi 0;35  # FIFO
+so 0;35  # SOCK
+bd 0;33  # BLK
+cd 0;33  # CHR
+
+su 0;32  # SETUID
+sg 0;32  # SETGID
+ex 0;32  # EXEC
+
+fi 1:37  # FILE
+
+# vim: filetype=dircolors
