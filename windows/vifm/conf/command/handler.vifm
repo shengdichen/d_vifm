@@ -1,0 +1,54 @@
+" NOTE {{{
+"   1. %f VS "%f"
+"   a) %f := one array of unescaped filenames
+"   b) "%f" := one space-separated string of escaped filenames
+"
+"   2. type-specific positioning relative to generic
+"   a) handler:
+"       1) specific BEFORE generic
+"       -> use specific by default, generic available with :f
+"       2) specific AFTER generic
+"       -> use generic by default, specific available with :f
+"   b) previewer: specific ALWAYS BEFORE generic
+"
+"   3. glob VS regex (:h vifm-patterns)
+"   a) glob: * alone will NOT match leading-dot
+"   -> prepend ? to force matching such dirs
+"       1) files (NOT folders) =: ?*[^/],*[^/]
+"       2) dirs (NOT files) =: ?*/,*/
+"       3) files and dirs =: ?*,*
+"   b) regex
+"       1) files =: /^.*[^\/]$/
+"       2) dirs =: /^.*\/$/
+"       3) files and dirs =: /^.*$/
+" }}}
+
+set shell="pwsh"
+set shellcmdflag="-NoLogo"
+
+" \ ~\.local\script\handle\main.ps1 %"f:p >~/file,
+filetype /^.*$/
+    \ main.ps1 %"f,
+
+filetype /^.*$/
+    \ {nvim}
+    \ nvim.exe -O -- %"f,
+    \ {mpv}
+    \ mpv.exe -- %"f,
+
+" filetype /^.*$/
+"     \ main.sh -- %f,
+"     \ main.sh --interactive -- %f,
+
+filetype /^.*$/
+    \ {archive}
+    \ archive.sh make -- %f,
+
+fileviewer /^.*$/
+    \ info.sh info -- %f,
+
+" notably used for bulk-renaming
+set vicmd=nvim.exe
+set vixcmd=nvim.exe
+
+" vim: filetype=vifm foldmethod=marker

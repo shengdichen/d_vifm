@@ -1,0 +1,22 @@
+command! resource
+    \ :source "$VIFM/vifmrc"
+
+set grepprg=
+    \"
+    \ag
+        \ --line-numbers --noheading
+        \ --hidden
+        \ %i %a %s
+    \"
+
+command! mkd
+    \ :mkdir! "%a"
+command! tch
+    \ :touch "%a"
+command! nv
+    \ :!nvim %f:p:h
+
+command! passNew
+    \ :!pass.sh new -- %f
+
+" vim: filetype=vifm foldmethod=marker

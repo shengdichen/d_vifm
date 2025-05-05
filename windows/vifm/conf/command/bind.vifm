@@ -1,0 +1,108 @@
+nnoremap rr
+    \ :resource
+    \ <cr>
+
+" :!<cursor-is-here> -- %f
+cnoremap :FF
+    \ !<space>--<space>%f<left><left><left><left><left><left>
+" :!<cursor-is-here> -- %f %F
+cnoremap :Ff
+    \ !<space>--<space>%f<space>%F<left><left><left><left><left><left><left><left><left>
+
+" navigation {{{
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+nnoremap <pageup> <nop>
+nnoremap <pagedown> <nop>
+nnoremap <home> <nop>
+nnoremap <end> <nop>
+
+nnoremap J 4j
+nnoremap K 4k
+
+vnoremap J 4j
+vnoremap K 4k
+
+mnoremap J 4j
+mnoremap K 4k
+" }}}
+
+command! locatetext
+    \ !"$HOME/.local/lib/goto/goto.ps1" text
+
+" \ :!fzf.sh
+" \ !"~/.local/lib/goto/goto.ps1" text
+nnoremap ff
+    \ :locatetext
+    \ <cr>
+nnoremap fd
+    \ :execute 'cd' fnameescape(system("$HOME/.local/lib/goto/goto.ps1 dir"))
+    \ <cr>
+nnoremap fg
+    \ :execute 'goto' fnameescape(system("$HOME/.local/lib/goto/goto.ps1 file"))
+    \ <cr>
+
+nnoremap af
+    \ :tch<space>
+nnoremap ad
+    \ :mkd<space>
+nnoremap an
+    \ :!wget<space>
+
+nnoremap <cr>
+    \ :!tmux.sh file open "%f"
+    \ <cr>
+nnoremap L
+    \ :!tmux.sh file open "%f:p:h"
+    \ <cr>
+
+nnoremap H
+    \ :write |
+    \ :!tmux.sh vifm
+    \ <cr>
+
+nnoremap s
+    \ :!tmux.ps1 shell "%d"
+    \ <cr>
+" nnoremap S
+"     \ :shell!
+"     \ <cr>
+nnoremap S
+    \ :shell
+    \ <cr>
+
+" tab {{{
+nnoremap <c-t>
+    \ :tabnew |
+    \ :tabname<space>
+nnoremap <c-y>
+    \ :tabname<space>
+
+nnoremap <c-n>
+    \ gt
+nnoremap <c-p>
+    \ gT
+" }}}
+
+" other pane {{{
+" preview
+nnoremap w
+    \ :split |
+    \ :view!
+    \ <cr>
+
+" ls
+nnoremap W
+    \ :split |
+    \ :if &quickview |
+    \ :view |
+    \ :endif
+    \ <cr>
+
+" disable full-screen previewing (open in handler instead)
+nnoremap e <nop>
+" }}}
+
+" vim: filetype=vifm foldmethod=marker

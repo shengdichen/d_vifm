@@ -1,0 +1,51 @@
+" system {{{
+" use vifm's internal fs-operations
+set syscalls
+
+" some more humane settings, default is "fst"
+"   1. removing f: |:filter| will KEEP matched files instead of HIDING
+"   2. removing s: yy, dd and DD will always act on a single file even if a
+"   selection exists; use ys, ds and Ds instead to act on the selection
+"   3. removing t: <Tab> and <CTRL-I> will traverse backwards in history
+"   instead of switching tabs; use <space> for this instead
+set cpoptions=""
+
+" do NOT rely on vifm's multiplexer-integration (mildly awkward syntax)
+screen!
+screen
+" }}}
+
+" history {{{
+" allow trash-dir for non-permanent deletion
+set trash
+
+" number of undo's
+set undolevels=100
+
+" number of dirs in dir-history
+set history=100
+
+" info saved in vifm-sessions
+" NOTE:
+"   1. remove |savedirs| to not save dir-history
+set vifminfo=
+\bmarks,bookmarks,registers,
+\savedirs,dirstack,tabs,
+\dhistory,chistory,shistory,phistory
+" }}}
+
+" marks {{{
+delmarks!
+
+mark h ~/
+mark m ~/mnt/
+mark x ~/xyz/
+mark d ~/dot/
+mark p ~/dot/dot/d_prv/
+
+mark t ~/.config/tmux/script/
+mark v ~/.config/vifm/conf/
+mark n ~/.config/nvim/conf/rpre/plugin/
+" }}}
+
+" vim: filetype=vifm foldmethod=marker
