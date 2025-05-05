@@ -22,9 +22,6 @@ set vimhelp
 " tab-completion
 set wildmenu
 set wildstyle=popup
-
-set shell=/bin/zsh
-set shellcmdflag="-c"
 " }}}
 
 " searching {{{

@@ -1,3 +1,6 @@
+set shell=/bin/zsh
+set shellcmdflag="-c"
+
 command! resource
     \ :source "$HOME/.config/vifm/vifmrc"
 
